@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="horizontal">
+
+    <ImageView
+        android:id="@+id/iv_le_rank_new"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@mipmap/l_rank" />
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <TextView
+            android:id="@+id/tv_le_rank_new"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="新歌榜"
+            android:textSize="20sp" />
+
+        <TextView
+            android:textSize="17sp"
+            android:id="@+id/tv_le_rank_no1"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/tv_le_rank_new"
+            android:text="1.失落沙洲" />
+
+        <TextView
+            android:textSize="17sp"
+            android:id="@+id/tv_le_rank_no2"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/tv_le_rank_no1"
+            android:text="2.给你的歌" />
+
+        <TextView
+            android:textSize="17sp"
+            android:id="@+id/tv_le_rank_no3"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/tv_le_rank_no2"
+            android:text="3.青春闪电" />
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+            android:layout_below="@+id/tv_le_rank_no1"
+            android:src="@mipmap/ic_songlist_detail_nor" />
+    </RelativeLayout>
+</LinearLayout>

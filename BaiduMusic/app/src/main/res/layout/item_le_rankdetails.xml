@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="match_parent">
+    <RelativeLayout
+        android:layout_margin="5dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <ImageView
+            android:id="@+id/iv_le_rankdetails"
+            android:src="@mipmap/l_rank"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentTop="true"
+            android:layout_alignParentStart="true"
+            android:layout_alignBottom="@+id/tv_le_rankdetails_author" />
+        <TextView
+            android:id="@+id/tv_le_rankdetails_song"
+            android:textSize="20sp"
+            android:text="失落沙洲"
+            android:maxEms="10"
+            android:maxLines="1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_above="@+id/tv_le_rankdetails_author"
+            android:layout_toEndOf="@+id/iv_le_rankdetails" />
+        <TextView
+            android:maxEms="10"
+            android:maxLines="1"
+            android:id="@+id/tv_le_rankdetails_author"
+            android:textSize="16sp"
+            android:text="徐佳莹"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/iv_le_rankdetails_more"
+            android:layout_toEndOf="@+id/iv_le_rankdetails" />
+        <ImageView
+            android:id="@+id/iv_le_rankdetails_more"
+            android:src="@mipmap/ic_list_more_invalid"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_alignParentEnd="true"
+            android:layout_marginEnd="24dp" />
+        <TextView
+            android:id="@+id/tv_le_rankdetails_count"
+            android:text="01"
+            android:textColor="@android:color/holo_red_dark"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentTop="true"
+            android:layout_alignParentStart="true" />
+        <!--<ImageView-->
+            android:src="@mipmap/img_king_mask1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+    </RelativeLayout>
+
+</LinearLayout>
