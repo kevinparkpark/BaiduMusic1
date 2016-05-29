@@ -6,24 +6,32 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.example.kevin.baidumusic.R;
+import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by kevin on 16/5/21.
  */
 public class SongMenuAdapter extends RecyclerView.Adapter<SongMenuAdapter.MyHolder> {
     private Context context;
-    private ArrayList<SongMenuBean> datas;
+    private List<SongMenuBean.ContentBean> datas;
+    private SongMenuRecyclerViewOnClickListener clickListener;
+
+    public void setClickListener(SongMenuRecyclerViewOnClickListener clickListener) {
+        this.clickListener = clickListener;
+    }
 
     public SongMenuAdapter(Context context) {
         this.context = context;
     }
 
-    public void setDatas(ArrayList<SongMenuBean> datas) {
+    public void setDatas(List<SongMenuBean.ContentBean> datas) {
         this.datas = datas;
         notifyDataSetChanged();
     }
@@ -38,12 +46,22 @@ public class SongMenuAdapter extends RecyclerView.Adapter<SongMenuAdapter.MyHold
     }
 
     @Override
-    public void onBindViewHolder(MyHolder holder, int position) {
+    public void onBindViewHolder(final MyHolder holder, int position) {
 
-        holder.tvSongmenuCount.setText(datas.get(position).getCount());
-//        holder.tvSongmenuTitle.setText(datas.get(position).getTitle());
-//        holder.tvSongmenuWhere.setText(datas.get(position).getWhere());
-//        holder.ivSongmenu.setImageBitmap(datas.get(position).getImageSongmenu());
+        holder.tvSongmenuCount.setText(datas.get(position).getListenum());
+        holder.tvSongmenuTitle.setText(datas.get(position).getTitle());
+        holder.tvSongmenuWhere.setText(datas.get(position).getTag());
+        Picasso.with(context).load(datas.get(position).getPic_w300()).into(holder.ivSongmenu);
+
+        if (clickListener!=null){
+            holder.relativeLayout.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    int position=holder.getLayoutPosition();
+                    clickListener.onSongMenuClick(position);
+                }
+            });
+        }
     }
 
     @Override
@@ -55,14 +73,15 @@ public class SongMenuAdapter extends RecyclerView.Adapter<SongMenuAdapter.MyHold
 
         TextView tvSongmenuCount,tvSongmenuTitle,tvSongmenuWhere;
         ImageView ivSongmenu;
+        RelativeLayout relativeLayout;
 
         public MyHolder(View itemView) {
             super(itemView);
             tvSongmenuCount= (TextView) itemView.findViewById(R.id.tv_songmenu_count);
-            tvSongmenuTitle= (TextView) itemView.findViewById(R.id.tv_songmenu_list);
+            tvSongmenuTitle= (TextView) itemView.findViewById(R.id.tv_songmenu_title);
             tvSongmenuWhere= (TextView) itemView.findViewById(R.id.tv_songmenu_where);
             ivSongmenu= (ImageView) itemView.findViewById(R.id.iv_songmenu_image);
-
+            relativeLayout= (RelativeLayout) itemView.findViewById(R.id.relativelayout_songmenu);
         }
     }
 }

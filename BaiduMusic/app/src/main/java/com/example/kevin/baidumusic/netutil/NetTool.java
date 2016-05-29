@@ -69,5 +69,35 @@ public class NetTool {
         });
         requestQueue.add(request);
     }
+    //输入URl 解析
+    public void getUrl(final NetListener netListener,String url){
+
+        StringRequest stringRequest=new StringRequest(url, new Response.Listener<String>() {
+            @Override
+            public void onResponse(String response) {
+                netListener.onSuccessed(response);
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                netListener.onFailed(error);
+            }
+        });
+        requestQueue.add(stringRequest);
+    }
+    public void getUrlId(final NetListener netListener,String url1, String songId,String url2){
+        StringRequest stringRequest=new StringRequest(url1+songId+url2, new Response.Listener<String>() {
+            @Override
+            public void onResponse(String response) {
+                netListener.onSuccessed(response);
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                netListener.onFailed(error);
+            }
+        });
+        requestQueue.add(stringRequest);
+    }
 
 }

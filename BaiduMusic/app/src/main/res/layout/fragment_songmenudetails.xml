@@ -1,12 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="vertical" android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:id="@+id/rankdetails_head">
-<ImageView
-    android:src="@mipmap/l_rank"
-    android:scaleType="fitXY"
-    android:id="@+id/iv_le_rankdetails_head"
+    android:layout_height="match_parent">
+<ListView
+    android:id="@+id/songmenudetails_listview"
     android:layout_width="match_parent"
-    android:layout_height="230dp" />
+    android:layout_height="wrap_content">
+
+</ListView>
 </LinearLayout>

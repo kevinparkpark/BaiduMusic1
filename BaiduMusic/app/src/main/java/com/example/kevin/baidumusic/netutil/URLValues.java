@@ -17,4 +17,8 @@ public final class URLValues {
     public static final String LE_RANKDETAILS_SONGURL1="http://tingapi.ting.baidu.com/v1/restserver/ting?from=webapp_music&method=baidu.ting.song.play&format=json&callback=&songid=";
     public static final String LE_RANKDETAILS_SONGURL2="&_=1413017198449";
 
+    public static final String LE_SONGMENU="http://tingapi.ting.baidu.com/v1/restserver/ting?method=baidu.ting.diy.gedan&page_no=1&page_size=30&from=ios&version=5.2.3&from=ios&channel=appstore";
+
+    public static final String LE_SONGMENUDETAILS_LIST1="http://tingapi.ting.baidu.com/v1/restserver/ting?method=baidu.ting.diy.gedanInfo&from=ios&listid=";
+    public static final String LE_SONGMENUDETAILS_LIST2="&version=5.2.3&from=ios&channel=appstore";
 }

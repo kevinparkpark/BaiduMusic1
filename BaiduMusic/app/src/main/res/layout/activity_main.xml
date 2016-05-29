@@ -14,7 +14,7 @@
 
     </FrameLayout>
 
-    <LinearLayout
+    <RelativeLayout
         android:id="@+id/linearLayout_main_playlist"
         android:layout_width="match_parent"
         android:layout_height="50dp"
@@ -25,7 +25,7 @@
 
         <ImageView
             android:id="@+id/iv_main_song_image"
-            android:layout_width="wrap_content"
+            android:layout_width="60dp"
             android:layout_height="match_parent"
             android:src="@mipmap/yuan" />
 
@@ -34,41 +34,55 @@
             android:layout_height="match_parent"
             android:orientation="vertical">
 
-            <TextView
-                android:id="@+id/tv_main_song_title"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:text="百度音乐 听到极致"
-                android:textSize="15sp" />
-
-            <TextView
-                android:id="@+id/tv_main_song_author"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:text="T-ara" />
         </LinearLayout>
 
         <ImageView
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:layout_weight="0.23"
-            android:src="@mipmap/bt_minibar_playinglist_normal" />
+            android:src="@mipmap/bt_minibar_playinglist_normal"
+            android:layout_marginEnd="22dp"
+            android:layout_alignParentTop="true"
+            android:layout_toStartOf="@+id/iv_main_play" />
 
         <ImageView
             android:id="@+id/iv_main_play"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:layout_weight="0.25"
-            android:src="@mipmap/bt_minibar_play_normal" />
+            android:src="@mipmap/bt_minibar_play_normal"
+            android:layout_marginEnd="22dp"
+            android:layout_alignParentTop="true"
+            android:layout_toStartOf="@+id/iv_main_next" />
 
         <ImageView
             android:id="@+id/iv_main_next"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:layout_weight="0.25"
-            android:src="@mipmap/bt_minibar_next_normal" />
-    </LinearLayout>
+            android:src="@mipmap/bt_minibar_next_normal"
+            android:layout_marginEnd="24dp"
+            android:layout_alignParentTop="true"
+            android:layout_alignParentEnd="true" />
+
+        <TextView
+            android:id="@+id/tv_main_song_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="百度音乐 听到极致"
+            android:textSize="15sp"
+            android:layout_alignParentTop="true"
+            android:layout_toEndOf="@+id/iv_main_song_image" />
+
+        <TextView
+            android:id="@+id/tv_main_song_author"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="T-ara"
+            android:layout_centerVertical="true"
+            android:layout_toEndOf="@+id/iv_main_song_image" />
+    </RelativeLayout>
 
 </RelativeLayout>

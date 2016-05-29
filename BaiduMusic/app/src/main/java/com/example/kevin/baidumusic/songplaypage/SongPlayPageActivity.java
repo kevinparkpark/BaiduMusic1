@@ -30,12 +30,12 @@ import java.util.ArrayList;
 /**
  * Created by kevin on 16/5/26.
  */
-public class SongPlayPageActivity extends AppCompatActivity {
+public class SongPlayPageActivity extends AppCompatActivity implements View.OnClickListener {
     private boolean flag = true;
     private ViewPager viewPager;
     private ArrayList<BaseFragment> fragments;
     private SongPlayPageAdapter adapter;
-    private ImageView ivSongPlay;
+    private ImageView ivSongPlay,ivNext,ivPrevious;
     private TextView tvSongPlayTitle, tvSongPlayAuthor, tvSongPlayTime, tvSongPlayMaxTime;
     private SeekBar seekBar;
     private int maxCurrent;
@@ -52,6 +52,9 @@ public class SongPlayPageActivity extends AppCompatActivity {
         tvSongPlayTitle = (TextView) findViewById(R.id.songplayactivity_title);
         tvSongPlayTime = (TextView) findViewById(R.id.tv_songplaypage_time);
         tvSongPlayMaxTime = (TextView) findViewById(R.id.tv_songplaypage_maxtime);
+        ivNext= (ImageView) findViewById(R.id.iv_songplayactivity_next);
+        ivPrevious= (ImageView) findViewById(R.id.iv_songplayactivity_previous);
+
         seekBar = (SeekBar) findViewById(R.id.seekbar_songplaypage);
 
         EventBus.getDefault().register(this);
@@ -77,18 +80,9 @@ public class SongPlayPageActivity extends AppCompatActivity {
 //        authorImgFragment.setArguments(bundle);
 
         //播放按键监听
-        ivSongPlay.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (flag = !flag) {
-//                    ivSongPlay.setImageResource(R.mipmap.bt_widget_pause_press);
-                    sendBroadcast(new Intent(BroadcastValues.PLAY));
-                } else {
-//                    ivSongPlay.setImageResource(R.mipmap.bt_widget_play_press);
-                    sendBroadcast(new Intent(BroadcastValues.PAUSE));
-                }
-            }
-        });
+        ivSongPlay.setOnClickListener(this);
+        ivNext.setOnClickListener(this);
+        ivPrevious.setOnClickListener(this);
 
     }
     //接收服务中seekbar相关数据
@@ -125,11 +119,11 @@ public class SongPlayPageActivity extends AppCompatActivity {
     }
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void serviceToplaySong(EventServiceToPauseBean serviceToPlayBean){
-        ivSongPlay.setImageResource(R.mipmap.bt_widget_pause_press);
+        ivSongPlay.setImageResource(R.mipmap.bt_widget_play_press);
     }
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void serviceToPlayBtn(EventServiceToPlayBtnBean btnBean){
-        ivSongPlay.setImageResource(R.mipmap.bt_widget_play_press);
+        ivSongPlay.setImageResource(R.mipmap.bt_widget_pause_press);
     }
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void serviceToplaySong(EventUpDateSongUI songUI){
@@ -151,4 +145,24 @@ public class SongPlayPageActivity extends AppCompatActivity {
         return dateFormat.format(time);
     }
 
+    @Override
+    public void onClick(View v) {
+        switch (v.getId()){
+            case R.id.iv_songplayactivity_play:
+                if (flag = !flag) {
+//                    ivSongPlay.setImageResource(R.mipmap.bt_widget_pause_press);
+                    sendBroadcast(new Intent(BroadcastValues.PLAY));
+                } else {
+//                    ivSongPlay.setImageResource(R.mipmap.bt_widget_play_press);
+                    sendBroadcast(new Intent(BroadcastValues.PAUSE));
+                }
+                break;
+            case R.id.iv_songplayactivity_next:
+                sendBroadcast(new Intent(BroadcastValues.NEXT));
+                break;
+            case R.id.iv_songplayactivity_previous:
+                sendBroadcast(new Intent(BroadcastValues.PREVIOUS));
+                break;
+        }
+    }
 }
