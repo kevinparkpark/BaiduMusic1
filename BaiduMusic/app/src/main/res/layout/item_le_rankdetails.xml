@@ -45,7 +45,6 @@
             android:layout_marginEnd="24dp" />
         <TextView
             android:id="@+id/tv_le_rankdetails_count"
-            android:text="01"
             android:textColor="@android:color/holo_red_dark"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"

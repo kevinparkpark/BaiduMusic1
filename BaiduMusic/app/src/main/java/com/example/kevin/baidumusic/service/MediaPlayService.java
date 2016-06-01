@@ -24,6 +24,7 @@ import com.example.kevin.baidumusic.db.DBSongListCacheBean;
 import com.example.kevin.baidumusic.db.DBSongPlayListBean;
 import com.example.kevin.baidumusic.eventbean.EventProgressBean;
 import com.example.kevin.baidumusic.eventbean.EventRankDetailsPositionBen;
+import com.example.kevin.baidumusic.eventbean.EventRankDetailsSongIdBean;
 import com.example.kevin.baidumusic.eventbean.EventSeekToBean;
 import com.example.kevin.baidumusic.eventbean.EventServiceToPauseBean;
 import com.example.kevin.baidumusic.eventbean.EventServiceToPlayBtnBean;
@@ -32,8 +33,10 @@ import com.example.kevin.baidumusic.eventbean.EventUpDateSongUI;
 import com.example.kevin.baidumusic.musiclibrary.rank.RankDetailsBean;
 import com.example.kevin.baidumusic.musiclibrary.rank.songplay.SongPlayBean;
 import com.example.kevin.baidumusic.musiclibrary.songmenu.songmenudetails.SongMenuDetailsBean;
+import com.example.kevin.baidumusic.netutil.GsonUtil;
 import com.example.kevin.baidumusic.netutil.NetListener;
 import com.example.kevin.baidumusic.netutil.NetTool;
+import com.example.kevin.baidumusic.search.SearchBean;
 import com.example.kevin.baidumusic.util.BroadcastValues;
 import com.example.kevin.baidumusic.db.LiteOrmSington;
 import com.google.gson.Gson;
@@ -59,6 +62,7 @@ public class MediaPlayService extends Service {
     private ReceiveNextMode nextMode;
     private ReceivePrevious previousMode;
     private ReceiveDestroy destroyMode;
+    private ReceiveNotiPlay notiPlay;
     private int detailsSongPosition;
     private ArrayList<String> detailsSongUrl;
     private int current;
@@ -71,6 +75,11 @@ public class MediaPlayService extends Service {
     private List<SongMenuDetailsBean.ContentBean> contentBeanList;
     private SongPlayBean songPlayBean;
     private boolean flag = false;
+    private RemoteViews remoteViews;
+    private Notification.Builder builder;
+    private String searchSongId;
+    private NotificationManager manager;
+    private String lrc;
 
     @Override
     public void onCreate() {
@@ -99,18 +108,20 @@ public class MediaPlayService extends Service {
         IntentFilter nextFilter = new IntentFilter();
         nextFilter.addAction(BroadcastValues.NEXT);
         registerReceiver(nextMode, nextFilter);
+        //notificationplay
+        notiPlay = new ReceiveNotiPlay();
+        registerReceiver(notiPlay, new IntentFilter(BroadcastValues.NOTI_PLAY));
         //previous注册
-        previousMode=new ReceivePrevious();
+        previousMode = new ReceivePrevious();
         registerReceiver(previousMode, new IntentFilter(BroadcastValues.PREVIOUS));
         //destroy注册
-        destroyMode=new ReceiveDestroy();
-        registerReceiver(destroyMode,new IntentFilter(BroadcastValues.DESTORY));
+        destroyMode = new ReceiveDestroy();
+        registerReceiver(destroyMode, new IntentFilter(BroadcastValues.DESTORY));
 
         liteOrm = LiteOrmSington.getInstance().getLiteOrm();
         List<DBSongListCacheBean> dbSongListCacheBeen = liteOrm.query(DBSongListCacheBean.class);
         SharedPreferences getsp = getSharedPreferences("songposition", MODE_PRIVATE);
         detailsSongPosition = getsp.getInt("position", 0);
-        Log.d("MediaPlayService", "detailsSongPosition:" + detailsSongPosition);
         if (dbSongListCacheBeen.size() != 0) {
             EventBus.getDefault().post(new EventUpDateSongUI(dbSongListCacheBeen.get(detailsSongPosition).getTitle(),
                     dbSongListCacheBeen.get(detailsSongPosition).getAuthor(), dbSongListCacheBeen.get(detailsSongPosition).getImageUrl(),
@@ -121,15 +132,61 @@ public class MediaPlayService extends Service {
     //接收排行点击position
     @Subscribe
     public void Detailsposition(EventRankDetailsPositionBen pos) {
-
         detailsSongPosition = pos.getPostion();
-        Log.d("MediaPlayService", "detailsSongPosition:" + detailsSongPosition);
+    }
+
+    //搜索页面传值
+    @Subscribe
+    public void getSearchSongId(final SearchBean searchBean) {
+        searchSongId = searchBean.getResult().getSong_info().getSong_list().get(detailsSongPosition).getSong_id();
+        NetTool netTool = new NetTool();
+        netTool.getDetailsSongUrl(new NetListener() {
+            @Override
+            public void onSuccessed(String result) {
+                Gson gson = new Gson();
+                result = result.replace("(", "");
+                result = result.replace(")", "");
+                result = result.replace(";", "");
+                songPlayBean = new SongPlayBean();
+                songPlayBean = gson.fromJson(result, SongPlayBean.class);
+                songUrl = songPlayBean.getBitrate().getFile_link();
+                lrc=songPlayBean.getSonginfo().getLrclink();
+                String author = songPlayBean.getSonginfo().getAuthor();
+                String songTitle = songPlayBean.getSonginfo().getTitle();
+                String songImageUrl = songPlayBean.getSonginfo().getPic_small();
+                String songImageBigUrl = songPlayBean.getSonginfo().getPic_premium();
+
+                detailsSongUrl = new ArrayList<>();
+                final List<SearchBean.ResultBean.SongInfoBean.SongListBean> songInfoBeen = searchBean.
+                        getResult().getSong_info().getSong_list();
+                for (int i = 0; i < songInfoBeen.size(); i++) {
+                    detailsSongUrl.add(songInfoBeen.get(i).getSong_id());
+                }
+                new Thread(new Runnable() {
+                    @Override
+                    public void run() {
+                        for (int i = 0; i < songInfoBeen.size(); i++) {
+                            liteOrm.insert(new DBSongListCacheBean(songInfoBeen.get(i).getTitle(), songInfoBeen.get(i).getAuthor(),
+                                    null, null, songInfoBeen.get(i).getSong_id()));
+                        }
+                    }
+                }).start();
+
+                startPlay(songUrl);
+                liteOrm.insert(new DBSongPlayListBean(songUrl, author, songTitle, songImageUrl, songImageBigUrl));
+
+            }
+
+            @Override
+            public void onFailed(VolleyError error) {
+
+            }
+        }, searchSongId);
     }
 
     //接收排行详情数据
     @Subscribe
     public void getEventDetails(final RankDetailsBean rankDetailsBean) {
-        Log.d("MediaPlayService", "service-eventdetails");
         NetTool netTool = new NetTool();
         netTool.getDetailsSongUrl(new NetListener() {
             @Override
@@ -142,6 +199,7 @@ public class MediaPlayService extends Service {
                 songPlayBean = new SongPlayBean();
                 songPlayBean = gson.fromJson(result, SongPlayBean.class);
                 songUrl = songPlayBean.getBitrate().getFile_link();
+                lrc=songPlayBean.getSonginfo().getLrclink();
                 String author = songPlayBean.getSonginfo().getAuthor();
                 String songTitle = songPlayBean.getSonginfo().getTitle();
                 String songImageUrl = songPlayBean.getSonginfo().getPic_small();
@@ -170,9 +228,9 @@ public class MediaPlayService extends Service {
                 if (songUrl != null) {
                     liteOrm.save(new DBSongPlayListBean(songUrl, author, songTitle, songImageUrl, songImageBigUrl));
                     List<DBSongListCacheBean> song = liteOrm.query(DBSongListCacheBean.class);
-                    for (DBSongListCacheBean songUrlBean : song) {
-                        Log.d("MediaPlayService", "songUrlBean:" + songUrlBean.getTitle());
-                    }
+//                    for (DBSongListCacheBean songUrlBean : song) {
+//                        Log.d("MediaPlayService", "songUrlBean:" + songUrlBean.getTitle());
+//                    }
                 }
                 SharedPreferences sp = getSharedPreferences("songposition", MODE_PRIVATE);
                 SharedPreferences.Editor editor = sp.edit();
@@ -205,6 +263,7 @@ public class MediaPlayService extends Service {
                 songPlayBean = new SongPlayBean();
                 songPlayBean = gson.fromJson(result, SongPlayBean.class);
                 songUrl = songPlayBean.getBitrate().getFile_link();
+                lrc=songPlayBean.getSonginfo().getLrclink();
                 String author = songPlayBean.getSonginfo().getAuthor();
                 String songTitle = songPlayBean.getSonginfo().getTitle();
                 String songImageUrl = songPlayBean.getSonginfo().getPic_small();
@@ -233,9 +292,9 @@ public class MediaPlayService extends Service {
                 if (songUrl != null) {
                     liteOrm.save(new DBSongPlayListBean(songUrl, author, songTitle, songImageUrl, songImageBigUrl));
                     List<DBSongListCacheBean> song = liteOrm.query(DBSongListCacheBean.class);
-                    for (DBSongListCacheBean songUrlBean : song) {
-                        Log.d("MediaPlayService", "songUrlBean:" + songUrlBean.getTitle());
-                    }
+//                    for (DBSongListCacheBean songUrlBean : song) {
+//                        Log.d("MediaPlayService", "songUrlBean:" + songUrlBean.getTitle());
+//                    }
                 }
                 SharedPreferences sp = getSharedPreferences("songposition", MODE_PRIVATE);
                 SharedPreferences.Editor editor = sp.edit();
@@ -274,15 +333,17 @@ public class MediaPlayService extends Service {
                         Thread.sleep(1000);
                         if (mp != null) {
                             current = mp.getCurrentPosition();
-                            EventBus.getDefault().post(new EventProgressBean(current, maxCurrent));
+                            EventBus.getDefault().post(new EventProgressBean(current, maxCurrent,lrc));
                             EventBus.getDefault().post(new EventUpDateSongUI(songPlayBean.getSonginfo().getTitle(), songPlayBean.getSonginfo().getAuthor(),
-                                    songPlayBean.getSonginfo().getPic_small(), songPlayBean.getSonginfo().getPic_premium()));
+                                    songPlayBean.getSonginfo().getPic_small(), songPlayBean.getSonginfo().getPic_big()));
                             if (mp.isPlaying()) {
                                 EventBus.getDefault().post(new EventServiceToPlayBtnBean(true));
                             } else {
-                                EventBus.getDefault().post(new EventServiceToPauseBean(dbSongListCacheBeen.get(detailsSongPosition + 1).getTitle(),
-                                        dbSongListCacheBeen.get(detailsSongPosition + 1).getAuthor(), dbSongListCacheBeen.get(detailsSongPosition + 1).getImageUrl(),
-                                        dbSongListCacheBeen.get(detailsSongPosition + 1).getImageBigUrl()));
+                                if (detailsSongPosition < dbSongListCacheBeen.size()) {
+                                    EventBus.getDefault().post(new EventServiceToPauseBean(dbSongListCacheBeen.get(detailsSongPosition + 1).getTitle(),
+                                            dbSongListCacheBeen.get(detailsSongPosition + 1).getAuthor(), dbSongListCacheBeen.get(detailsSongPosition + 1).getImageUrl(),
+                                            dbSongListCacheBeen.get(detailsSongPosition + 1).getImageBigUrl()));
+                                }
                             }
                         }
                     } catch (InterruptedException e) {
@@ -307,9 +368,9 @@ public class MediaPlayService extends Service {
         }
         maxCurrent = mp.getDuration();
         seeTo();
-        showNotification(songPlayBean.getSonginfo().getPic_big(),songPlayBean.getSonginfo().getTitle()
-        ,songPlayBean.getSonginfo().getAuthor());
-        Log.d("MediaPlayService","-----"+ songPlayBean.getSonginfo().getPic_small());
+        showNotification(songPlayBean.getSonginfo().getPic_big(), songPlayBean.getSonginfo().getTitle()
+                , songPlayBean.getSonginfo().getAuthor(), R.mipmap.bt_widget_pause_press);
+        Log.d("MediaPlayService", "-----" + songPlayBean.getSonginfo().getPic_small());
     }
 
     //播放音乐的时候发送eventbus到 播放页面
@@ -317,6 +378,8 @@ public class MediaPlayService extends Service {
 
         if (flag) {
             mp.start();
+            showNotification(songPlayBean.getSonginfo().getPic_big(), songPlayBean.getSonginfo().getTitle()
+                    , songPlayBean.getSonginfo().getAuthor(), R.mipmap.bt_widget_pause_press);
         } else {
 
             next(detailsSongPosition);
@@ -330,6 +393,8 @@ public class MediaPlayService extends Service {
         if (mp != null && mp.isPlaying()) {
             mp.pause();
             EventBus.getDefault().post(new EventServiceToPlayBtnBean(true));
+            showNotification(songPlayBean.getSonginfo().getPic_big(), songPlayBean.getSonginfo().getTitle()
+                    , songPlayBean.getSonginfo().getAuthor(), R.mipmap.bt_widget_play_press);
         }
     }
 
@@ -337,6 +402,22 @@ public class MediaPlayService extends Service {
     public void next(int position) {
 
         List<DBSongListCacheBean> been = liteOrm.query(DBSongListCacheBean.class);
+
+//        GsonUtil gsonUtil=new GsonUtil(been.get(position).getSongId());
+//        songUrl = gsonUtil.getSongUrl();
+//        lrc=gsonUtil.getLrc();
+//        String author = gsonUtil.getAuthor();
+//        String songTitle = gsonUtil.getSongTitle();
+//        String songImageUrl = gsonUtil.getSongImageUrl();
+//        String songImageBigUrl = gsonUtil.getSongImageBigUrl();
+//
+//        startPlay(songUrl);
+//        liteOrm.insert(new DBSongPlayListBean(songUrl, author, songTitle, songImageUrl, songImageBigUrl));
+//        SharedPreferences sp = getSharedPreferences("songposition", MODE_PRIVATE);
+//        SharedPreferences.Editor editor = sp.edit();
+//        editor.putInt("position", detailsSongPosition);
+//        editor.commit();
+
         NetTool netTool = new NetTool();
         netTool.getDetailsSongUrl(new NetListener() {
             @Override
@@ -348,6 +429,7 @@ public class MediaPlayService extends Service {
                 songPlayBean = new SongPlayBean();
                 songPlayBean = gson.fromJson(result, SongPlayBean.class);
                 songUrl = songPlayBean.getBitrate().getFile_link();
+                lrc=songPlayBean.getSonginfo().getLrclink();
                 String author = songPlayBean.getSonginfo().getAuthor();
                 String songTitle = songPlayBean.getSonginfo().getTitle();
                 String songImageUrl = songPlayBean.getSonginfo().getPic_small();
@@ -384,30 +466,32 @@ public class MediaPlayService extends Service {
         unregisterReceiver(nextMode);
         unregisterReceiver(previousMode);
         unregisterReceiver(destroyMode);
+        unregisterReceiver(notiPlay);
     }
 
     //notification
-    public void showNotification(String imgUrl,String title,String author){
-        NotificationManager manager= (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
-        Notification.Builder builder=new Notification.Builder(this);
+    public void showNotification(String imgUrl, String title, String author, int id) {
+        manager = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
+        builder = new Notification.Builder(this);
         builder.setSmallIcon(R.mipmap.yuan).setAutoCancel(true);
-        RemoteViews remoteViews=new RemoteViews(getPackageName(),R.layout.remote_view);
+        remoteViews = new RemoteViews(getPackageName(), R.layout.remote_view);
 //        remoteViews.setImageViewResource(R.id.iv_remote_img,R.mipmap.yuan);
-        remoteViews.setTextViewText(R.id.tv_remote_title,title);
-        remoteViews.setTextViewText(R.id.tv_remote_author,author);
-        Intent intent=new Intent(BroadcastValues.PLAY);
-        Intent pauseIntent=new Intent(BroadcastValues.NEXT);
-        Intent destroyIntent=new Intent(BroadcastValues.DESTORY);
-        PendingIntent destroyPendingIntent=PendingIntent.getBroadcast(this,0,destroyIntent,0);
-        PendingIntent pausePendingIntent=PendingIntent.getBroadcast(this,0,pauseIntent,0);
-        PendingIntent pendingIntent=PendingIntent.getBroadcast(this,0,intent,0);
-        remoteViews.setOnClickPendingIntent(R.id.iv_remote_play,pendingIntent);
-        remoteViews.setOnClickPendingIntent(R.id.iv_remote_next,pausePendingIntent);
-        remoteViews.setOnClickPendingIntent(R.id.iv_remote_diestroy,destroyPendingIntent);
+        remoteViews.setTextViewText(R.id.tv_remote_title, title);
+        remoteViews.setTextViewText(R.id.tv_remote_author, author);
+        remoteViews.setImageViewResource(R.id.iv_remote_play, id);
+        Intent intent = new Intent(BroadcastValues.NOTI_PLAY);
+        Intent pauseIntent = new Intent(BroadcastValues.NEXT);
+        Intent destroyIntent = new Intent(BroadcastValues.DESTORY);
+        PendingIntent destroyPendingIntent = PendingIntent.getBroadcast(this, 0, destroyIntent, 0);
+        PendingIntent pausePendingIntent = PendingIntent.getBroadcast(this, 0, pauseIntent, 0);
+        PendingIntent pendingIntent = PendingIntent.getBroadcast(this, 0, intent, 0);
+        remoteViews.setOnClickPendingIntent(R.id.iv_remote_play, pendingIntent);
+        remoteViews.setOnClickPendingIntent(R.id.iv_remote_next, pausePendingIntent);
+        remoteViews.setOnClickPendingIntent(R.id.iv_remote_diestroy, destroyPendingIntent);
         builder.setContent(remoteViews);
-        manager.notify(2016,builder.build());
+        manager.notify(2016, builder.build());
         Picasso.with(this).load(imgUrl).into(remoteViews,
-                R.id.iv_remote_img,2016,builder.build());
+                R.id.iv_remote_img, 2016, builder.build());
     }
 
     //接收音乐播放按键广播
@@ -430,7 +514,6 @@ public class MediaPlayService extends Service {
     class ReceiveNextMode extends BroadcastReceiver {
         @Override
         public void onReceive(Context context, Intent intent) {
-            Log.d("ReceiveNextMode", "nextrecevice");
             next(++detailsSongPosition);
         }
     }
@@ -439,14 +522,32 @@ public class MediaPlayService extends Service {
     class ReceivePrevious extends BroadcastReceiver {
         @Override
         public void onReceive(Context context, Intent intent) {
+            if (detailsSongPosition>0){
             next(--detailsSongPosition);
+            }
         }
     }
+
     //退出程序
-    class ReceiveDestroy extends BroadcastReceiver{
+    class ReceiveDestroy extends BroadcastReceiver {
         @Override
         public void onReceive(Context context, Intent intent) {
+            //退出系统及notification
+            manager.cancel(2016);
             System.exit(0);
+        }
+    }
+    //notification播放按键监听
+    class ReceiveNotiPlay extends BroadcastReceiver {
+        boolean play = true;
+
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            if (play = !play) {
+                play();
+            } else {
+                pause();
+            }
         }
     }
 

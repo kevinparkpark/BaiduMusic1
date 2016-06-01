@@ -57,10 +57,10 @@ public class RankDetailsAdapter extends BaseAdapter{
             holder= (ViewHolder) convertView.getTag();
         }
 
-        holder.tv_count.setText(songListBeen.get(position).getRank());
+//        holder.tv_count.setText(songListBeen.get(position).getRank());
         holder.tv_song.setText(songListBeen.get(position).getTitle());
         holder.tv_author.setText(songListBeen.get(position).getAuthor());
-        if (songListBeen.get(position).getPic_big().trim().length() == 0){
+        if (songListBeen.get(position).getPic_small().trim().length() == 0){
 
             Log.d("RankDetailsAdapter", "getCount():" + getCount());
         }else {

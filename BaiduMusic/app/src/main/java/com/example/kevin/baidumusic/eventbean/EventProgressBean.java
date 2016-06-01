@@ -5,10 +5,12 @@ package com.example.kevin.baidumusic.eventbean;
  */
 public class EventProgressBean {
     int current,maxCurrent;
+    String lrc;
 
-    public EventProgressBean(int current, int maxCurrent) {
+    public EventProgressBean(int current, int maxCurrent, String lrc) {
         this.current = current;
         this.maxCurrent = maxCurrent;
+        this.lrc = lrc;
     }
 
     public int getCurrent() {
@@ -25,5 +27,13 @@ public class EventProgressBean {
 
     public void setMaxCurrent(int maxCurrent) {
         this.maxCurrent = maxCurrent;
+    }
+
+    public String getLrc() {
+        return lrc;
+    }
+
+    public void setLrc(String lrc) {
+        this.lrc = lrc;
     }
 }

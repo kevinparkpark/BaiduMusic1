@@ -66,7 +66,7 @@ public class RankAdapter extends BaseAdapter {
                 + "-" + contentBeans.get(position).getContent().get(2).getAuthor());
 
         ImageLoader loader = VolleySingleton.getInstance().getImageLoader();
-        loader.get(contentBeans.get(position).getPic_s260(),ImageLoader.getImageListener(
+        loader.get(contentBeans.get(position).getPic_s192(),ImageLoader.getImageListener(
                 holder.ivRankNew,R.mipmap.ic_launcher,R.mipmap.ic_launcher));
 
         return convertView;

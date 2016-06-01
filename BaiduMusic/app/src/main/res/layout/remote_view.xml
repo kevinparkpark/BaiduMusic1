@@ -24,21 +24,23 @@
         android:layout_toEndOf="@+id/iv_remote_img"
         android:layout_weight="0.40">
         <TextView
+            android:maxLines="1"
             android:maxEms="10"
             android:id="@+id/tv_remote_title"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="因为爱情"
+            android:text=""
             android:textColor="@android:color/white"
             android:textSize="18sp" />
 
         <TextView
-            android:maxEms="10"
+            android:maxLines="1"
+            android:maxEms="6"
             android:layout_marginTop="10dp"
             android:id="@+id/tv_remote_author"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="王菲"
+            android:text=""
             android:textColor="@android:color/white" />
     </LinearLayout>
 
@@ -48,7 +50,7 @@
         android:id="@+id/iv_remote_play"
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
-        android:src="@mipmap/bt_widget_play_press"
+        android:src="@mipmap/bt_widget_pause_press"
         android:layout_marginEnd="48dp"
         android:layout_alignTop="@+id/iv_remote_diestroy"
         android:layout_toStartOf="@+id/iv_remote_next"

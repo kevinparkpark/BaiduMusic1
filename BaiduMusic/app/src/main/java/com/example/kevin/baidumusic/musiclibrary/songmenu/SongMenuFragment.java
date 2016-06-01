@@ -1,12 +1,21 @@
 package com.example.kevin.baidumusic.musiclibrary.songmenu;
 
+import android.os.Handler;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.View;
+import android.widget.Toast;
 
 import com.android.volley.VolleyError;
+import com.chanven.lib.cptr.PtrClassicFrameLayout;
+import com.chanven.lib.cptr.PtrDefaultHandler;
+import com.chanven.lib.cptr.PtrFrameLayout;
+import com.chanven.lib.cptr.loadmore.OnLoadMoreListener;
+import com.chanven.lib.cptr.recyclerview.RecyclerAdapterWithHF;
 import com.example.kevin.baidumusic.base.BaseFragment;
 import com.example.kevin.baidumusic.R;
+import com.example.kevin.baidumusic.musiclibrary.rank.RankBean;
 import com.example.kevin.baidumusic.netutil.NetListener;
 import com.example.kevin.baidumusic.netutil.NetTool;
 import com.example.kevin.baidumusic.netutil.URLValues;
@@ -21,7 +30,11 @@ import java.util.List;
 public class SongMenuFragment extends BaseFragment {
     private SongMenuAdapter adapter;
     private List<SongMenuBean.ContentBean> contentBeanList;
+    private SongMenuBean bean;
     private RecyclerView recyclerView;
+    private PtrClassicFrameLayout ptrClassicFrameLayout;//recyclerviewhead类
+    private RecyclerAdapterWithHF adapterWithHF;//recyclerview帮助类
+    private int page=1;//网络加载首页
 
     @Override
     public int setlayout() {
@@ -31,45 +44,79 @@ public class SongMenuFragment extends BaseFragment {
     @Override
     protected void initView(View view) {
         recyclerView = (RecyclerView) view.findViewById(R.id.songmenu_recyclerview);
+        ptrClassicFrameLayout= (PtrClassicFrameLayout) view.findViewById(R.id.ptrFramlayout);
 
     }
 
     @Override
     protected void initData() {
+        adapter = new SongMenuAdapter(context);
+        contentBeanList = new ArrayList<>();
+
+        GridLayoutManager manager = new GridLayoutManager(context, 2);
+        manager.setOrientation(GridLayoutManager.VERTICAL);
+        recyclerView.setLayoutManager(manager);
+        adapterWithHF=new RecyclerAdapterWithHF(adapter);
+        recyclerView.setAdapter(adapterWithHF);
+        ptrClassicFrameLayout.setPtrHandler(ptrDefaultHandler);
+        ptrClassicFrameLayout.setOnLoadMoreListener(onLoadMoreListener);
+        ptrClassicFrameLayout.setLoadMoreEnable(true);
+        reFlashData();
+        adapter.setDatas(contentBeanList);
+
+
+        adapter.setClickListener(new SongMenuRecyclerViewOnClickListener() {
+            @Override
+            public void onSongMenuClick(int position) {
+                ((SongMenuToDetailsOnClickListener) getActivity()).onSongMenuToDetailsClickListener(contentBeanList.get(position).getListid());
+            }
+        });
+
+    }
+    //第一次加载
+    private PtrDefaultHandler ptrDefaultHandler=new PtrDefaultHandler() {
+        @Override
+        public void onRefreshBegin(PtrFrameLayout frame) {
+            contentBeanList=new ArrayList<>();
+            reFlashData();
+        }
+    };
+    //loadmore
+    private OnLoadMoreListener onLoadMoreListener=new OnLoadMoreListener() {
+        @Override
+        public void loadMore() {
+            ++page;
+            reFlashData();
+        }
+    };
+
+    public interface SongMenuToDetailsOnClickListener {
+        void onSongMenuToDetailsClickListener(String position);
+    }
+    public void reFlashData(){
         NetTool netTool = new NetTool();
         netTool.getUrl(new NetListener() {
             @Override
             public void onSuccessed(String result) {
                 Gson gson = new Gson();
-                SongMenuBean bean = gson.fromJson(result, SongMenuBean.class);
-                contentBeanList = new ArrayList<SongMenuBean.ContentBean>();
-                contentBeanList = bean.getContent();
-                adapter = new SongMenuAdapter(context);
+                bean = gson.fromJson(result, SongMenuBean.class);
 
+                contentBeanList.addAll(bean.getContent());
                 adapter.setDatas(contentBeanList);
-                GridLayoutManager manager = new GridLayoutManager(context, 2);
-                manager.setOrientation(GridLayoutManager.VERTICAL);
-                recyclerView.setLayoutManager(manager);
+                adapterWithHF.notifyDataSetChanged();
+                ptrClassicFrameLayout.refreshComplete();
+                ptrClassicFrameLayout.loadMoreComplete(true);
 
-                recyclerView.setAdapter(adapter);
-
-                adapter.setClickListener(new SongMenuRecyclerViewOnClickListener() {
-                    @Override
-                    public void onSongMenuClick(int position) {
-                        ((SongMenuToDetailsOnClickListener) getActivity()).onSongMenuToDetailsClickListener(contentBeanList.get(position).getListid());
-                    }
-                });
+                if (page>1){
+                Toast.makeText(context, "加载完毕", Toast.LENGTH_SHORT).show();
+                }
             }
 
             @Override
             public void onFailed(VolleyError error) {
 
             }
-        }, URLValues.LE_SONGMENU);
-
+        }, URLValues.LE_SONGMENU1+String.valueOf(page)+URLValues.LE_SONGMENU2);
     }
 
-    public interface SongMenuToDetailsOnClickListener {
-        void onSongMenuToDetailsClickListener(String position);
-    }
 }

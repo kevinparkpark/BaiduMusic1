@@ -85,6 +85,7 @@ public class NetTool {
         });
         requestQueue.add(stringRequest);
     }
+    //拼接Url 解析
     public void getUrlId(final NetListener netListener,String url1, String songId,String url2){
         StringRequest stringRequest=new StringRequest(url1+songId+url2, new Response.Listener<String>() {
             @Override

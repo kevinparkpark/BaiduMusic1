@@ -11,5 +11,6 @@ public final class BroadcastValues {
     public static final String PREVIOUS="com.example.kevin.baidumusic.util.previous";
     public static final String UPDATE_SONGUI="com.example.kevin.baidumusic.util.update.songui";
     public static final String DESTORY="com.example.kevin.baidumusic.util.destory";
+    public static final String NOTI_PLAY="com.example.kevin.baidumusic.util.notification.play";
 
 }

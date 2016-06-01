@@ -50,7 +50,6 @@ public class RankFragment extends BaseFragment {
 
                 contentBeans = new ArrayList<RankBean.ContentBean>();
                 contentBeans = rankBean.getContent();
-                Log.d("RankFragment", contentBeans.get(0).getName());
 
                 adapter = new RankAdapter(context);
                 adapter.setContentBeans(contentBeans);

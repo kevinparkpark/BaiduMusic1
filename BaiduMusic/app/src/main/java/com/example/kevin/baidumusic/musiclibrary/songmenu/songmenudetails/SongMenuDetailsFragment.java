@@ -1,5 +1,6 @@
 package com.example.kevin.baidumusic.musiclibrary.songmenu.songmenudetails;
 
+import android.support.v4.app.Fragment;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -24,6 +25,7 @@ import com.squareup.picasso.Picasso;
 
 import org.greenrobot.eventbus.EventBus;
 
+import java.lang.reflect.Field;
 import java.util.List;
 
 /**
@@ -102,5 +104,6 @@ public class SongMenuDetailsFragment extends BaseFragment{
     public void onDestroy() {
         super.onDestroy();
         ((MainActivity)getActivity()).showTitleFragment();
+
     }
 }

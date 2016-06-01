@@ -1,10 +1,11 @@
 package com.example.kevin.baidumusic.musiclibrary.rank;
 
+import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ImageView;
-import android.widget.ListView;
 
 import com.android.volley.VolleyError;
 import com.example.kevin.baidumusic.MainActivity;
@@ -15,20 +16,23 @@ import com.example.kevin.baidumusic.db.LiteOrmSington;
 import com.example.kevin.baidumusic.eventbean.EventRankDetailsPositionBen;
 import com.example.kevin.baidumusic.netutil.NetListener;
 import com.example.kevin.baidumusic.netutil.NetTool;
+import com.example.kevin.baidumusic.util.RefreshListView;
+import com.example.kevin.baidumusic.util.myinterface.OnRefreshListener;
 import com.google.gson.Gson;
 import com.litesuits.orm.LiteOrm;
 import com.squareup.picasso.Picasso;
 
 import org.greenrobot.eventbus.EventBus;
 
+import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.List;
 
 /**
  * Created by kevin on 16/5/23.
  */
-public class RankDetailsFragment extends BaseFragment {
-    private ListView listView;
+public class RankDetailsFragment extends BaseFragment implements OnRefreshListener{
+    private RefreshListView refreshListView;
     private List<RankDetailsBean.SongListBean> songListBeen;
     private RankDetailsBean rankDetailsBean;
     private RankDetailsAdapter adapter;
@@ -36,6 +40,7 @@ public class RankDetailsFragment extends BaseFragment {
     private ImageView ivRankdetailsBack;
     private View view;
     private ImageView ivLeRankDetailsHead;
+    private String url;
 
     @Override
     public int setlayout() {
@@ -44,7 +49,7 @@ public class RankDetailsFragment extends BaseFragment {
 
     @Override
     protected void initView(View view) {
-        listView = (ListView) view.findViewById(R.id.rankdetails_listview);
+        refreshListView = (RefreshListView) view.findViewById(R.id.rankdetails_listview);
         ivRankdetailsBack = (ImageView) view.findViewById(R.id.iv_rankdetails_back);
 
         ivRankdetailsBack.setOnClickListener(new View.OnClickListener() {
@@ -64,39 +69,25 @@ public class RankDetailsFragment extends BaseFragment {
 
     @Override
     protected void initData() {
-        final String url = getArguments().getString("url");
 
-        NetTool netTool = new NetTool();
-        netTool.getLeRankDetails(new NetListener() {
-            @Override
-            public void onSuccessed(String result) {
-                Gson gson = new Gson();
-                rankDetailsBean = gson.fromJson(result, RankDetailsBean.class);
-                songListBeen = new ArrayList<>();
-                songListBeen = rankDetailsBean.getSong_list();
+         url = getArguments().getString("url");
+        adapter = new RankDetailsAdapter(context);
 
-                adapter = new RankDetailsAdapter(context);
-                adapter.setSongListBeen(songListBeen);
+        initResolve(url);
 
-                headView();
-                Picasso.with(context).load(url).into(ivLeRankDetailsHead);
-                //设置head
-                listView.addHeaderView(view, null, false);
+        headView();
+        Picasso.with(context).load(url).into(ivLeRankDetailsHead);
+        //设置head
+        refreshListView.addHeaderView(view, null, false);
 
-                listView.setAdapter(adapter);
-            }
+        refreshListView.setAdapter(adapter);
+        refreshListView.setOnRefreshListener(this);
 
-            @Override
-            public void onFailed(VolleyError error) {
-
-            }
-        }, getArguments().getInt("count"));
-
-        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+        refreshListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 
-                EventBus.getDefault().post(new EventRankDetailsPositionBen(position-1));
+                EventBus.getDefault().post(new EventRankDetailsPositionBen(position-2));
                 EventBus.getDefault().post(rankDetailsBean);
                 LiteOrm liteOrm= LiteOrmSington.getInstance().getLiteOrm();
                 liteOrm.deleteAll(DBSongListCacheBean.class);
@@ -113,8 +104,38 @@ public class RankDetailsFragment extends BaseFragment {
         super.onDestroy();
         EventBus.getDefault().unregister(this);
     }
-
-    public void unRegister() {
-
+    //下拉刷新
+    public void onDownPullRefresh(){
+        initResolve(url);
     }
+    //上拉加载
+    @Override
+    public void onLoadingMore() {
+        initResolve(url);
+    }
+    public void initResolve(final String url){
+        NetTool netTool = new NetTool();
+        netTool.getLeRankDetails(new NetListener() {
+            @Override
+            public void onSuccessed(String result) {
+                Gson gson = new Gson();
+                rankDetailsBean = gson.fromJson(result, RankDetailsBean.class);
+                songListBeen = new ArrayList<>();
+                songListBeen = rankDetailsBean.getSong_list();
+
+                adapter.setSongListBeen(songListBeen);
+                adapter.notifyDataSetChanged();
+                refreshListView.hideFooterView();
+                refreshListView.hideHeaderView();
+
+
+            }
+
+            @Override
+            public void onFailed(VolleyError error) {
+
+            }
+        }, getArguments().getInt("count"));
+    }
+
 }

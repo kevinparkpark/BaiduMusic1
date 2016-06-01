@@ -18,7 +18,7 @@ import java.util.List;
 /**
  * Created by kevin on 16/5/21.
  */
-public class SongMenuAdapter extends RecyclerView.Adapter<SongMenuAdapter.MyHolder> {
+public class SongMenuAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     private Context context;
     private List<SongMenuBean.ContentBean> datas;
     private SongMenuRecyclerViewOnClickListener clickListener;
@@ -46,15 +46,15 @@ public class SongMenuAdapter extends RecyclerView.Adapter<SongMenuAdapter.MyHold
     }
 
     @Override
-    public void onBindViewHolder(final MyHolder holder, int position) {
-
-        holder.tvSongmenuCount.setText(datas.get(position).getListenum());
-        holder.tvSongmenuTitle.setText(datas.get(position).getTitle());
-        holder.tvSongmenuWhere.setText(datas.get(position).getTag());
-        Picasso.with(context).load(datas.get(position).getPic_w300()).into(holder.ivSongmenu);
+    public void onBindViewHolder(final RecyclerView.ViewHolder holder, int position) {
+        MyHolder holder1= (MyHolder) holder;
+        holder1.tvSongmenuCount.setText(datas.get(position).getListenum());
+        holder1.tvSongmenuTitle.setText(datas.get(position).getTitle());
+        holder1.tvSongmenuWhere.setText(datas.get(position).getTag());
+        Picasso.with(context).load(datas.get(position).getPic_300()).into(holder1.ivSongmenu);
 
         if (clickListener!=null){
-            holder.relativeLayout.setOnClickListener(new View.OnClickListener() {
+            holder1.relativeLayout.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     int position=holder.getLayoutPosition();
@@ -69,7 +69,7 @@ public class SongMenuAdapter extends RecyclerView.Adapter<SongMenuAdapter.MyHold
         return datas==null?0:datas.size();
     }
 
-    class MyHolder extends RecyclerView.ViewHolder{
+    public class MyHolder extends RecyclerView.ViewHolder{
 
         TextView tvSongmenuCount,tvSongmenuTitle,tvSongmenuWhere;
         ImageView ivSongmenu;

@@ -12,7 +12,7 @@ import android.view.ViewGroup;
  * Created by kevin on 16/5/20.
  */
 public abstract class SecBaseFragment extends Fragment{
-    private Context context;
+    protected Context context;
 
     @Override
     public void onAttach(Context context) {

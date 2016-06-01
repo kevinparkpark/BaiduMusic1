@@ -1,10 +1,12 @@
 package com.example.kevin.baidumusic;
 
 import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
+import android.view.WindowManager;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
@@ -21,6 +23,7 @@ import com.example.kevin.baidumusic.mymusic.MyFragment;
 import com.example.kevin.baidumusic.mymusic.localmusic.MyLocalMusicFragment;
 import com.example.kevin.baidumusic.search.SearchFragment;
 import com.example.kevin.baidumusic.service.MediaPlayService;
+import com.example.kevin.baidumusic.songlist.SongListCacheFragment;
 import com.example.kevin.baidumusic.songplaypage.SongPlayPageActivity;
 import com.example.kevin.baidumusic.totalfragment.TotalFragment;
 import com.example.kevin.baidumusic.util.BroadcastValues;
@@ -35,7 +38,7 @@ public class MainActivity extends AppCompatActivity implements MyFragment.MyToLo
 
     private TotalFragment totalFragment;
     private MyFragment myFragment;
-    private ImageView ivPlay,ivSongImage,ivMainNext;
+    private ImageView ivPlay,ivSongImage,ivMainNext,ivSongListCache;
     private TextView tvSongTitle,tvSongAuthor;
     private boolean flag = false;
     private RelativeLayout linearLayoutMainPlaylist;
@@ -53,9 +56,13 @@ public class MainActivity extends AppCompatActivity implements MyFragment.MyToLo
         ivPlay = (ImageView) findViewById(R.id.iv_main_play);
         ivSongImage= (ImageView) findViewById(R.id.iv_main_song_image);
         ivMainNext= (ImageView) findViewById(R.id.iv_main_next);
+        ivSongListCache= (ImageView) findViewById(R.id.iv_main_songlistcache);
         tvSongTitle= (TextView) findViewById(R.id.tv_main_song_title);
         tvSongAuthor= (TextView) findViewById(R.id.tv_main_song_author);
         linearLayoutMainPlaylist= (RelativeLayout) findViewById(R.id.linearLayout_main_playlist);
+
+        //主页状态
+//        setWindowsState();
 
         linearLayoutMainPlaylist.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -76,7 +83,6 @@ public class MainActivity extends AppCompatActivity implements MyFragment.MyToLo
             public void onClick(View v) {
                 if (flag = !flag) {
 //                    ivPlay.setSelected(true);
-                    Log.d("MainActivity", "bo-A");
                     sendBroadcast(new Intent(BroadcastValues.PLAY));
                 } else {
 //                    ivPlay.setSelected(false);
@@ -89,6 +95,14 @@ public class MainActivity extends AppCompatActivity implements MyFragment.MyToLo
             @Override
             public void onClick(View v) {
                 sendBroadcast(new Intent(BroadcastValues.NEXT));
+            }
+        });
+        //歌曲缓存列表
+        ivSongListCache.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                getSupportFragmentManager().beginTransaction().add(R.id.framelayout_main,new SongListCacheFragment())
+                        .addToBackStack(null).commit();
             }
         });
 
@@ -169,5 +183,12 @@ public class MainActivity extends AppCompatActivity implements MyFragment.MyToLo
         EventBus.getDefault().unregister(this);
         stopService(startIntent);
     }
+    //主页状态
+//    private void setWindowsState(){
+//        getWindow().addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
+//        getWindow().addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_NAVIGATION);
+//        getWindow().setBackgroundDrawableResource(R.color.maincolor);
+//    }
+    
 
 }
