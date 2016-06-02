@@ -9,7 +9,9 @@ import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.android.volley.toolbox.ImageLoader;
 import com.example.kevin.baidumusic.R;
+import com.example.kevin.baidumusic.netutil.VolleySingleton;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
@@ -51,7 +53,10 @@ public class SongMenuAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
         holder1.tvSongmenuCount.setText(datas.get(position).getListenum());
         holder1.tvSongmenuTitle.setText(datas.get(position).getTitle());
         holder1.tvSongmenuWhere.setText(datas.get(position).getTag());
-        Picasso.with(context).load(datas.get(position).getPic_300()).into(holder1.ivSongmenu);
+//        Picasso.with(context).load(datas.get(position).getPic_300()).into(holder1.ivSongmenu);
+        ImageLoader loader= VolleySingleton.getInstance().getImageLoader();
+        loader.get(datas.get(position).getPic_300(),ImageLoader.getImageListener(holder1.ivSongmenu,
+                R.mipmap.yuan,R.mipmap.yuan));
 
         if (clickListener!=null){
             holder1.relativeLayout.setOnClickListener(new View.OnClickListener() {

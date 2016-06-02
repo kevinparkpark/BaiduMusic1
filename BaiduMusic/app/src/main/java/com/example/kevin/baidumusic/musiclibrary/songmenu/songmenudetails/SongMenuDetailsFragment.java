@@ -73,7 +73,8 @@ public class SongMenuDetailsFragment extends BaseFragment{
                 adapter=new SongMenuDetailsAdapter(context);
                 adapter.setContentBeanList(contentBeanList);
                 headView();
-                Picasso.with(context).load(bean.getPic_w700()).resize(1000,500).centerCrop().into(ivSongMenuDetailsHeadImg);
+                Picasso.with(context).load(bean.getPic_w700()).resize(1000,500).
+                        centerCrop().into(ivSongMenuDetailsHeadImg);
                 tvTag.setText(bean.getTag());
                 tvTitle.setText(bean.getTitle());
                 tvListNum.setText(bean.getListenum());

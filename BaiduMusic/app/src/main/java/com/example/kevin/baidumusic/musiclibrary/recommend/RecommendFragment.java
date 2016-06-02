@@ -53,6 +53,9 @@ public class RecommendFragment extends BaseFragment {
     protected void initData() {
         adapter = new RecommendAdapter();
         picBeanList = new ArrayList<>();
+        //设置缓存图片数量及艰巨
+        viewPager.setOffscreenPageLimit(3);
+        viewPager.setPageMargin(10);
 
         NetTool netTool = new NetTool();
         netTool.getUrl(new NetListener() {
@@ -64,7 +67,23 @@ public class RecommendFragment extends BaseFragment {
                 adapter.setPicBeanList(picBeanList);
                 viewPager.setAdapter(adapter);
 
-                //需要获取picBeanList集合size;?????????????????????????????????????????????????????????
+                //获得tips的数量
+                tips = new ImageView[picBeanList.size()];
+                //花点点
+                for (int i = 0; i < tips.length; i++) {
+                    ImageView imageView = new ImageView(context);
+                    if (i == 0) {
+                        imageView.setBackgroundResource(R.mipmap.page_indicator_focused);
+                    } else {
+                        imageView.setBackgroundResource(R.mipmap.page_indicator_unfocused);
+                    }
+                    tips[i] = imageView;
+                    LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(new ViewGroup
+                            .LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT));
+                    layoutParams.leftMargin = 10;// 设置点点点view的左边距
+                    layoutParams.rightMargin = 10;// 设置点点点view的右边距
+                    group.addView(imageView, layoutParams);
+                }
             }
 
             @Override
@@ -135,21 +154,7 @@ public class RecommendFragment extends BaseFragment {
             }
         });
 
-        tips = new ImageView[5];
-        for (int i = 0; i < tips.length; i++) {
-            ImageView imageView = new ImageView(context);
-            if (i == 0) {
-                imageView.setBackgroundResource(R.mipmap.page_indicator_focused);
-            } else {
-                imageView.setBackgroundResource(R.mipmap.page_indicator_unfocused);
-            }
-            tips[i] = imageView;
-            LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(new ViewGroup
-                    .LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT));
-            layoutParams.leftMargin = 10;// 设置点点点view的左边距
-            layoutParams.rightMargin = 10;// 设置点点点view的右边距
-            group.addView(imageView, layoutParams);
-        }
+
 
     }
 

@@ -32,8 +32,49 @@ public final class URLValues {
             ".ting.search.merge&query=";
     public static final String SEARCH2="&page_size=50&page_no=1&type=-1&format=json&from=ios&" +
             "version=5.2.5&from=ios&channel=appstore";
-    public static final String MVLIST="http://tingapi.ting.baidu.com/v1/restserver/ting?from=" +
-            "android&version=5.7.3.0&channel=xiaomi&operator=3&provider=11%2C12&method=baidu." +
-            "ting.mv.searchMV&format=json&order=1&page_num=1&page_size=20&query=全部";
+    public static final String MVLIST1="http://tingapi.ting.baidu.com/v1/restserver/ting?" +
+            "from=android&version=5.7.3.0&channel=xiaomi&operator=3&provider=11%2C12&method=" +
+            "baidu.ting.mv.searchMV&format=json&order=1&page_num=";
+    public static final String MVLIST2="&page_size=20&query=全部";
+
     public static final String MV_DEMO="http://music.baidu.com/playmv/264730630";
+
+    public static final String KMUSIC_BANNERS="http://tingapi.ting.baidu.com/v1/restserver/" +
+            "ting?method=baidu.ting.artist.getList&format=json&order=1&limit=6&offset=0&area=0&" +
+            "sex=0&abc=&from=ios&version=5.2.1&from=ios&channel=appstore";
+
+    public static final String KMUSIC_CH_MAN_AUTHOR_LIST1="http://tingapi.ting.baidu.com/v1/restserver/ting?method=baidu.ting.artist.getList&format=json&order=";
+    public static final String KMUSIC_CH_MAN_AUTHOR_LIST2="&limit=50&offset=0&area=6&sex=1&abc=热门&from=ios&version=5.2.5&from=ios&channel=appstore";
+    public static final String KMUSIC_CH_WOMAN_AUTHOR_LIST1="http://tingapi.ting.baidu.com/v1/restserver/ting?method=baidu.ting.artist.getList&format=json&order=";
+    public static final String KMUSIC_CH_WOMAN_AUTHOR_LIST2="&limit=50&offset=0&area=6&sex=2&abc=热门&from=ios&version=5.2.5&from=ios&channel=appstore";
+    public static final String KMUSIC_CH_GROUP_AUTHOR_LIST1="http://tingapi.ting.baidu.com/v1/restserver/ting?method=baidu.ting.artist.getList&format=json&order=";
+    public static final String KMUSIC_CH_GROUP_AUTHOR_LIST2="&limit=50&offset=0&area=6&sex=3&abc=热门&from=ios&version=5.2.5&from=ios&channel=appstore";
+
+    public static final String KMUSIC_EURO_MAN_AUTHOR_LIST1="http://tingapi.ting.baidu.com/v1/restserver/ting?method=baidu.ting.artist.getList&format=json&order=";
+    public static final String KMUSIC_EURO_MAN_AUTHOR_LIST2="&limit=50&offset=0&area=3&sex=1&abc=热门&from=ios&version=5.2.5&from=ios&channel=appstore";
+    public static final String KMUSIC_EURO_WOMAN_AUTHOR_LIST1="http://tingapi.ting.baidu.com/v1/restserver/ting?method=baidu.ting.artist.getList&format=json&order=";
+    public static final String KMUSIC_EURO_WOMAN_AUTHOR_LIST2="&limit=50&offset=0&area=3&sex=2&abc=热门&from=ios&version=5.2.5&from=ios&channel=appstore";
+    public static final String KMUSIC_EURO_GROUP_AUTHOR_LIST1="http://tingapi.ting.baidu.com/v1/restserver/ting?method=baidu.ting.artist.getList&format=json&order=";
+    public static final String KMUSIC_EURO_GROUP_AUTHOR_LIST2="&limit=50&offset=0&area=3&sex=3&abc=热门&from=ios&version=5.2.5&from=ios&channel=appstore";
+
+    public static final String KMUSIC_KR_MAN_AUTHOR_LIST1="http://tingapi.ting.baidu.com/v1/restserver/ting?method=baidu.ting.artist.getList&format=json&order=";
+    public static final String KMUSIC_KR_MAN_AUTHOR_LIST2="&limit=50&offset=0&area=7&sex=1&abc=热门&from=ios&version=5.2.5&from=ios&channel=appstore";
+    public static final String KMUSIC_KR_WOMAN_AUTHOR_LIST1="http://tingapi.ting.baidu.com/v1/restserver/ting?method=baidu.ting.artist.getList&format=json&order=";
+    public static final String KMUSIC_KR_WOMAN_AUTHOR_LIST2="&limit=50&offset=0&area=7&sex=2&abc=热门&from=ios&version=5.2.5&from=ios&channel=appstore";
+    public static final String KMUSIC_KR_GROUP_AUTHOR_LIST1="http://tingapi.ting.baidu.com/v1/restserver/ting?method=baidu.ting.artist.getList&format=json&order=";
+    public static final String KMUSIC_KR_GROUP_AUTHOR_LIST2="&limit=50&offset=0&area=7&sex=3&abc=热门&from=ios&version=5.2.5&from=ios&channel=appstore";
+
+    public static final String KMUSIC_JP_MAN_AUTHOR_LIST1="http://tingapi.ting.baidu.com/v1/restserver/ting?method=baidu.ting.artist.getList&format=json&order=";
+    public static final String KMUSIC_JP_MAN_AUTHOR_LIST2="&limit=50&offset=0&area=60&sex=1&abc=热门&from=ios&version=5.2.5&from=ios&channel=appstore";
+    public static final String KMUSIC_JP_WOMAN_AUTHOR_LIST1="http://tingapi.ting.baidu.com/v1/restserver/ting?method=baidu.ting.artist.getList&format=json&order=";
+    public static final String KMUSIC_JP_WOMAN_AUTHOR_LIST2="&limit=50&offset=0&area=60&sex=2&abc=热门&from=ios&version=5.2.5&from=ios&channel=appstore";
+    public static final String KMUSIC_JP_GROUP_AUTHOR_LIST1="http://tingapi.ting.baidu.com/v1/restserver/ting?method=baidu.ting.artist.getList&format=json&order=";
+    public static final String KMUSIC_JP_GROUP_AUTHOR_LIST2="&limit=50&offset=0&area=60&sex=3&abc=热门&from=ios&version=5.2.5&from=ios&channel=appstore";
+
+    public static final String KMUSIC_OTHER_AUTHOR_LIST1="http://tingapi.ting.baidu.com/v1/restserver/ting?method=baidu.ting.artist.getList&format=json&order=";
+    public static final String KMUSIC_OTHER_AUTHOR_LIST2="&limit=50&offset=0&area=5&sex=4&abc=热门&from=ios&version=5.2.5&from=ios&channel=appstore";
+
+    public static final String AUTHORDETAILS_SONGLIST_TINGUID1="http://tingapi.ting.baidu.com/v1/restserver/ting?method=baidu.ting.artist.getSongList&format=json&tinguid=";
+    public static final String AUTHORDETAILS_SONGLIST_TINGUID2="&artistid(null)&limits=30&order=2&offset=0&version=5.2.5&from=ios&channel=appstore";
+
 }

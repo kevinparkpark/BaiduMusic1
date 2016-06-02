@@ -1,9 +1,7 @@
 package com.example.kevin.baidumusic.musiclibrary.songmenu;
 
-import android.os.Handler;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.View;
 import android.widget.Toast;
 
@@ -15,7 +13,6 @@ import com.chanven.lib.cptr.loadmore.OnLoadMoreListener;
 import com.chanven.lib.cptr.recyclerview.RecyclerAdapterWithHF;
 import com.example.kevin.baidumusic.base.BaseFragment;
 import com.example.kevin.baidumusic.R;
-import com.example.kevin.baidumusic.musiclibrary.rank.RankBean;
 import com.example.kevin.baidumusic.netutil.NetListener;
 import com.example.kevin.baidumusic.netutil.NetTool;
 import com.example.kevin.baidumusic.netutil.URLValues;
@@ -61,14 +58,15 @@ public class SongMenuFragment extends BaseFragment {
         ptrClassicFrameLayout.setPtrHandler(ptrDefaultHandler);
         ptrClassicFrameLayout.setOnLoadMoreListener(onLoadMoreListener);
         ptrClassicFrameLayout.setLoadMoreEnable(true);
-        reFlashData();
+        reFleshData();
         adapter.setDatas(contentBeanList);
 
 
         adapter.setClickListener(new SongMenuRecyclerViewOnClickListener() {
             @Override
             public void onSongMenuClick(int position) {
-                ((SongMenuToDetailsOnClickListener) getActivity()).onSongMenuToDetailsClickListener(contentBeanList.get(position).getListid());
+                ((songMenuToDetailsOnClickListener) getActivity())
+                        .onSongMenuToDetailsClickListener(contentBeanList.get(position).getListid());
             }
         });
 
@@ -78,7 +76,7 @@ public class SongMenuFragment extends BaseFragment {
         @Override
         public void onRefreshBegin(PtrFrameLayout frame) {
             contentBeanList=new ArrayList<>();
-            reFlashData();
+            reFleshData();
         }
     };
     //loadmore
@@ -86,14 +84,16 @@ public class SongMenuFragment extends BaseFragment {
         @Override
         public void loadMore() {
             ++page;
-            reFlashData();
+            reFleshData();
         }
     };
 
-    public interface SongMenuToDetailsOnClickListener {
+    public interface songMenuToDetailsOnClickListener {
         void onSongMenuToDetailsClickListener(String position);
     }
-    public void reFlashData(){
+
+    //刷新加载数据
+    public void reFleshData(){
         NetTool netTool = new NetTool();
         netTool.getUrl(new NetListener() {
             @Override

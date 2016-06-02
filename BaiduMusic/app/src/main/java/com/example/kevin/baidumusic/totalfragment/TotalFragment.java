@@ -7,7 +7,7 @@ import android.widget.ImageView;
 
 import com.example.kevin.baidumusic.R;
 import com.example.kevin.baidumusic.base.BaseFragment;
-import com.example.kevin.baidumusic.kmusic.KFragment;
+import com.example.kevin.baidumusic.kmusic.KMusicFragment;
 import com.example.kevin.baidumusic.musiclibrary.LeFragment;
 import com.example.kevin.baidumusic.liveFragment.LiveFragment;
 import com.example.kevin.baidumusic.mymusic.MyFragment;
@@ -48,7 +48,7 @@ public class TotalFragment extends BaseFragment {
         fragments = new ArrayList<>();
         fragments.add(new MyFragment());
         fragments.add(new LeFragment());
-        fragments.add(new KFragment());
+        fragments.add(new KMusicFragment());
         fragments.add(new LiveFragment());
 
         adapter.setFragments(fragments);

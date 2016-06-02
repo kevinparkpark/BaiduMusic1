@@ -9,7 +9,9 @@ import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.android.volley.toolbox.ImageLoader;
 import com.example.kevin.baidumusic.R;
+import com.example.kevin.baidumusic.netutil.VolleySingleton;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
@@ -18,7 +20,7 @@ import java.util.List;
 /**
  * Created by kevin on 16/5/21.
  */
-public class MvAdapter extends RecyclerView.Adapter<MvAdapter.MyHolder> {
+public class MvAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
     private List<MvBean.ResultBean.MvListBean> mvListBeen;
     private Context context;
@@ -45,10 +47,14 @@ public class MvAdapter extends RecyclerView.Adapter<MvAdapter.MyHolder> {
     }
 
     @Override
-    public void onBindViewHolder(final MyHolder holder, int position) {
-        holder.tvAuthor.setText(mvListBeen.get(position).getArtist());
-        holder.tvName.setText(mvListBeen.get(position).getTitle());
-        Picasso.with(context).load(mvListBeen.get(position).getThumbnail()).into(holder.ivMv);
+    public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
+        MyHolder holder1= (MyHolder) holder;
+        holder1.tvAuthor.setText(mvListBeen.get(position).getArtist());
+        holder1.tvName.setText(mvListBeen.get(position).getTitle());
+        Picasso.with(context).load(mvListBeen.get(position).getThumbnail()).into(holder1.ivMv);
+        ImageLoader loader= VolleySingleton.getInstance().getImageLoader();
+        loader.get(mvListBeen.get(position).getThumbnail(),ImageLoader.getImageListener(holder1.ivMv
+        ,R.mipmap.yuan,R.mipmap.yuan));
 //        if (clickListener!=null){
 //            holder.relativeLayout.setOnClickListener(new View.OnClickListener() {
 //                @Override
@@ -58,6 +64,7 @@ public class MvAdapter extends RecyclerView.Adapter<MvAdapter.MyHolder> {
 //                }
 //            });
 //        }
+
     }
 
     @Override

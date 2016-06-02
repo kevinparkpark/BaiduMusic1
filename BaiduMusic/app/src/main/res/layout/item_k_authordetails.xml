@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="match_parent">
+<RelativeLayout
+    android:id="@+id/rl_k_authordetals"
+    android:orientation="horizontal"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+    <ImageView
+        android:src="@mipmap/authordetails_demo"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/iv_k_authordetails_iv" />
+    <TextView
+        android:layout_marginLeft="10dp"
+        android:gravity="center"
+        android:text="未知"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/tv_k_authordetails_text"
+        android:layout_centerVertical="true"
+        android:layout_toEndOf="@+id/iv_k_authordetails_iv"
+        android:layout_marginStart="15dp" />
+    <ImageView
+        android:src="@mipmap/ic_songlist_detail_nor"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/tv_k_authordetails_text"
+        android:layout_alignParentEnd="true" />
+</RelativeLayout>
+</LinearLayout>

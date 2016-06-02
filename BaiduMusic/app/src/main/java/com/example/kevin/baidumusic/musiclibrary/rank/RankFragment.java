@@ -1,6 +1,5 @@
 package com.example.kevin.baidumusic.musiclibrary.rank;
 
-import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
@@ -22,9 +21,9 @@ public class RankFragment extends BaseFragment {
     private ListView listView;
     private RankAdapter adapter;
     private List<RankBean.ContentBean> contentBeans;
-    private RankToOnItemListener rankToOnItemListener;
+    private RankFragment.rankToOnItemListener rankToOnItemListener;
 
-    public void setRankToOnItemListener(RankToOnItemListener rankToOnItemListener) {
+    public void setRankToOnItemListener(RankFragment.rankToOnItemListener rankToOnItemListener) {
         this.rankToOnItemListener = rankToOnItemListener;
     }
 
@@ -65,14 +64,14 @@ public class RankFragment extends BaseFragment {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 
-                ((RankToOnItemListener)getActivity()).onRankToItemListener(contentBeans.get(position).getType()
+                ((RankFragment.rankToOnItemListener)getActivity()).onRankToItemListener(contentBeans.get(position).getType()
                 ,contentBeans.get(position).getPic_s192());
 
             }
         });
     }
 
-    public interface RankToOnItemListener{
+    public interface rankToOnItemListener {
         void onRankToItemListener(int count, String url);
     }
 }

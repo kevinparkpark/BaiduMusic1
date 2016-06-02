@@ -1,20 +1,19 @@
 package com.example.kevin.baidumusic;
 
 import android.content.Intent;
-import android.os.Build;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 import android.view.View;
-import android.view.WindowManager;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.example.kevin.baidumusic.eventbean.EventServiceToPauseBean;
 import com.example.kevin.baidumusic.eventbean.EventServiceToPlayBtnBean;
 import com.example.kevin.baidumusic.eventbean.EventUpDateSongUI;
+import com.example.kevin.baidumusic.kmusic.KMusicFragment;
+import com.example.kevin.baidumusic.kmusic.authordetails.AuthorDetailsFragment;
+import com.example.kevin.baidumusic.kmusic.authordetails.songlist.AuthorDetailsSonglistFragment;
 import com.example.kevin.baidumusic.musiclibrary.rank.RankDetailsFragment;
 import com.example.kevin.baidumusic.musiclibrary.rank.RankFragment;
 import com.example.kevin.baidumusic.musiclibrary.songmenu.SongMenuFragment;
@@ -33,8 +32,8 @@ import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 
-public class MainActivity extends AppCompatActivity implements MyFragment.MyToLocalFragmentOnClick, RankFragment.RankToOnItemListener
-,SongMenuFragment.SongMenuToDetailsOnClickListener{
+public class MainActivity extends AppCompatActivity implements MyFragment.MyToLocalFragmentOnClick, RankFragment.rankToOnItemListener
+,SongMenuFragment.songMenuToDetailsOnClickListener,KMusicFragment.kMusicToDetailsOnClickListener,AuthorDetailsFragment.authorDetailsToSonglistOnClickListener {
 
     private TotalFragment totalFragment;
     private MyFragment myFragment;
@@ -162,6 +161,28 @@ public class MainActivity extends AppCompatActivity implements MyFragment.MyToLo
         bundle.putString("listid",position);
         songMenuDetailsFragment.setArguments(bundle);
     }
+    //歌手详情页面
+    AuthorDetailsFragment authorDetailsFragment=new AuthorDetailsFragment();
+    @Override
+    public void onKMusicToDetailsClickListener(String url1,String url2,String authorName) {
+        getSupportFragmentManager().beginTransaction().setCustomAnimations(R.anim.fragment_in,R.anim.fragment_out)
+                .add(R.id.framelayout_main,authorDetailsFragment).hide(totalFragment).addToBackStack(null).commit();
+        Bundle bundle=new Bundle();
+        bundle.putString("authorurl1",url1);
+        bundle.putString("authorurl2",url2);
+        bundle.putString("authorname",authorName);
+        authorDetailsFragment.setArguments(bundle);
+    }
+    //歌手歌曲页面
+    AuthorDetailsSonglistFragment authorDetailsSonglistFragment=new AuthorDetailsSonglistFragment();
+    @Override
+    public void onAuthorDetailsToSonglistClickListener(String tingUid) {
+        getSupportFragmentManager().beginTransaction().setCustomAnimations(R.anim.fragment_in,R.anim.fragment_out)
+                .add(R.id.framelayout_main,authorDetailsSonglistFragment).hide(authorDetailsFragment).addToBackStack(null).commit();
+        Bundle bundle=new Bundle();
+        bundle.putString("tinguid",tingUid);
+        authorDetailsSonglistFragment.setArguments(bundle);
+    }
 
     //重新显示titlefragment
     public void showTitleFragment() {
@@ -183,6 +204,8 @@ public class MainActivity extends AppCompatActivity implements MyFragment.MyToLo
         EventBus.getDefault().unregister(this);
         stopService(startIntent);
     }
+
+
     //主页状态
 //    private void setWindowsState(){
 //        getWindow().addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
