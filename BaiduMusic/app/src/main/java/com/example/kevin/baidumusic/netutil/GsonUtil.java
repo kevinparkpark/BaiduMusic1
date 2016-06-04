@@ -9,6 +9,7 @@ import com.google.gson.Gson;
  * Created by kevin on 16/5/30.
  */
 public class GsonUtil {
+
     String songUrl,lrc,author,songTitle,songImageUrl,songImageBigUrl;
 
 

@@ -1,7 +1,6 @@
 package com.example.kevin.baidumusic.mymusic.localmusic;
 
 import android.support.design.widget.TabLayout;
-import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
 import android.view.View;
 import android.widget.RelativeLayout;
@@ -9,8 +8,8 @@ import android.widget.RelativeLayout;
 import com.example.kevin.baidumusic.MainActivity;
 import com.example.kevin.baidumusic.R;
 import com.example.kevin.baidumusic.base.BaseFragment;
+import com.example.kevin.baidumusic.mymusic.localmusic.musicsonglist.MyLocalMusicSonglistFragment;
 
-import java.lang.reflect.Field;
 import java.util.ArrayList;
 
 /**
@@ -41,7 +40,7 @@ public class MyLocalMusicFragment extends BaseFragment{
         adapter=new LocalMusicAdapter(getActivity().getSupportFragmentManager());
 
         fragments=new ArrayList<>();
-        fragments.add(new MyLocalMusicSongFragment());
+        fragments.add(new MyLocalMusicSonglistFragment());
         fragments.add(new MyLocalMusicFolderFragment());
         fragments.add(new MyLocalMusicAuthorFragment());
         fragments.add(new MyLocalMusicAlbumFragment());

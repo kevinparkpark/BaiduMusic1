@@ -47,8 +47,8 @@ public class MvAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     }
 
     @Override
-    public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
-        MyHolder holder1= (MyHolder) holder;
+    public void onBindViewHolder(final RecyclerView.ViewHolder holder, int position) {
+        final MyHolder holder1= (MyHolder) holder;
         holder1.tvAuthor.setText(mvListBeen.get(position).getArtist());
         holder1.tvName.setText(mvListBeen.get(position).getTitle());
         Picasso.with(context).load(mvListBeen.get(position).getThumbnail()).into(holder1.ivMv);
@@ -56,10 +56,10 @@ public class MvAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
         loader.get(mvListBeen.get(position).getThumbnail(),ImageLoader.getImageListener(holder1.ivMv
         ,R.mipmap.yuan,R.mipmap.yuan));
 //        if (clickListener!=null){
-//            holder.relativeLayout.setOnClickListener(new View.OnClickListener() {
+//            holder1.relativeLayout.setOnClickListener(new View.OnClickListener() {
 //                @Override
 //                public void onClick(View v) {
-//                    int position=holder.getLayoutPosition();
+//                    int position=holder1.getLayoutPosition();
 //                    clickListener.onMvClick(position);
 //                }
 //            });

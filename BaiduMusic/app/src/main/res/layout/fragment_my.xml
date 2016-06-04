@@ -34,23 +34,26 @@
 
                 <TextView
                     android:id="@+id/tv_my_disc"
-                    android:layout_toRightOf="@id/iv_my_disc"
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
-                    android:layout_margin="15dp"
                     android:layout_weight="0.17"
                     android:text="本地音乐"
-                    android:textSize="20sp" />
+                    android:textSize="16sp"
+                    android:layout_marginLeft="15dp"
+                    android:layout_marginRight="15dp"
+                    android:layout_centerVertical="true"
+                    android:layout_toEndOf="@+id/iv_my_disc"
+                    android:layout_marginStart="25dp" />
 
                 <TextView
                     android:id="@+id/tv_localmusic_count"
-                    android:layout_toRightOf="@id/tv_my_disc"
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
-                    android:layout_margin="20dp"
-                    android:layout_weight="0.23"
                     android:text="0首"
-                    android:textSize="15sp" />
+                    android:textSize="15sp"
+                    android:layout_alignBottom="@+id/tv_my_disc"
+                    android:layout_centerVertical="true"
+                    android:layout_centerHorizontal="true"/>
 
                 <ImageView
                     android:layout_width="39dp"
@@ -59,7 +62,8 @@
                     android:layout_marginLeft="10dp"
                     android:layout_marginRight="10dp"
                     android:layout_alignBottom="@+id/iv_my_disc"
-                    android:layout_alignParentEnd="true" />
+                    android:layout_alignParentEnd="true"
+                    android:id="@+id/imageView13" />
 
             </RelativeLayout>
             <RelativeLayout
@@ -80,12 +84,14 @@
                     android:layout_height="match_parent"
                     android:layout_weight="0.17"
                     android:text="最近播放"
-                    android:textSize="20sp"
+                    android:textSize="16sp"
                     android:id="@+id/textView"
                     android:layout_marginLeft="15dp"
                     android:layout_marginRight="15dp"
                     android:layout_centerVertical="true"
-                    android:layout_toStartOf="@+id/textView2" />
+                    android:layout_alignTop="@+id/textView2"
+                    android:layout_toStartOf="@+id/textView2"
+                    android:layout_marginEnd="14dp" />
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -132,13 +138,13 @@
                     android:layout_height="match_parent"
                     android:layout_weight="0.17"
                     android:text="下载管理"
-                    android:textSize="20sp"
+                    android:textSize="16sp"
                     android:id="@+id/textView3"
                     android:layout_marginLeft="15dp"
                     android:layout_marginRight="15dp"
                     android:layout_centerVertical="true"
-                    android:layout_toEndOf="@+id/imageView2"
-                    android:layout_marginStart="19dp" />
+                    android:layout_toStartOf="@+id/textView4"
+                    android:layout_marginEnd="21dp" />
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -185,12 +191,13 @@
                     android:layout_height="match_parent"
                     android:layout_weight="0.17"
                     android:text="我的K歌"
-                    android:textSize="20sp"
+                    android:textSize="16sp"
+                    android:layout_centerVertical="true"
                     android:layout_marginLeft="15dp"
                     android:layout_marginRight="15dp"
-                    android:layout_centerVertical="true"
-                    android:layout_toEndOf="@+id/imageView3"
-                    android:layout_marginStart="19dp" />
+                    android:layout_marginEnd="25dp"
+                    android:layout_alignParentTop="true"
+                    android:layout_toStartOf="@+id/textView5" />
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -223,7 +230,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="79dp">
                 <TextView
-                    android:textSize="20sp"
+                    android:textSize="16sp"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="收藏歌单"

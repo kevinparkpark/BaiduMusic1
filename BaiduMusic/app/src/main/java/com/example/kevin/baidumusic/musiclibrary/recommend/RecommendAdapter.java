@@ -42,7 +42,7 @@ public class RecommendAdapter extends PagerAdapter{
 //                .getRandpic()).into(imageView);
         ImageLoader loader = VolleySingleton.getInstance().getImageLoader();
         loader.get(picBeanList.get(position%picBeanList.size()).getRandpic(),ImageLoader.getImageListener(
-                imageView, R.mipmap.ic_launcher,R.mipmap.ic_launcher));
+                imageView, R.mipmap.yuan,R.mipmap.yuan));
         try {
             container.addView(imageView);
         } catch (IllegalStateException e) {

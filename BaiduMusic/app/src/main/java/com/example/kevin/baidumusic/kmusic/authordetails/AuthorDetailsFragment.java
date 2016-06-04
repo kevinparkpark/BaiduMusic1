@@ -65,7 +65,9 @@ public class AuthorDetailsFragment extends SecBaseFragment implements OnRefreshL
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 ((authorDetailsToSonglistOnClickListener)getActivity())
-                        .onAuthorDetailsToSonglistClickListener(artistBeanList.get(position).getTing_uid());
+                        .onAuthorDetailsToSonglistClickListener(artistBeanList.get(position-1).getTing_uid()
+                        ,artistBeanList.get(position-1).getName(),artistBeanList.get(position-1).getCountry(),
+                                artistBeanList.get(position-1).getAvatar_big());
             }
         });
     }
@@ -101,8 +103,9 @@ public class AuthorDetailsFragment extends SecBaseFragment implements OnRefreshL
     public void onLoadingMore() {
         refesh(++page);
     }
+
     public interface authorDetailsToSonglistOnClickListener{
-        void onAuthorDetailsToSonglistClickListener(String tingUid);
+        void onAuthorDetailsToSonglistClickListener(String tingUid,String author,String country,String imgUrl);
     }
 
     @Override

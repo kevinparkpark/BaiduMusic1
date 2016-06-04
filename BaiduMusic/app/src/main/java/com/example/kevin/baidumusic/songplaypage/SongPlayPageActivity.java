@@ -1,14 +1,18 @@
 package com.example.kevin.baidumusic.songplaypage;
 
+import android.app.DownloadManager;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.SeekBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.kevin.baidumusic.R;
 import com.example.kevin.baidumusic.base.BaseFragment;
@@ -17,6 +21,7 @@ import com.example.kevin.baidumusic.eventbean.EventSeekToBean;
 import com.example.kevin.baidumusic.eventbean.EventServiceToPauseBean;
 import com.example.kevin.baidumusic.eventbean.EventServiceToPlayBtnBean;
 import com.example.kevin.baidumusic.eventbean.EventUpDateSongUI;
+import com.example.kevin.baidumusic.netutil.NetTool;
 import com.example.kevin.baidumusic.util.BroadcastValues;
 
 import org.greenrobot.eventbus.EventBus;
@@ -35,12 +40,16 @@ public class SongPlayPageActivity extends AppCompatActivity implements View.OnCl
     private ViewPager viewPager;
     private ArrayList<BaseFragment> fragments;
     private SongPlayPageAdapter adapter;
-    private ImageView ivSongPlay,ivNext,ivPrevious;
+    private ImageView ivSongPlay, ivNext, ivPrevious, ivMode,ivDownload;
     private TextView tvSongPlayTitle, tvSongPlayAuthor, tvSongPlayTime, tvSongPlayMaxTime;
     private SeekBar seekBar;
     private int maxCurrent;
     private DateFormat dateFormat;
-    private boolean seekbarTouch=true;
+    private boolean seekbarTouch = true;
+    private final int MODE_RANDOM = 1;//随机播放
+    private final int MODE_ONE = 2;//单曲循环
+    private final int MODE_LOOP = 0;//列表循环
+    private int mode = 0;//播放方式
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -52,8 +61,10 @@ public class SongPlayPageActivity extends AppCompatActivity implements View.OnCl
         tvSongPlayTitle = (TextView) findViewById(R.id.songplayactivity_title);
         tvSongPlayTime = (TextView) findViewById(R.id.tv_songplaypage_time);
         tvSongPlayMaxTime = (TextView) findViewById(R.id.tv_songplaypage_maxtime);
-        ivNext= (ImageView) findViewById(R.id.iv_songplayactivity_next);
-        ivPrevious= (ImageView) findViewById(R.id.iv_songplayactivity_previous);
+        ivNext = (ImageView) findViewById(R.id.iv_songplayactivity_next);
+        ivPrevious = (ImageView) findViewById(R.id.iv_songplayactivity_previous);
+        ivMode = (ImageView) findViewById(R.id.iv_songplaypage_playmode);
+        ivDownload= (ImageView) findViewById(R.id.iv_songplaypage_download);
 
         seekBar = (SeekBar) findViewById(R.id.seekbar_songplaypage);
 
@@ -83,8 +94,10 @@ public class SongPlayPageActivity extends AppCompatActivity implements View.OnCl
         ivSongPlay.setOnClickListener(this);
         ivNext.setOnClickListener(this);
         ivPrevious.setOnClickListener(this);
-
+        ivMode.setOnClickListener(this);
+        ivDownload.setOnClickListener(this);
     }
+
     //接收服务中seekbar相关数据
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void SeeBarControl(final EventProgressBean bean) {
@@ -95,7 +108,7 @@ public class SongPlayPageActivity extends AppCompatActivity implements View.OnCl
             tvSongPlayMaxTime.setText(timeFormat(bean.getMaxCurrent()));
         }
         tvSongPlayTime.setText(timeFormat(bean.getCurrent()));
-        if (bean.getCurrent() != 0&&seekbarTouch) {
+        if (bean.getCurrent() != 0 && seekbarTouch) {
             seekBar.setProgress(bean.getCurrent());
         }
         //seekbar监听
@@ -107,26 +120,29 @@ public class SongPlayPageActivity extends AppCompatActivity implements View.OnCl
 
             @Override
             public void onStartTrackingTouch(SeekBar seekBar) {
-                seekbarTouch=false;
+                seekbarTouch = false;
             }
 
             @Override
             public void onStopTrackingTouch(SeekBar seekBar) {
-                seekbarTouch=true;
+                seekbarTouch = true;
                 EventBus.getDefault().post(new EventSeekToBean(seekBar.getProgress()));
             }
         });
     }
+
     @Subscribe(threadMode = ThreadMode.MAIN)
-    public void serviceToplaySong(EventServiceToPauseBean serviceToPlayBean){
+    public void serviceToplaySong(EventServiceToPauseBean serviceToPlayBean) {
         ivSongPlay.setImageResource(R.mipmap.bt_widget_play_press);
     }
+
     @Subscribe(threadMode = ThreadMode.MAIN)
-    public void serviceToPlayBtn(EventServiceToPlayBtnBean btnBean){
+    public void serviceToPlayBtn(EventServiceToPlayBtnBean btnBean) {
         ivSongPlay.setImageResource(R.mipmap.bt_widget_pause_press);
     }
+
     @Subscribe(threadMode = ThreadMode.MAIN)
-    public void serviceToplaySong(EventUpDateSongUI songUI){
+    public void serviceToplaySong(EventUpDateSongUI songUI) {
         tvSongPlayAuthor.setText(songUI.getAuthor());
         tvSongPlayTitle.setText(songUI.getTitle());
     }
@@ -147,7 +163,7 @@ public class SongPlayPageActivity extends AppCompatActivity implements View.OnCl
 
     @Override
     public void onClick(View v) {
-        switch (v.getId()){
+        switch (v.getId()) {
             case R.id.iv_songplayactivity_play:
                 if (flag = !flag) {
 //                    ivSongPlay.setImageResource(R.mipmap.bt_widget_pause_press);
@@ -163,6 +179,38 @@ public class SongPlayPageActivity extends AppCompatActivity implements View.OnCl
             case R.id.iv_songplayactivity_previous:
                 sendBroadcast(new Intent(BroadcastValues.PREVIOUS));
                 break;
+            case R.id.iv_songplaypage_playmode:
+                if (mode < 2) {
+                    mode++;
+                } else {
+                    mode = 0;
+                }
+                swithPlayMode(mode);
+                Log.d("SongPlayPageActivity", "mode:" + mode);
+                break;
+            case R.id.iv_songplaypage_download:
+                sendBroadcast(new Intent(BroadcastValues.DOWNLOAD));
+                break;
         }
     }
+
+    public void swithPlayMode(int mode) {
+        switch (mode) {
+            case MODE_LOOP:
+                Toast.makeText(this, "循环播放", Toast.LENGTH_SHORT).show();
+                break;
+            case MODE_RANDOM:
+                Toast.makeText(this, "随机播放", Toast.LENGTH_SHORT).show();
+                break;
+            case MODE_ONE:
+                Toast.makeText(this, "单曲循环", Toast.LENGTH_SHORT).show();
+                break;
+        }
+        Intent intent=new Intent(BroadcastValues.PLAY_MODE);
+        intent.putExtra("mode",mode);
+        sendBroadcast(intent);
+        ivMode.setImageLevel(mode);
+    }
+
+
 }

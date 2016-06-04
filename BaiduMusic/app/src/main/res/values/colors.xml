@@ -4,5 +4,7 @@
     <color name="colorPrimaryDark">#303F9F</color>
     <color name="colorAccent">#FF4081</color>
     <color name="maincolor">#54B0E9</color>
+    <color name="white">#ffffff</color>
+    <color name="radionormal">#5fd0fd</color>
 
 </resources>

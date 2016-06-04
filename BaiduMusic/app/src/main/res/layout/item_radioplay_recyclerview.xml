@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="match_parent">
+<RelativeLayout
+    android:id="@+id/relativelayout_item_radioplay"
+    android:layout_margin="10dp"
+    android:orientation="vertical"
+    android:background="@drawable/shape_item_radioplay"
+    android:layout_width="80dp"
+    android:layout_height="80dp">
+    <ImageView
+        android:id="@+id/iv_item_radioplay_recyclerview"
+        android:scaleType="fitXY"
+        android:layout_gravity="center"
+        android:src="@mipmap/radioplay_item_img"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:layout_centerVertical="true"
+        android:layout_centerHorizontal="true" />
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+    <TextView
+        android:textColor="@android:color/white"
+        android:id="@+id/tv_item_radioplay_recyclerview"
+        android:gravity="center"
+        android:text="70年代"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/iv_item_radioplay_recyclerview"
+        android:layout_alignStart="@+id/iv_item_radioplay_recyclerview"
+        android:layout_gravity="bottom" />
+    </LinearLayout>
+</RelativeLayout>
+</LinearLayout>

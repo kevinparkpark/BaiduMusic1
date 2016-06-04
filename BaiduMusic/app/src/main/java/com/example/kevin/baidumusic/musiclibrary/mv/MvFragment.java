@@ -1,10 +1,14 @@
 package com.example.kevin.baidumusic.musiclibrary.mv;
 
+import android.content.Intent;
+import android.net.Uri;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.View;
+import android.widget.MediaController;
 import android.widget.Toast;
+import android.widget.VideoView;
 
 import com.android.volley.VolleyError;
 import com.chanven.lib.cptr.PtrClassicFrameLayout;
@@ -12,11 +16,13 @@ import com.chanven.lib.cptr.PtrDefaultHandler;
 import com.chanven.lib.cptr.PtrFrameLayout;
 import com.chanven.lib.cptr.loadmore.OnLoadMoreListener;
 import com.chanven.lib.cptr.recyclerview.RecyclerAdapterWithHF;
+import com.example.kevin.baidumusic.app.MyApp;
 import com.example.kevin.baidumusic.base.BaseFragment;
 import com.example.kevin.baidumusic.R;
 import com.example.kevin.baidumusic.netutil.NetListener;
 import com.example.kevin.baidumusic.netutil.NetTool;
 import com.example.kevin.baidumusic.netutil.URLValues;
+import com.example.kevin.baidumusic.util.BroadcastValues;
 import com.google.gson.Gson;
 
 import java.util.ArrayList;
@@ -59,17 +65,17 @@ public class MvFragment extends BaseFragment {
         ptrClassicFrameLayout.setOnLoadMoreListener(onLoadMoreListener);
         ptrClassicFrameLayout.setLoadMoreEnable(true);
         reFresh();
-//        adapter.setMvListBeen(mvListBeen);
+
+
     }
 
     public void reFresh() {
-        NetTool netTool = new NetTool();
+        final NetTool netTool = new NetTool();
         netTool.getUrl(new NetListener() {
             @Override
-            public void onSuccessed(String result) {
-                Log.d("MvFragment", "------------>" + result);
-                Gson gson = new Gson();
-                MvBean mvBean = gson.fromJson(result, MvBean.class);
+            public void onSuccessed(final String result) {
+                final Gson gson = new Gson();
+                final MvBean mvBean = gson.fromJson(result, MvBean.class);
                 if (mvBean.getResult() == null) {
                     Toast.makeText(context, "网络有问题", Toast.LENGTH_SHORT).show();
                 } else {
@@ -82,6 +88,40 @@ public class MvFragment extends BaseFragment {
                     if (page > 1) {
                         Toast.makeText(context, "加载完毕", Toast.LENGTH_SHORT).show();
                     }
+
+                    recyclerAdapterWithHF.setOnItemClickListener(new RecyclerAdapterWithHF.OnItemClickListener() {
+                        @Override
+                        public void onItemClick(RecyclerAdapterWithHF adapter, RecyclerView.ViewHolder vh, final int position) {
+
+                            //暂停音乐播放
+                            context.sendBroadcast(new Intent(BroadcastValues.PAUSE));
+                            NetTool netTool1 = new NetTool();
+                            netTool1.getUrl(new NetListener() {
+                                @Override
+                                public void onSuccessed(String result) {
+                                    Gson gson1 = new Gson();
+                                    MvPlayBean mvPlayBean = gson1.fromJson(result, MvPlayBean.class);
+                                    String str = mvPlayBean.getResult().getVideo_info().getSourcepath();
+                                    int indexOf = str.indexOf("http://www.yinyuetai.com/video/");
+                                    String substring=str.substring(31,str.length()-1);
+//                                    String substring = str.substring(indexOf+1);
+//                                    Uri uri = Uri.parse("http://www.yinyuetai.com/mv/video-url/"+substring);
+//                                    Intent intent = new Intent(Intent.ACTION_VIEW);
+//                                    intent.setDataAndType(uri,"video/3gp");
+//                                    startActivity(intent);
+                                    Intent intent=new Intent(MyApp.context,MvPlayActivity.class);
+                                    intent.putExtra("url","http://www.yinyuetai.com/mv/video-url/"+substring);
+                                    startActivity(intent);
+
+                                }
+
+                                @Override
+                                public void onFailed(VolleyError error) {
+
+                                }
+                            }, URLValues.MV_PLAY1 + mvListBeen.get(position).getMv_id() + URLValues.MV_PLAY2);
+                        }
+                    });
                 }
             }
 

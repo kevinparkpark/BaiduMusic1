@@ -53,8 +53,8 @@ public class RecommendFragment extends BaseFragment {
     protected void initData() {
         adapter = new RecommendAdapter();
         picBeanList = new ArrayList<>();
-        //设置缓存图片数量及艰巨
-        viewPager.setOffscreenPageLimit(3);
+        //设置缓存图片数量及间距
+        viewPager.setOffscreenPageLimit(5);
         viewPager.setPageMargin(10);
 
         NetTool netTool = new NetTool();

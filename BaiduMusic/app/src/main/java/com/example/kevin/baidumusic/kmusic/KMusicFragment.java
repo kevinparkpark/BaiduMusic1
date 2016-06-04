@@ -34,12 +34,12 @@ public class KMusicFragment extends BaseFragment implements View.OnClickListener
     private ViewGroup group;
     private ImageView tips[];
     private int tipsCount;
-    private boolean userTouch=false;
-    private boolean threadAlive =true;
+    private boolean userTouch = false;
+    private boolean threadAlive = true;
     private Handler handler;
     private Thread thread;
-    private RelativeLayout rlCHMan,rlChWo,rlCHGroup,rlEuMan,rlEuWo,rlEuGroup,rlKrMan,rlKrWo,
-            rlKrGroup, rlJpMan,rlJpWo,rlJpGroup,rlOther;
+    private RelativeLayout rlCHMan, rlChWo, rlCHGroup, rlEuMan, rlEuWo, rlEuGroup, rlKrMan, rlKrWo,
+            rlKrGroup, rlJpMan, rlJpWo, rlJpGroup, rlOther;
 
     @Override
     public int setlayout() {
@@ -48,25 +48,25 @@ public class KMusicFragment extends BaseFragment implements View.OnClickListener
 
     @Override
     protected void initView(View view) {
-        viewPager= (ViewPager) view.findViewById(k_viewpager);
-        group= (ViewGroup) view.findViewById(R.id.kmusic_viewgroup);
-        rlCHMan= (RelativeLayout) view.findViewById(R.id.k_manauthor);
-        rlChWo= (RelativeLayout) view.findViewById(R.id.k_womenauthor);
-        rlCHGroup= (RelativeLayout) view.findViewById(R.id.k_groupauthor);
+        viewPager = (ViewPager) view.findViewById(k_viewpager);
+        group = (ViewGroup) view.findViewById(R.id.kmusic_viewgroup);
+        rlCHMan = (RelativeLayout) view.findViewById(R.id.k_manauthor);
+        rlChWo = (RelativeLayout) view.findViewById(R.id.k_womenauthor);
+        rlCHGroup = (RelativeLayout) view.findViewById(R.id.k_groupauthor);
 
-        rlEuMan= (RelativeLayout) view.findViewById(R.id.k_euro_man_author);
-        rlEuWo= (RelativeLayout) view.findViewById(R.id.k_euro_women_author);
-        rlEuGroup= (RelativeLayout) view.findViewById(R.id.k_euro_group_author);
+        rlEuMan = (RelativeLayout) view.findViewById(R.id.k_euro_man_author);
+        rlEuWo = (RelativeLayout) view.findViewById(R.id.k_euro_women_author);
+        rlEuGroup = (RelativeLayout) view.findViewById(R.id.k_euro_group_author);
 
-        rlKrMan= (RelativeLayout) view.findViewById(R.id.k_korea_man_author);
-        rlKrWo= (RelativeLayout) view.findViewById(R.id.k_korea_woman_author);
-        rlKrGroup= (RelativeLayout) view.findViewById(R.id.k_korea_group_author);
+        rlKrMan = (RelativeLayout) view.findViewById(R.id.k_korea_man_author);
+        rlKrWo = (RelativeLayout) view.findViewById(R.id.k_korea_woman_author);
+        rlKrGroup = (RelativeLayout) view.findViewById(R.id.k_korea_group_author);
 
-        rlJpMan= (RelativeLayout) view.findViewById(R.id.k_jp_man_author);
-        rlJpWo= (RelativeLayout) view.findViewById(R.id.k_jp_woman_author);
-        rlJpGroup= (RelativeLayout) view.findViewById(R.id.k_jp_group_author);
+        rlJpMan = (RelativeLayout) view.findViewById(R.id.k_jp_man_author);
+        rlJpWo = (RelativeLayout) view.findViewById(R.id.k_jp_woman_author);
+        rlJpGroup = (RelativeLayout) view.findViewById(R.id.k_jp_group_author);
 
-        rlOther= (RelativeLayout) view.findViewById(R.id.k_other_author);
+        rlOther = (RelativeLayout) view.findViewById(R.id.k_other_author);
         rlCHMan.setOnClickListener(this);
         rlChWo.setOnClickListener(this);
         rlCHGroup.setOnClickListener(this);
@@ -84,21 +84,21 @@ public class KMusicFragment extends BaseFragment implements View.OnClickListener
 
     @Override
     protected void initData() {
-        adapter=new kMusicAdapter();
-        artistBeanList=new ArrayList<>();
+        adapter = new kMusicAdapter();
+        artistBeanList = new ArrayList<>();
         viewPager.setOffscreenPageLimit(3);
         viewPager.setPageMargin(10);
-        NetTool netTool=new NetTool();
+        NetTool netTool = new NetTool();
         netTool.getUrl(new NetListener() {
             @Override
             public void onSuccessed(String result) {
-                Gson gson=new Gson();
-                KMusicBean kMusicBean=gson.fromJson(result,KMusicBean.class);
-                artistBeanList=kMusicBean.getArtist();
+                Gson gson = new Gson();
+                KMusicBean kMusicBean = gson.fromJson(result, KMusicBean.class);
+                artistBeanList = kMusicBean.getArtist();
                 adapter.setArtistBeanList(artistBeanList);
                 viewPager.setAdapter(adapter);
 
-                tips=new ImageView[artistBeanList.size()];
+                tips = new ImageView[artistBeanList.size()];
                 for (int i = 0; i < tips.length; i++) {
                     ImageView imageView = new ImageView(context);
                     if (i == 0) {
@@ -182,8 +182,9 @@ public class KMusicFragment extends BaseFragment implements View.OnClickListener
             }
         });
     }
-    public void setImageBackground(int items){
-        int index = items % tips.length;
+
+    public void setImageBackground(int position) {
+        int index = position % tips.length;
         for (int i = 0; i < tips.length; i++) {
             if (i == index) {
                 tips[i].setBackgroundResource(R.mipmap.page_indicator_focused);
@@ -195,68 +196,69 @@ public class KMusicFragment extends BaseFragment implements View.OnClickListener
 
     @Override
     public void onDestroy() {
-        threadAlive =false;
+        threadAlive = false;
         super.onDestroy();
     }
 
     @Override
     public void onClick(View v) {
-        switch (v.getId()){
+        switch (v.getId()) {
             case R.id.k_manauthor:
-                ((kMusicToDetailsOnClickListener)getActivity()).onKMusicToDetailsClickListener(
-                        URLValues.KMUSIC_CH_MAN_AUTHOR_LIST1,URLValues.KMUSIC_CH_MAN_AUTHOR_LIST2,"华语男歌手");
+                ((kMusicToDetailsOnClickListener) getActivity()).onKMusicToDetailsClickListener(
+                        URLValues.KMUSIC_CH_MAN_AUTHOR_LIST1, URLValues.KMUSIC_CH_MAN_AUTHOR_LIST2, "华语男歌手");
                 break;
             case R.id.k_womenauthor:
-                ((kMusicToDetailsOnClickListener)getActivity()).onKMusicToDetailsClickListener(
-                        URLValues.KMUSIC_CH_WOMAN_AUTHOR_LIST1,URLValues.KMUSIC_CH_WOMAN_AUTHOR_LIST2,"华语女歌手");
+                ((kMusicToDetailsOnClickListener) getActivity()).onKMusicToDetailsClickListener(
+                        URLValues.KMUSIC_CH_WOMAN_AUTHOR_LIST1, URLValues.KMUSIC_CH_WOMAN_AUTHOR_LIST2, "华语女歌手");
                 break;
             case R.id.k_groupauthor:
-                ((kMusicToDetailsOnClickListener)getActivity()).onKMusicToDetailsClickListener(
-                        URLValues.KMUSIC_CH_GROUP_AUTHOR_LIST1,URLValues.KMUSIC_CH_GROUP_AUTHOR_LIST2,"华语组合");
+                ((kMusicToDetailsOnClickListener) getActivity()).onKMusicToDetailsClickListener(
+                        URLValues.KMUSIC_CH_GROUP_AUTHOR_LIST1, URLValues.KMUSIC_CH_GROUP_AUTHOR_LIST2, "华语组合");
                 break;
             case R.id.k_euro_man_author:
-                ((kMusicToDetailsOnClickListener)getActivity()).onKMusicToDetailsClickListener(
-                        URLValues.KMUSIC_EURO_MAN_AUTHOR_LIST1,URLValues.KMUSIC_EURO_MAN_AUTHOR_LIST2,"欧美男歌手");
+                ((kMusicToDetailsOnClickListener) getActivity()).onKMusicToDetailsClickListener(
+                        URLValues.KMUSIC_EURO_MAN_AUTHOR_LIST1, URLValues.KMUSIC_EURO_MAN_AUTHOR_LIST2, "欧美男歌手");
                 break;
             case R.id.k_euro_women_author:
-                ((kMusicToDetailsOnClickListener)getActivity()).onKMusicToDetailsClickListener(
-                        URLValues.KMUSIC_EURO_WOMAN_AUTHOR_LIST1,URLValues.KMUSIC_EURO_WOMAN_AUTHOR_LIST2,"欧美女歌手");
+                ((kMusicToDetailsOnClickListener) getActivity()).onKMusicToDetailsClickListener(
+                        URLValues.KMUSIC_EURO_WOMAN_AUTHOR_LIST1, URLValues.KMUSIC_EURO_WOMAN_AUTHOR_LIST2, "欧美女歌手");
                 break;
             case R.id.k_euro_group_author:
-                ((kMusicToDetailsOnClickListener)getActivity()).onKMusicToDetailsClickListener(
-                        URLValues.KMUSIC_EURO_GROUP_AUTHOR_LIST1,URLValues.KMUSIC_EURO_GROUP_AUTHOR_LIST2,"欧美组合");
+                ((kMusicToDetailsOnClickListener) getActivity()).onKMusicToDetailsClickListener(
+                        URLValues.KMUSIC_EURO_GROUP_AUTHOR_LIST1, URLValues.KMUSIC_EURO_GROUP_AUTHOR_LIST2, "欧美组合");
                 break;
             case R.id.k_korea_man_author:
-                ((kMusicToDetailsOnClickListener)getActivity()).onKMusicToDetailsClickListener(
-                        URLValues.KMUSIC_KR_MAN_AUTHOR_LIST1,URLValues.KMUSIC_KR_MAN_AUTHOR_LIST2,"韩国男歌手");
+                ((kMusicToDetailsOnClickListener) getActivity()).onKMusicToDetailsClickListener(
+                        URLValues.KMUSIC_KR_MAN_AUTHOR_LIST1, URLValues.KMUSIC_KR_MAN_AUTHOR_LIST2, "韩国男歌手");
                 break;
             case R.id.k_korea_woman_author:
-                ((kMusicToDetailsOnClickListener)getActivity()).onKMusicToDetailsClickListener(
-                        URLValues.KMUSIC_KR_WOMAN_AUTHOR_LIST1,URLValues.KMUSIC_KR_WOMAN_AUTHOR_LIST2,"韩国女歌手");
+                ((kMusicToDetailsOnClickListener) getActivity()).onKMusicToDetailsClickListener(
+                        URLValues.KMUSIC_KR_WOMAN_AUTHOR_LIST1, URLValues.KMUSIC_KR_WOMAN_AUTHOR_LIST2, "韩国女歌手");
                 break;
             case R.id.k_korea_group_author:
-                ((kMusicToDetailsOnClickListener)getActivity()).onKMusicToDetailsClickListener(
-                        URLValues.KMUSIC_KR_GROUP_AUTHOR_LIST1,URLValues.KMUSIC_KR_GROUP_AUTHOR_LIST2,"韩国组合");
+                ((kMusicToDetailsOnClickListener) getActivity()).onKMusicToDetailsClickListener(
+                        URLValues.KMUSIC_KR_GROUP_AUTHOR_LIST1, URLValues.KMUSIC_KR_GROUP_AUTHOR_LIST2, "韩国组合");
                 break;
             case R.id.k_jp_man_author:
-                ((kMusicToDetailsOnClickListener)getActivity()).onKMusicToDetailsClickListener(
-                        URLValues.KMUSIC_JP_MAN_AUTHOR_LIST1,URLValues.KMUSIC_JP_MAN_AUTHOR_LIST2,"日本男歌手");
+                ((kMusicToDetailsOnClickListener) getActivity()).onKMusicToDetailsClickListener(
+                        URLValues.KMUSIC_JP_MAN_AUTHOR_LIST1, URLValues.KMUSIC_JP_MAN_AUTHOR_LIST2, "日本男歌手");
                 break;
             case R.id.k_jp_woman_author:
-                ((kMusicToDetailsOnClickListener)getActivity()).onKMusicToDetailsClickListener(
-                        URLValues.KMUSIC_JP_WOMAN_AUTHOR_LIST1,URLValues.KMUSIC_JP_WOMAN_AUTHOR_LIST2,"日本女歌手");
+                ((kMusicToDetailsOnClickListener) getActivity()).onKMusicToDetailsClickListener(
+                        URLValues.KMUSIC_JP_WOMAN_AUTHOR_LIST1, URLValues.KMUSIC_JP_WOMAN_AUTHOR_LIST2, "日本女歌手");
                 break;
             case R.id.k_jp_group_author:
-                ((kMusicToDetailsOnClickListener)getActivity()).onKMusicToDetailsClickListener(
-                        URLValues.KMUSIC_JP_GROUP_AUTHOR_LIST1,URLValues.KMUSIC_JP_GROUP_AUTHOR_LIST2,"日本组合");
+                ((kMusicToDetailsOnClickListener) getActivity()).onKMusicToDetailsClickListener(
+                        URLValues.KMUSIC_JP_GROUP_AUTHOR_LIST1, URLValues.KMUSIC_JP_GROUP_AUTHOR_LIST2, "日本组合");
                 break;
             case R.id.k_other_author:
-                ((kMusicToDetailsOnClickListener)getActivity()).onKMusicToDetailsClickListener(
-                        URLValues.KMUSIC_OTHER_AUTHOR_LIST1,URLValues.KMUSIC_OTHER_AUTHOR_LIST2,"其他歌手");
+                ((kMusicToDetailsOnClickListener) getActivity()).onKMusicToDetailsClickListener(
+                        URLValues.KMUSIC_OTHER_AUTHOR_LIST1, URLValues.KMUSIC_OTHER_AUTHOR_LIST2, "其他歌手");
                 break;
         }
     }
+
     public interface kMusicToDetailsOnClickListener {
-        void onKMusicToDetailsClickListener(String url1,String url2,String authorName);
+        void onKMusicToDetailsClickListener(String url1, String url2, String authorName);
     }
 }

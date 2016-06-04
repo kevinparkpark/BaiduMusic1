@@ -1,0 +1,133 @@
+package com.example.kevin.baidumusic.musiclibrary.radio.radioplay.songplaylist;
+
+import android.content.Intent;
+import android.os.Bundle;
+import android.support.annotation.Nullable;
+import android.support.v4.view.ViewPager;
+import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
+import android.view.View;
+import android.widget.ImageView;
+import android.widget.TextView;
+
+import com.android.volley.VolleyError;
+import com.example.kevin.baidumusic.MainActivity;
+import com.example.kevin.baidumusic.R;
+import com.example.kevin.baidumusic.db.DBSongListCacheBean;
+import com.example.kevin.baidumusic.db.LiteOrmSington;
+import com.example.kevin.baidumusic.eventbean.EventRankDetailsPositionBen;
+import com.example.kevin.baidumusic.eventbean.EventServiceToPauseBean;
+import com.example.kevin.baidumusic.eventbean.EventServiceToPlayBtnBean;
+import com.example.kevin.baidumusic.eventbean.EventUpDateSongUI;
+import com.example.kevin.baidumusic.musiclibrary.radio.radioplay.RadioPlayActivity;
+import com.example.kevin.baidumusic.musiclibrary.radio.radioplay.songplaylist.RadioPlayListBean;
+import com.example.kevin.baidumusic.musiclibrary.radio.radioplay.songplaylist.RadioPlayListPagerAdapter;
+import com.example.kevin.baidumusic.netutil.NetListener;
+import com.example.kevin.baidumusic.netutil.NetTool;
+import com.example.kevin.baidumusic.netutil.URLValues;
+import com.example.kevin.baidumusic.util.BroadcastValues;
+import com.google.gson.Gson;
+import com.litesuits.orm.LiteOrm;
+
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
+
+import java.util.List;
+
+/**
+ * Created by kevin on 16/6/3.
+ */
+public class RadioPlayListActivity extends AppCompatActivity {
+    private ViewPager viewPager;
+    private List<RadioPlayListBean.ResultBean.SonglistBean> songlistBeanList;
+    private RadioPlayListPagerAdapter adapter;
+    private TextView tvScene;
+    private ImageView ivBack;
+
+    @Override
+    protected void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_radioplaylist);
+        viewPager = (ViewPager) findViewById(R.id.radioplaylist_viewpager);
+        tvScene = (TextView) findViewById(R.id.tv_radioplaylist_scene);
+        ivBack = (ImageView) findViewById(R.id.iv_radioplaylist_back_to_activity);
+
+        initData();
+
+        //返回上一层
+        tvScene.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+             finish();
+            }
+        });
+        //返回主页面
+        ivBack.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+             sendBroadcast(new Intent(BroadcastValues.FINISH_RADIOPLAY));
+            }
+        });
+    }
+
+    public void initData() {
+        String sceneId = getIntent().getStringExtra("sceneid");
+        Log.d("RadioPlayListActivity","----------"+ sceneId);
+        String sceneName = getIntent().getStringExtra("scenename");
+
+        adapter = new RadioPlayListPagerAdapter(this);
+        viewPager.setOffscreenPageLimit(3);
+        viewPager.setPageMargin(30);
+
+        NetTool netTool = new NetTool();
+        netTool.getUrl(new NetListener() {
+            @Override
+            public void onSuccessed(String result) {
+                Gson gson = new Gson();
+                final RadioPlayListBean bean = gson.fromJson(result, RadioPlayListBean.class);
+                adapter.setSonglistBeanList(bean.getResult().getSonglist());
+                viewPager.setAdapter(adapter);
+
+                //播放第一首歌
+                EventBus.getDefault().post(new EventRankDetailsPositionBen(0));
+                EventBus.getDefault().post(bean);
+                LiteOrm liteOrm = LiteOrmSington.getInstance().getLiteOrm();
+                liteOrm.deleteAll(DBSongListCacheBean.class);
+
+                viewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
+                    @Override
+                    public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+
+                    }
+
+                    @Override
+                    public void onPageSelected(int position) {
+                        adapter.setPos(position);
+                        EventBus.getDefault().post(new EventRankDetailsPositionBen(position));
+                        EventBus.getDefault().post(bean);
+                        LiteOrm liteOrm = LiteOrmSington.getInstance().getLiteOrm();
+                        liteOrm.deleteAll(DBSongListCacheBean.class);
+                    }
+
+                    @Override
+                    public void onPageScrollStateChanged(int state) {
+
+                    }
+                });
+            }
+
+            @Override
+            public void onFailed(VolleyError error) {
+
+            }
+        }, URLValues.RADIOPLAYLIST_SCENE1 + sceneId + URLValues.RADIOPLAYLIST_SCENE2);
+
+
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+    }
+}

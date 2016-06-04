@@ -17,7 +17,7 @@
             android:layout_alignBottom="@+id/tv_le_rankdetails_author" />
         <TextView
             android:id="@+id/tv_le_rankdetails_song"
-            android:textSize="20sp"
+            android:textSize="16sp"
             android:text="失落沙洲"
             android:maxEms="10"
             android:maxLines="1"
@@ -29,7 +29,7 @@
             android:maxEms="10"
             android:maxLines="1"
             android:id="@+id/tv_le_rankdetails_author"
-            android:textSize="16sp"
+            android:textSize="14sp"
             android:text="徐佳莹"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
