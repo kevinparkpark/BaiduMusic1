@@ -116,7 +116,9 @@ public class RankDetailsFragment extends BaseFragment implements OnRefreshListen
     @Override
     public void onDestroy() {
         //返回上一层 刷新页面
-        ((MainActivity) getActivity()).showTitleFragment();
+        if(!getActivity().isDestroyed()) {
+            ((MainActivity) getActivity()).showTitleFragment();
+        }
         super.onDestroy();
         EventBus.getDefault().unregister(this);
     }

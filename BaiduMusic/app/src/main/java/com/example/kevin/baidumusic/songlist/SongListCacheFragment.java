@@ -1,11 +1,13 @@
 package com.example.kevin.baidumusic.songlist;
 
 import android.content.Intent;
+import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.TextView;
 
+import com.example.kevin.baidumusic.MainActivity;
 import com.example.kevin.baidumusic.R;
 import com.example.kevin.baidumusic.base.BaseFragment;
 import com.example.kevin.baidumusic.db.DBSongListCacheBean;
@@ -57,5 +59,11 @@ public class SongListCacheFragment extends BaseFragment{
                 getFragmentManager().popBackStack();
             }
         });
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        ((MainActivity)getActivity()).setSonglistCacheIsCreated(false);
     }
 }

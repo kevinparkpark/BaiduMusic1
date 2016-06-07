@@ -65,7 +65,7 @@ public class LatelyPlaylistFragment extends SecBaseFragment{
                 }
 
                 EventBus.getDefault().post(new EventPosition(position));
-                context.sendBroadcast(new Intent(BroadcastValues.NEXT));
+                context.sendBroadcast(new Intent(BroadcastValues.PREVIOUS));
             }
         });
     }

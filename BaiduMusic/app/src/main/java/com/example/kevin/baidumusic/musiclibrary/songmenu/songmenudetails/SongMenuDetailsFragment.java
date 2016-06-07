@@ -118,8 +118,10 @@ public class SongMenuDetailsFragment extends BaseFragment{
 
     @Override
     public void onDestroy() {
+        if (!getActivity().isDestroyed()) {
+            ((MainActivity) getActivity()).showTitleFragment();
+        }
         super.onDestroy();
-        ((MainActivity)getActivity()).showTitleFragment();
 
     }
 }

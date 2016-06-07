@@ -123,6 +123,8 @@ public class SearchFragment extends SecBaseFragment {
 
                 EventBus.getDefault().post(new EventPosition(position));
                 EventBus.getDefault().post(eventGenericBeen);
+
+
             }
         });
     }

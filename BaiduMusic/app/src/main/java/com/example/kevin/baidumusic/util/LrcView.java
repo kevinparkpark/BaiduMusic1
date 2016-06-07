@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.res.TypedArray;
 import android.graphics.Canvas;
 import android.graphics.Paint;
+import android.os.Environment;
 import android.text.TextUtils;
 import android.util.AttributeSet;
 import android.util.Log;
@@ -85,10 +86,12 @@ public class LrcView extends View {
         mCurrentPaint.setColor(currentColor);
         mCurrentPaint.setTextSize(mTextSize);
     }
+
     public static int sp2px(float spValue) {
         final float fontScale = MyApp.context.getResources().getDisplayMetrics().scaledDensity;
         return (int) (spValue * fontScale + 0.5f);
     }
+
     public static int dp2px(float dpValue) {
         final float scale = MyApp.context.getResources().getDisplayMetrics().density;
         return (int) (dpValue * scale + 0.5f);
@@ -144,9 +147,10 @@ public class LrcView extends View {
         postInvalidate();
     }
 
-    public void loadNetLrc(String url){
+    //加载网络歌词
+    public void loadNetLrc(String url) {
         reset();
-        if (TextUtils.isEmpty(url) ) {
+        if (TextUtils.isEmpty(url)) {
             label = "暂无歌词";
             postInvalidate();
             return;
@@ -190,21 +194,61 @@ public class LrcView extends View {
     }
 
     /**
-     * 加载歌词文件
-     *
-     * @param path 歌词文件路径
+     * 加载本地歌词文件
      */
-    private String temp = null;
-    public void loadLrc(String path) {
-        if(path.equals(temp)){
-        }else {
-            loadNetLrc(path);
-            temp = path;
+    public void loadLocalLrc(String path) {
+        Log.d("LrcView", path);
+        reset();
+        path = Environment.getExternalStorageDirectory() + "/" + path;
+//        Log.d("LrcView", "!new File(path).exists():" + !new File(path).exists());
+        if (TextUtils.isEmpty(path) || !new File(path).exists()) {
+            label = "暂无歌词";
+
+            postInvalidate();
+            return;
+        }
+
+        BufferedReader br = null;
+        try {
+            br = new BufferedReader(new InputStreamReader(new FileInputStream(new File(path))));
+            String line;
+            while ((line = br.readLine()) != null) {
+                String[] arr = parseLine(line);
+                if (arr != null) {
+                    mLrcTimes.add(Long.parseLong(arr[0]));
+                    mLrcTexts.add(arr[1]);
+                }
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        } finally {
+            try {
+                if (br != null) {
+                    br.close();
+                }
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
         }
     }
 
 
+    private String temp = null;
 
+    public void loadLrc(String path) {
+        if (!path.equals(temp)) {
+            Log.d("LrcView", path.substring(0, 4));
+            if (path.substring(0, 4).equals("http")) {
+                Log.d("LrcView", "if");
+                loadNetLrc(path);
+                temp = path;
+            } else {
+                Log.d("LrcView", "else");
+                loadLocalLrc(path);
+                temp = path;
+            }
+        }
+    }
 
 
     private void reset() {

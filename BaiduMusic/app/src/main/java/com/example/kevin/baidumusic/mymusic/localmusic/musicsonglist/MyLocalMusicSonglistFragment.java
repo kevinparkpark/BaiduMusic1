@@ -1,5 +1,6 @@
 package com.example.kevin.baidumusic.mymusic.localmusic.musicsonglist;
 
+import android.content.SharedPreferences;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ImageView;
@@ -26,7 +27,6 @@ public class MyLocalMusicSonglistFragment extends BaseFragment{
     private MyLocalMusicSongListAdapter adapter;
     private ListView listView;
     private List<LocalMusic> localMusics;
-    private ImageView ivBack;
     @Override
     public int setlayout() {
         return R.layout.fragment_mylocalmusicsong;
@@ -44,6 +44,7 @@ public class MyLocalMusicSonglistFragment extends BaseFragment{
         adapter=new MyLocalMusicSongListAdapter(context);
         adapter.setMusicList(localMusics);
 
+
         listView.setAdapter(adapter);
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
@@ -53,12 +54,17 @@ public class MyLocalMusicSonglistFragment extends BaseFragment{
                 final LiteOrm liteOrm= LiteOrmSington.getInstance().getLiteOrm();
                 liteOrm.deleteAll(DBSongListCacheBean.class);
 
+        SharedPreferences sp = context.getSharedPreferences("songposition", context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = sp.edit();
+        editor.putInt("position", position);
+        editor.commit();
+
                 new Thread(new Runnable() {
                     @Override
                     public void run() {
                         for (int i = 0; i < localMusics.size(); i++) {
                             liteOrm.insert(new DBSongListCacheBean(localMusics.get(i).getTitle(), localMusics.get(i).getArtist(),
-                                    "", "", localMusics.get(i).getFileName()));
+                                    null, null, localMusics.get(i).getFileName()));
                         }
                     }
                 }).start();

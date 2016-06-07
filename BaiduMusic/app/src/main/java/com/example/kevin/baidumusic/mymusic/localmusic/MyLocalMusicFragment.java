@@ -59,7 +59,9 @@ public class MyLocalMusicFragment extends BaseFragment{
 
     @Override
     public void onDestroy() {
-        ((MainActivity)getActivity()).showTitleFragment();
+        if (!getActivity().isDestroyed()) {
+            ((MainActivity) getActivity()).showTitleFragment();
+        }
         super.onDestroy();
     }
 }

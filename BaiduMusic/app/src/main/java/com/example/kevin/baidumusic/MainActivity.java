@@ -50,6 +50,10 @@ public class MainActivity extends AppCompatActivity implements MyFragment.MyToLo
     private Intent startIntent;
     private boolean songlistCacheIsCreated=false;
 
+    public void setSonglistCacheIsCreated(boolean songlistCacheIsCreated) {
+        this.songlistCacheIsCreated = songlistCacheIsCreated;
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -100,12 +104,12 @@ public class MainActivity extends AppCompatActivity implements MyFragment.MyToLo
             }
         });
         //歌曲缓存列表
-        final SongListCacheFragment songListCacheFragment=new SongListCacheFragment();
+      //  final SongListCacheFragment songListCacheFragment=new SongListCacheFragment();
         ivSongListCache.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 if (!songlistCacheIsCreated)
-                getSupportFragmentManager().beginTransaction().add(R.id.framelayout_main, songListCacheFragment)
+                getSupportFragmentManager().beginTransaction().add(R.id.framelayout_main, new SongListCacheFragment())
                         .addToBackStack(null).commit();
                 songlistCacheIsCreated=true;
             }
