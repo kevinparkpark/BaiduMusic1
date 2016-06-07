@@ -133,11 +133,13 @@ public class SongPlayPageActivity extends AppCompatActivity implements View.OnCl
 
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void serviceToplaySong(EventServiceToPauseBean serviceToPlayBean) {
+        flag = false;
         ivSongPlay.setImageResource(R.mipmap.bt_widget_play_press);
     }
 
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void serviceToPlayBtn(EventServiceToPlayBtnBean btnBean) {
+        flag=true;
         ivSongPlay.setImageResource(R.mipmap.bt_widget_pause_press);
     }
 
@@ -165,7 +167,7 @@ public class SongPlayPageActivity extends AppCompatActivity implements View.OnCl
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.iv_songplayactivity_play:
-                if (flag = !flag) {
+                if (!flag) {
 //                    ivSongPlay.setImageResource(R.mipmap.bt_widget_pause_press);
                     sendBroadcast(new Intent(BroadcastValues.PLAY));
                 } else {

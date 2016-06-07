@@ -1,6 +1,5 @@
 package com.example.kevin.baidumusic.musiclibrary.songmenu.songmenudetails;
 
-import android.support.v4.app.Fragment;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -15,7 +14,9 @@ import com.example.kevin.baidumusic.R;
 import com.example.kevin.baidumusic.base.BaseFragment;
 import com.example.kevin.baidumusic.db.DBSongListCacheBean;
 import com.example.kevin.baidumusic.db.LiteOrmSington;
-import com.example.kevin.baidumusic.eventbean.EventRankDetailsPositionBen;
+import com.example.kevin.baidumusic.eventbean.EventGenericBean;
+import com.example.kevin.baidumusic.eventbean.EventPosition;
+import com.example.kevin.baidumusic.musiclibrary.radio.radioplay.songplaylist.RadioPlayListBean;
 import com.example.kevin.baidumusic.netutil.NetListener;
 import com.example.kevin.baidumusic.netutil.NetTool;
 import com.example.kevin.baidumusic.netutil.URLValues;
@@ -25,7 +26,7 @@ import com.squareup.picasso.Picasso;
 
 import org.greenrobot.eventbus.EventBus;
 
-import java.lang.reflect.Field;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -93,10 +94,24 @@ public class SongMenuDetailsFragment extends BaseFragment{
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                EventBus.getDefault().post(new EventRankDetailsPositionBen(position-1));
-                EventBus.getDefault().post(bean);
-                LiteOrm liteOrm= LiteOrmSington.getInstance().getLiteOrm();
+//                EventBus.getDefault().post(new EventPosition(position-1));
+//                EventBus.getDefault().post(bean);
+//                LiteOrm liteOrm= LiteOrmSington.getInstance().getLiteOrm();
+//                liteOrm.deleteAll(DBSongListCacheBean.class);
+
+                List<EventGenericBean> eventGenericBeen=new ArrayList<EventGenericBean>();
+
+                final LiteOrm liteOrm= LiteOrmSington.getInstance().getLiteOrm();
                 liteOrm.deleteAll(DBSongListCacheBean.class);
+                for (SongMenuDetailsBean.ContentBean contentBean : bean.getContent()) {
+
+                    EventGenericBean bean1=new EventGenericBean(contentBean.getTitle(),contentBean.getAuthor(),
+                            bean.getPic_300(),bean.getPic_500(),contentBean.getSong_id());
+                    eventGenericBeen.add(bean1);
+                }
+
+                EventBus.getDefault().post(new EventPosition(position-1));
+                EventBus.getDefault().post(eventGenericBeen);
             }
         });
     }

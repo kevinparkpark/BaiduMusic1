@@ -94,9 +94,10 @@ public class AuthorDetailsFragment extends SecBaseFragment implements OnRefreshL
 
     @Override
     public void onDownPullRefresh() {
-        artistBeanList=new ArrayList<>();
-        page=1;
-        refesh(page);
+//        artistBeanList=new ArrayList<>();
+//        page=1;
+//        refesh(page);
+        refreshListView.hideHeaderView();
     }
 
     @Override

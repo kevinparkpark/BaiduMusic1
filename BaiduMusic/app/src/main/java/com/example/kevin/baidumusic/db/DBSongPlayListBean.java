@@ -1,13 +1,10 @@
 package com.example.kevin.baidumusic.db;
 
-import com.litesuits.orm.db.annotation.PrimaryKey;
-import com.litesuits.orm.db.enums.AssignType;
-
 /**
  * Created by kevin on 16/5/27.
  */
 public class DBSongPlayListBean {
-    String songUrl;
+    String songId;
     String author;
     String title;
     String picUrl;
@@ -15,8 +12,8 @@ public class DBSongPlayListBean {
 
     int id;
 
-    public DBSongPlayListBean(String songUrl, String author, String title, String picUrl, String picBigUrl) {
-        this.songUrl = songUrl;
+    public DBSongPlayListBean(String songId, String author, String title, String picUrl, String picBigUrl) {
+        this.songId = songId;
         this.author = author;
         this.title = title;
         this.picUrl = picUrl;
@@ -63,11 +60,11 @@ public class DBSongPlayListBean {
         this.id = id;
     }
 
-    public String getSongUrl() {
-        return songUrl;
+    public String getSongId() {
+        return songId;
     }
 
-    public void setSongUrl(String songUrl) {
-        this.songUrl = songUrl;
+    public void setSongId(String songId) {
+        this.songId = songId;
     }
 }

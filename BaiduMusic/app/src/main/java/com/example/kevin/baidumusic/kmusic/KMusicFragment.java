@@ -184,9 +184,9 @@ public class KMusicFragment extends BaseFragment implements View.OnClickListener
     }
 
     public void setImageBackground(int position) {
-        int index = position % tips.length;
+//        int index = position % tips.length;
         for (int i = 0; i < tips.length; i++) {
-            if (i == index) {
+            if (i == position%tips.length) {
                 tips[i].setBackgroundResource(R.mipmap.page_indicator_focused);
             } else {
                 tips[i].setBackgroundResource(R.mipmap.page_indicator_unfocused);

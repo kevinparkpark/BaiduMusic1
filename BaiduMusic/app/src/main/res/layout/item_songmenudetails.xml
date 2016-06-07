@@ -18,10 +18,10 @@
         android:layout_height="wrap_content"
         android:layout_gravity="right"
         android:layout_weight="0.03"
-        android:src="@mipmap/le_rankdetails_more"
-        android:layout_alignTop="@+id/tv_songmenudetails_author"
-        android:layout_alignParentEnd="true"
-        android:layout_marginEnd="24dp" />
+        android:src="@mipmap/ic_list_more_invalid"
+        android:layout_marginEnd="25dp"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentEnd="true" />
 
     <TextView
         android:layout_width="wrap_content"

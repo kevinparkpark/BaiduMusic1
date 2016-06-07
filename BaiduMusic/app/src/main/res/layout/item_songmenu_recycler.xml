@@ -4,13 +4,14 @@
     android:layout_height="wrap_content"
     android:orientation="vertical">
 <RelativeLayout
+    android:layout_margin="10dp"
     android:id="@+id/relativelayout_songmenu"
     android:layout_width="191dp"
     android:layout_height="wrap_content">
     <ImageView
         android:id="@+id/iv_songmenu_image"
-        android:layout_width="190dp"
-        android:layout_height="190dp"
+        android:layout_width="180dp"
+        android:layout_height="180dp"
         android:src="@mipmap/tingmenuimage1" />
 
     <ImageView
@@ -33,11 +34,12 @@
     <ImageView
         android:id="@+id/iv_songmenu_play"
         android:src="@mipmap/ic_listmore_play_normal"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignBottom="@+id/tv_songmenu_count"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:layout_above="@+id/tv_songmenu_title"
         android:layout_alignEnd="@+id/iv_songmenu_image" />
     <TextView
+        android:maxLines="1"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="2016Bullboard美国公告牌颁奖礼"

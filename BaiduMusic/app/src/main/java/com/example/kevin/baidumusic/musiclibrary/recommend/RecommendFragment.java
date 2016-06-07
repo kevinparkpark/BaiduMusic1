@@ -106,7 +106,7 @@ public class RecommendFragment extends BaseFragment {
                 @Override
                 public void run() {
                     while (thredAlive) {
-                        for (sleepTick = 0; sleepTick < 2; sleepTick++)
+                        for (sleepTick = 0; sleepTick < 4; sleepTick++)
                             try {
                                 Thread.sleep(1000);
                             } catch (InterruptedException e) {
@@ -165,9 +165,9 @@ public class RecommendFragment extends BaseFragment {
     }
     //设置轮播图点点
     public void setImageBackground(int items) {
-        int index = items % tips.length;
+//        int index = items % tips.length;
         for (int i = 0; i < tips.length; i++) {
-            if (i == index) {
+            if (i == items%tips.length) {
                 tips[i].setBackgroundResource(R.mipmap.page_indicator_focused);
             } else {
                 tips[i].setBackgroundResource(R.mipmap.page_indicator_unfocused);

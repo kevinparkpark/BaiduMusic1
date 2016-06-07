@@ -11,17 +11,12 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.android.volley.VolleyError;
-import com.example.kevin.baidumusic.MainActivity;
 import com.example.kevin.baidumusic.R;
 import com.example.kevin.baidumusic.db.DBSongListCacheBean;
 import com.example.kevin.baidumusic.db.LiteOrmSington;
-import com.example.kevin.baidumusic.eventbean.EventRankDetailsPositionBen;
-import com.example.kevin.baidumusic.eventbean.EventServiceToPauseBean;
-import com.example.kevin.baidumusic.eventbean.EventServiceToPlayBtnBean;
-import com.example.kevin.baidumusic.eventbean.EventUpDateSongUI;
-import com.example.kevin.baidumusic.musiclibrary.radio.radioplay.RadioPlayActivity;
-import com.example.kevin.baidumusic.musiclibrary.radio.radioplay.songplaylist.RadioPlayListBean;
-import com.example.kevin.baidumusic.musiclibrary.radio.radioplay.songplaylist.RadioPlayListPagerAdapter;
+import com.example.kevin.baidumusic.eventbean.EventGenericBean;
+import com.example.kevin.baidumusic.eventbean.EventPosition;
+import com.example.kevin.baidumusic.musiclibrary.rank.RankDetailsBean;
 import com.example.kevin.baidumusic.netutil.NetListener;
 import com.example.kevin.baidumusic.netutil.NetTool;
 import com.example.kevin.baidumusic.netutil.URLValues;
@@ -30,9 +25,8 @@ import com.google.gson.Gson;
 import com.litesuits.orm.LiteOrm;
 
 import org.greenrobot.eventbus.EventBus;
-import org.greenrobot.eventbus.Subscribe;
-import org.greenrobot.eventbus.ThreadMode;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -59,21 +53,21 @@ public class RadioPlayListActivity extends AppCompatActivity {
         tvScene.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-             finish();
+                finish();
             }
         });
         //返回主页面
         ivBack.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-             sendBroadcast(new Intent(BroadcastValues.FINISH_RADIOPLAY));
+                sendBroadcast(new Intent(BroadcastValues.FINISH_RADIOPLAY));
             }
         });
     }
 
     public void initData() {
         String sceneId = getIntent().getStringExtra("sceneid");
-        Log.d("RadioPlayListActivity","----------"+ sceneId);
+        Log.d("RadioPlayListActivity", "----------" + sceneId);
         String sceneName = getIntent().getStringExtra("scenename");
 
         adapter = new RadioPlayListPagerAdapter(this);
@@ -90,10 +84,28 @@ public class RadioPlayListActivity extends AppCompatActivity {
                 viewPager.setAdapter(adapter);
 
                 //播放第一首歌
-                EventBus.getDefault().post(new EventRankDetailsPositionBen(0));
-                EventBus.getDefault().post(bean);
-                LiteOrm liteOrm = LiteOrmSington.getInstance().getLiteOrm();
+
+                List<EventGenericBean> eventGenericBeen = new ArrayList<EventGenericBean>();
+
+                final LiteOrm liteOrm = LiteOrmSington.getInstance().getLiteOrm();
                 liteOrm.deleteAll(DBSongListCacheBean.class);
+
+                for (RadioPlayListBean.ResultBean.SonglistBean songlistBean : bean.getResult().getSonglist()) {
+                    EventGenericBean bean1 = new EventGenericBean(songlistBean.getTitle(), songlistBean.getAuthor(),
+                            songlistBean.getPic_small(), songlistBean.getPic_big(), songlistBean.getSong_id());
+                    eventGenericBeen.add(bean1);
+                }
+                EventBus.getDefault().post(new EventPosition(0));
+                EventBus.getDefault().post(eventGenericBeen);
+
+
+//                for (RankDetailsBean.SongListBean songListBean : rankDetailsBean.getSong_list()) {
+//                    EventGenericBean bean=new EventGenericBean(songListBean.getTitle(),songListBean.getAuthor(),
+//                            songListBean.getPic_small(),songListBean.getPic_big(),songListBean.getSong_id());
+//                    eventGenericBeen.add(bean);
+//                }
+//                EventBus.getDefault().post(new EventPosition(position-2));
+//                EventBus.getDefault().post(eventGenericBeen);
 
                 viewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
                     @Override
@@ -104,10 +116,24 @@ public class RadioPlayListActivity extends AppCompatActivity {
                     @Override
                     public void onPageSelected(int position) {
                         adapter.setPos(position);
-                        EventBus.getDefault().post(new EventRankDetailsPositionBen(position));
-                        EventBus.getDefault().post(bean);
-                        LiteOrm liteOrm = LiteOrmSington.getInstance().getLiteOrm();
+//                        EventBus.getDefault().post(new EventPosition(position));
+//                        EventBus.getDefault().post(bean);
+//                        LiteOrm liteOrm = LiteOrmSington.getInstance().getLiteOrm();
+//                        liteOrm.deleteAll(DBSongListCacheBean.class);
+
+                        List<EventGenericBean> eventGenericBeen = new ArrayList<EventGenericBean>();
+
+                        final LiteOrm liteOrm = LiteOrmSington.getInstance().getLiteOrm();
                         liteOrm.deleteAll(DBSongListCacheBean.class);
+
+                        for (RadioPlayListBean.ResultBean.SonglistBean songlistBean : bean.getResult().getSonglist()) {
+                            EventGenericBean bean1 = new EventGenericBean(songlistBean.getTitle(), songlistBean.getAuthor(),
+                                    songlistBean.getPic_small(), songlistBean.getPic_big(), songlistBean.getSong_id());
+                            eventGenericBeen.add(bean1);
+                        }
+                        EventBus.getDefault().post(new EventPosition(position));
+                        EventBus.getDefault().post(eventGenericBeen);
+
                     }
 
                     @Override

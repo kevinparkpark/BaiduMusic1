@@ -4,12 +4,13 @@ import android.content.Intent;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
+import android.widget.TextView;
 
 import com.example.kevin.baidumusic.R;
 import com.example.kevin.baidumusic.base.BaseFragment;
 import com.example.kevin.baidumusic.db.DBSongListCacheBean;
 import com.example.kevin.baidumusic.db.LiteOrmSington;
-import com.example.kevin.baidumusic.eventbean.EventRankDetailsPositionBen;
+import com.example.kevin.baidumusic.eventbean.EventPosition;
 import com.example.kevin.baidumusic.util.BroadcastValues;
 import com.litesuits.orm.LiteOrm;
 
@@ -24,6 +25,7 @@ public class SongListCacheFragment extends BaseFragment{
     private List<DBSongListCacheBean>cacheBeen;
     private SongListCacheAdapter adapter;
     private ListView listView;
+    private TextView tvList;
     @Override
     public int setlayout() {
         return R.layout.fragment_songlistcache;
@@ -32,6 +34,7 @@ public class SongListCacheFragment extends BaseFragment{
     @Override
     protected void initView(View view) {
         listView= (ListView) view.findViewById(R.id.songlistcache_listview);
+        tvList= (TextView) view.findViewById(R.id.tv_songlistcache_text);
     }
 
     @Override
@@ -44,8 +47,14 @@ public class SongListCacheFragment extends BaseFragment{
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                EventBus.getDefault().post(new EventPosition(position));
                 context.sendBroadcast(new Intent(BroadcastValues.NEXT));
-                EventBus.getDefault().post(new EventRankDetailsPositionBen(position-1));
+            }
+        });
+        tvList.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                getFragmentManager().popBackStack();
             }
         });
     }

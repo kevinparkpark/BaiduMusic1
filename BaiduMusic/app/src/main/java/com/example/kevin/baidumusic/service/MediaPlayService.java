@@ -23,8 +23,9 @@ import com.android.volley.VolleyError;
 import com.example.kevin.baidumusic.R;
 import com.example.kevin.baidumusic.db.DBSongListCacheBean;
 import com.example.kevin.baidumusic.db.DBSongPlayListBean;
+import com.example.kevin.baidumusic.eventbean.EventGenericBean;
 import com.example.kevin.baidumusic.eventbean.EventProgressBean;
-import com.example.kevin.baidumusic.eventbean.EventRankDetailsPositionBen;
+import com.example.kevin.baidumusic.eventbean.EventPosition;
 import com.example.kevin.baidumusic.eventbean.EventSeekToBean;
 import com.example.kevin.baidumusic.eventbean.EventServiceToPauseBean;
 import com.example.kevin.baidumusic.eventbean.EventServiceToPlayBtnBean;
@@ -35,6 +36,7 @@ import com.example.kevin.baidumusic.musiclibrary.radio.radioplay.songplaylist.Ra
 import com.example.kevin.baidumusic.musiclibrary.rank.RankDetailsBean;
 import com.example.kevin.baidumusic.musiclibrary.rank.songplay.SongPlayBean;
 import com.example.kevin.baidumusic.musiclibrary.songmenu.songmenudetails.SongMenuDetailsBean;
+import com.example.kevin.baidumusic.netutil.DbUtil;
 import com.example.kevin.baidumusic.netutil.HttpDownloader;
 import com.example.kevin.baidumusic.netutil.NetListener;
 import com.example.kevin.baidumusic.netutil.NetTool;
@@ -70,40 +72,34 @@ public class MediaPlayService extends Service {
     private ReceiveNotiPlay notiPlay;
     private ReceivePlayListMode playListMode;
     private ReceiveDownload receiveDownload;
-    private int detailsSongPosition;
-    private ArrayList<String> detailsSongUrl;
+    private int detailsPosition;
     private int current;
     private int maxCurrent;
     private LiteOrm liteOrm;
     private List<DBSongPlayListBean> songUrlBeen;
     private List<DBSongListCacheBean> dbSongListCacheBeen;
     private EventServiceToPauseBean eventServiceToPlayBean;
-    private List<RankDetailsBean.SongListBean> data;
-    private List<SongMenuDetailsBean.ContentBean> contentBeanList;
-    private List<AuthorDetailsSonglistBean.SonglistBean> songlistBeanList;
     private SongPlayBean songPlayBean;
     private boolean flag = false;
     private RemoteViews remoteViews;
     private Notification.Builder builder;
-    private String searchSongId;
     private NotificationManager manager;
     private String lrc;
     private String author, songTitle, songImageUrl, songImageBigUrl;
     private final int MODE_RANDOM = 1;//随机播放
     private final int MODE_ONE = 2;//单曲循环
     private final int MODE_LOOP = 0;//列表循环
-    private int mode;//播放方式
+    private int mode = 0;//播放方式
 
     @Override
     public void onCreate() {
         super.onCreate();
         EventBus.getDefault().register(this);
-
         mp = new MediaPlayer();
         mp.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
             @Override
             public void onCompletion(MediaPlayer mp) {
-                next(detailsSongPosition);
+                next(detailsPosition);
             }
         });
 
@@ -138,22 +134,23 @@ public class MediaPlayService extends Service {
         liteOrm = LiteOrmSington.getInstance().getLiteOrm();
         List<DBSongListCacheBean> dbSongListCacheBeen = liteOrm.query(DBSongListCacheBean.class);
         SharedPreferences getsp = getSharedPreferences("songposition", MODE_PRIVATE);
-        detailsSongPosition = getsp.getInt("position", 0);
+        detailsPosition = getsp.getInt("position", 0);
         if (dbSongListCacheBeen.size() != 0) {
-            EventBus.getDefault().post(new EventUpDateSongUI(dbSongListCacheBeen.get(detailsSongPosition).getTitle(),
-                    dbSongListCacheBeen.get(detailsSongPosition).getAuthor(), dbSongListCacheBeen.get(detailsSongPosition).getImageUrl(),
-                    dbSongListCacheBeen.get(detailsSongPosition).getImageBigUrl()));
+            EventBus.getDefault().post(new EventUpDateSongUI(dbSongListCacheBeen.get(detailsPosition).getTitle(),
+                    dbSongListCacheBeen.get(detailsPosition).getAuthor(), dbSongListCacheBeen.get(detailsPosition).getImageUrl(),
+                    dbSongListCacheBeen.get(detailsPosition).getImageBigUrl()));
         }
     }
 
     //接收点击position
     @Subscribe
-    public void Detailsposition(EventRankDetailsPositionBen pos) {
-        detailsSongPosition = pos.getPostion();
+    public void Detailsposition(EventPosition pos) {
+        detailsPosition = pos.getPostion();
     }
-
+    //接收数据
     @Subscribe
-    public void getRadioPlayList(final RadioPlayListBean radioPlayListBean) {
+    public void DetailsResolution(final List<EventGenericBean> eventGenericBean){
+
         NetTool netTool = new NetTool();
         netTool.getDetailsSongUrl(new NetListener() {
             @Override
@@ -173,76 +170,12 @@ public class MediaPlayService extends Service {
                 songImageBigUrl = songPlayBean.getSonginfo().getPic_premium();
                 EventBus.getDefault().post(new EventSongLastPlayListBean(songTitle, author, songImageUrl, songImageBigUrl));
 
-                Log.d("MediaPlayService", "service" + songUrl);
-
-//                detailsSongUrl = new ArrayList<>();
-                final List<RadioPlayListBean.ResultBean.SonglistBean> playListBean = radioPlayListBean.getResult().getSonglist();
-//                for (int i = 0; i < playListBean.size(); i++) {
-//                    detailsSongUrl.add(playListBean.get(i).getSong_id());
-//                }
                 new Thread(new Runnable() {
                     @Override
                     public void run() {
-                        for (int i = 0; i < playListBean.size(); i++) {
-                            liteOrm.insert(new DBSongListCacheBean(playListBean.get(i).getTitle(), playListBean.get(i).getAuthor(),
-                                    playListBean.get(i).getPic_small(), playListBean.get(i).getPic_big(), playListBean.get(i).getSong_id()));
-                        }
-                    }
-                }).start();
-
-                startPlay(songUrl);
-
-                SharedPreferences sp = getSharedPreferences("songposition", MODE_PRIVATE);
-                SharedPreferences.Editor editor = sp.edit();
-                editor.putInt("position", detailsSongPosition);
-                editor.commit();
-            }
-
-            @Override
-            public void onFailed(VolleyError error) {
-
-            }
-            //传入position并接收SongId
-        }, radioPlayListBean.getResult().getSonglist().get(detailsSongPosition).getSong_id());
-    }
-
-    //歌手详情
-    @Subscribe
-    public void getAuthorDetailsSonglist(final AuthorDetailsSonglistBean authorDetailsSonglistBean) {
-        String ID = authorDetailsSonglistBean.getSonglist().get(detailsSongPosition).getSong_id();
-
-        NetTool netTool = new NetTool();
-        netTool.getUrlId(new NetListener() {
-            @Override
-            public void onSuccessed(String result) {
-
-                Gson gson = new Gson();
-                result = result.replace("(", "");
-                result = result.replace(")", "");
-                result = result.replace(";", "");
-                songPlayBean = new SongPlayBean();
-                songPlayBean = gson.fromJson(result, SongPlayBean.class);
-                songUrl = songPlayBean.getBitrate().getFile_link();
-                lrc = songPlayBean.getSonginfo().getLrclink();
-                author = songPlayBean.getSonginfo().getAuthor();
-                songTitle = songPlayBean.getSonginfo().getTitle();
-                songImageUrl = songPlayBean.getSonginfo().getPic_small();
-                songImageBigUrl = songPlayBean.getSonginfo().getPic_premium();
-                EventBus.getDefault().post(new EventSongLastPlayListBean(songTitle, author, songImageUrl, songImageBigUrl));
-
-                Log.d("MediaPlayService", "service" + songUrl);
-
-                detailsSongUrl = new ArrayList<>();
-                songlistBeanList = authorDetailsSonglistBean.getSonglist();
-                for (int i = 0; i < songlistBeanList.size(); i++) {
-                    detailsSongUrl.add(songlistBeanList.get(i).getSong_id());
-                }
-                new Thread(new Runnable() {
-                    @Override
-                    public void run() {
-                        for (int i = 0; i < songlistBeanList.size(); i++) {
-                            liteOrm.insert(new DBSongListCacheBean(songlistBeanList.get(i).getTitle(), songlistBeanList.get(i).getAuthor(),
-                                    songlistBeanList.get(i).getPic_small(), songlistBeanList.get(i).getPic_big(), songlistBeanList.get(i).getSong_id()));
+                        for (int i = 0; i < eventGenericBean.size(); i++) {
+                            liteOrm.insert(new DBSongListCacheBean(eventGenericBean.get(i).getTitle(), eventGenericBean.get(i).getAuthor(),
+                                    eventGenericBean.get(i).getImageUrl(), eventGenericBean.get(i).getImageBigUrl(), eventGenericBean.get(i).getSongId()));
                         }
                     }
                 }).start();
@@ -250,12 +183,11 @@ public class MediaPlayService extends Service {
                 startPlay(songUrl);
 
                 if (songUrl != null) {
-                    liteOrm.save(new DBSongPlayListBean(songUrl, author, songTitle, songImageUrl, songImageBigUrl));
-                    List<DBSongListCacheBean> song = liteOrm.query(DBSongListCacheBean.class);
+                    liteOrm.save(new DBSongPlayListBean(songPlayBean.getSonginfo().getSong_id(), author, songTitle, songImageUrl, songImageBigUrl));
                 }
                 SharedPreferences sp = getSharedPreferences("songposition", MODE_PRIVATE);
                 SharedPreferences.Editor editor = sp.edit();
-                editor.putInt("position", detailsSongPosition);
+                editor.putInt("position", detailsPosition);
                 editor.commit();
             }
 
@@ -264,186 +196,8 @@ public class MediaPlayService extends Service {
 
             }
             //传入position并接收SongId
-        }, URLValues.LE_RANKDETAILS_SONGURL1, ID, URLValues.LE_RANKDETAILS_SONGURL2);
+        }, eventGenericBean.get(detailsPosition).getSongId());
     }
-
-
-    //搜索页面传值
-    @Subscribe
-    public void getSearchSongId(final SearchBean searchBean) {
-        searchSongId = searchBean.getResult().getSong_info().getSong_list().get(detailsSongPosition).getSong_id();
-        NetTool netTool = new NetTool();
-        netTool.getDetailsSongUrl(new NetListener() {
-            @Override
-            public void onSuccessed(String result) {
-                Gson gson = new Gson();
-                result = result.replace("(", "");
-                result = result.replace(")", "");
-                result = result.replace(";", "");
-                songPlayBean = new SongPlayBean();
-                songPlayBean = gson.fromJson(result, SongPlayBean.class);
-                songUrl = songPlayBean.getBitrate().getFile_link();
-                lrc = songPlayBean.getSonginfo().getLrclink();
-                author = songPlayBean.getSonginfo().getAuthor();
-                songTitle = songPlayBean.getSonginfo().getTitle();
-                songImageUrl = songPlayBean.getSonginfo().getPic_small();
-                songImageBigUrl = songPlayBean.getSonginfo().getPic_premium();
-
-                detailsSongUrl = new ArrayList<>();
-                final List<SearchBean.ResultBean.SongInfoBean.SongListBean> songInfoBeen = searchBean.
-                        getResult().getSong_info().getSong_list();
-                for (int i = 0; i < songInfoBeen.size(); i++) {
-                    detailsSongUrl.add(songInfoBeen.get(i).getSong_id());
-                }
-                new Thread(new Runnable() {
-                    @Override
-                    public void run() {
-                        for (int i = 0; i < songInfoBeen.size(); i++) {
-                            liteOrm.insert(new DBSongListCacheBean(songInfoBeen.get(i).getTitle(), songInfoBeen.get(i).getAuthor(),
-                                    null, null, songInfoBeen.get(i).getSong_id()));
-                        }
-                    }
-                }).start();
-
-                startPlay(songUrl);
-                liteOrm.insert(new DBSongPlayListBean(songUrl, author, songTitle, songImageUrl, songImageBigUrl));
-
-            }
-
-            @Override
-            public void onFailed(VolleyError error) {
-
-            }
-        }, searchSongId);
-    }
-
-    //接收排行详情数据
-    @Subscribe
-    public void getEventDetails(final RankDetailsBean rankDetailsBean) {
-        NetTool netTool = new NetTool();
-        netTool.getDetailsSongUrl(new NetListener() {
-            @Override
-            public void onSuccessed(String result) {
-
-                Gson gson = new Gson();
-                result = result.replace("(", "");
-                result = result.replace(")", "");
-                result = result.replace(";", "");
-                songPlayBean = new SongPlayBean();
-                songPlayBean = gson.fromJson(result, SongPlayBean.class);
-                songUrl = songPlayBean.getBitrate().getFile_link();
-                lrc = songPlayBean.getSonginfo().getLrclink();
-                author = songPlayBean.getSonginfo().getAuthor();
-                songTitle = songPlayBean.getSonginfo().getTitle();
-                songImageUrl = songPlayBean.getSonginfo().getPic_small();
-                songImageBigUrl = songPlayBean.getSonginfo().getPic_premium();
-                EventBus.getDefault().post(new EventSongLastPlayListBean(songTitle, author, songImageUrl, songImageBigUrl));
-
-                Log.d("MediaPlayService", "service" + songUrl);
-
-                detailsSongUrl = new ArrayList<>();
-                data = rankDetailsBean.getSong_list();
-                for (int i = 0; i < data.size(); i++) {
-                    detailsSongUrl.add(rankDetailsBean.getSong_list().get(i).getSong_id());
-                }
-                new Thread(new Runnable() {
-                    @Override
-                    public void run() {
-                        for (int i = 0; i < data.size(); i++) {
-                            liteOrm.insert(new DBSongListCacheBean(data.get(i).getTitle(), data.get(i).getAuthor(),
-                                    data.get(i).getPic_small(), data.get(i).getPic_big(), data.get(i).getSong_id()));
-                        }
-                    }
-                }).start();
-
-                startPlay(songUrl);
-
-                if (songUrl != null) {
-                    liteOrm.save(new DBSongPlayListBean(songUrl, author, songTitle, songImageUrl, songImageBigUrl));
-                    List<DBSongListCacheBean> song = liteOrm.query(DBSongListCacheBean.class);
-//                    for (DBSongListCacheBean songUrlBean : song) {
-//                        Log.d("MediaPlayService", "songUrlBean:" + songUrlBean.getTitle());
-//                    }
-                }
-                SharedPreferences sp = getSharedPreferences("songposition", MODE_PRIVATE);
-                SharedPreferences.Editor editor = sp.edit();
-                editor.putInt("position", detailsSongPosition);
-                editor.commit();
-            }
-
-            @Override
-            public void onFailed(VolleyError error) {
-
-            }
-            //传入position并接收SongId
-        }, rankDetailsBean.getSong_list().get(detailsSongPosition).getSong_id());
-
-    }
-
-    //接收歌单数据
-    @Subscribe
-    public void getEventSongMenuDetails(final SongMenuDetailsBean songMenuDetailsBean) {
-        Log.d("MediaPlayService", "service-eventdetails");
-        NetTool netTool = new NetTool();
-        netTool.getDetailsSongUrl(new NetListener() {
-            @Override
-            public void onSuccessed(String result) {
-
-                Gson gson = new Gson();
-                result = result.replace("(", "");
-                result = result.replace(")", "");
-                result = result.replace(";", "");
-                songPlayBean = new SongPlayBean();
-                songPlayBean = gson.fromJson(result, SongPlayBean.class);
-                songUrl = songPlayBean.getBitrate().getFile_link();
-                lrc = songPlayBean.getSonginfo().getLrclink();
-                author = songPlayBean.getSonginfo().getAuthor();
-                songTitle = songPlayBean.getSonginfo().getTitle();
-                songImageUrl = songPlayBean.getSonginfo().getPic_small();
-                songImageBigUrl = songPlayBean.getSonginfo().getPic_premium();
-                EventBus.getDefault().post(new EventSongLastPlayListBean(songTitle, author, songImageUrl, songImageBigUrl));
-
-                Log.d("MediaPlayService", "service" + songUrl);
-
-                detailsSongUrl = new ArrayList<>();
-                contentBeanList = songMenuDetailsBean.getContent();
-                for (int i = 0; i < contentBeanList.size(); i++) {
-                    detailsSongUrl.add(contentBeanList.get(i).getSong_id());
-                }
-                new Thread(new Runnable() {
-                    @Override
-                    public void run() {
-                        for (int i = 0; i < contentBeanList.size(); i++) {
-                            liteOrm.insert(new DBSongListCacheBean(songMenuDetailsBean.getTitle(), contentBeanList.get(i).getAuthor(),
-                                    null, null, contentBeanList.get(i).getSong_id()));
-                        }
-                    }
-                }).start();
-
-                startPlay(songUrl);
-
-                if (songUrl != null) {
-                    liteOrm.save(new DBSongPlayListBean(songUrl, author, songTitle, songImageUrl, songImageBigUrl));
-                    List<DBSongListCacheBean> song = liteOrm.query(DBSongListCacheBean.class);
-//                    for (DBSongListCacheBean songUrlBean : song) {
-//                        Log.d("MediaPlayService", "songUrlBean:" + songUrlBean.getTitle());
-//                    }
-                }
-                SharedPreferences sp = getSharedPreferences("songposition", MODE_PRIVATE);
-                SharedPreferences.Editor editor = sp.edit();
-                editor.putInt("position", detailsSongPosition);
-                editor.commit();
-            }
-
-            @Override
-            public void onFailed(VolleyError error) {
-
-            }
-            //传入position并接收SongId
-        }, songMenuDetailsBean.getContent().get(detailsSongPosition).getSong_id());
-
-    }
-
 
     //接收seekbar传过来的数据 刷新seekbar
     @Subscribe
@@ -473,10 +227,10 @@ public class MediaPlayService extends Service {
                             if (mp.isPlaying()) {
                                 EventBus.getDefault().post(new EventServiceToPlayBtnBean(true));
                             } else {
-                                if (detailsSongPosition < dbSongListCacheBeen.size()) {
-                                    EventBus.getDefault().post(new EventServiceToPauseBean(dbSongListCacheBeen.get(detailsSongPosition + 1).getTitle(),
-                                            dbSongListCacheBeen.get(detailsSongPosition + 1).getAuthor(), dbSongListCacheBeen.get(detailsSongPosition + 1).getImageUrl(),
-                                            dbSongListCacheBeen.get(detailsSongPosition + 1).getImageBigUrl()));
+                                if (detailsPosition < dbSongListCacheBeen.size()) {
+                                    EventBus.getDefault().post(new EventServiceToPauseBean(dbSongListCacheBeen.get(detailsPosition ).getTitle(),
+                                            dbSongListCacheBeen.get(detailsPosition ).getAuthor(), dbSongListCacheBeen.get(detailsPosition ).getImageUrl(),
+                                            dbSongListCacheBeen.get(detailsPosition ).getImageBigUrl()));
                                 }
                             }
                         }
@@ -491,23 +245,24 @@ public class MediaPlayService extends Service {
 
     //接收本地音乐数据
     @Subscribe
-    public void getLocalMusicSonglist(final ArrayList<LocalMusic> localMusic){
+    public void getLocalMusicSonglist(LocalMusic localMusic) {
 
-        startPlay(localMusic.get(detailsSongPosition));
+        startPlay(localMusic);
 
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
-                for (int i = 0; i < localMusic.size(); i++) {
-                    liteOrm.insert(new DBSongListCacheBean(localMusic.get(i).getTitle(), localMusic.get(i).getArtist(),
-                            "", "", localMusic.get(i).getFileName()));
-                }
-            }
-        }).start();
+//        new Thread(new Runnable() {
+//            @Override
+//            public void run() {
+//                for (int i = 0; i < localMusic.size(); i++) {
+//                    liteOrm.insert(new DBSongListCacheBean(localMusic.get(i).getTitle(), localMusic.get(i).getArtist(),
+//                            "", "", localMusic.get(i).getFileName()));
+//                }
+//            }
+//        }).start();
 
     }
+
     //播放本地音乐
-    public void startPlay(LocalMusic localMusic){
+    public void startPlay(LocalMusic localMusic) {
         mp.reset();
         try {
             mp.setDataSource(localMusic.getUri());
@@ -543,51 +298,49 @@ public class MediaPlayService extends Service {
 
     //播放音乐的时候发送eventbus到 播放页面
     public void play() {
-
-        if (flag) {
+        if (!flag) {
+            next(detailsPosition);
+        } else {
             mp.start();
+
             showNotification(songPlayBean.getSonginfo().getPic_big(), songPlayBean.getSonginfo().getTitle()
                     , songPlayBean.getSonginfo().getAuthor(), R.mipmap.bt_widget_pause_press);
-        } else {
-
-            next(detailsSongPosition);
-            flag = true;
         }
     }
 
     //暂停
     public void pause() {
-
         if (mp != null && mp.isPlaying()) {
             mp.pause();
             EventBus.getDefault().post(new EventServiceToPlayBtnBean(true));
             showNotification(songPlayBean.getSonginfo().getPic_big(), songPlayBean.getSonginfo().getTitle()
                     , songPlayBean.getSonginfo().getAuthor(), R.mipmap.bt_widget_play_press);
+            flag=true;
         }
     }
 
     //下一首
-    public void next(int position) {
+    public void next(final int position) {
         Log.d("MediaPlayService", "position:" + position);
-        List<DBSongListCacheBean> been = liteOrm.query(DBSongListCacheBean.class);
+        final List<DBSongListCacheBean> been = liteOrm.query(DBSongListCacheBean.class);
         //播放模式
         switch (mode) {
             case MODE_RANDOM:
                 Random random = new Random(System.currentTimeMillis());
-                detailsSongPosition = random.nextInt(been.size());
+                detailsPosition = random.nextInt(been.size());
                 break;
             case MODE_ONE:
 
                 break;
             case MODE_LOOP:
-                if (detailsSongPosition == been.size() - 1) {
-                    detailsSongPosition = 0;
+                if (detailsPosition == been.size() - 1) {
+                    detailsPosition = 0;
                 } else {
-                    detailsSongPosition++;
+                    detailsPosition++;
                 }
                 break;
         }
-        Log.d("MediaPlayService", "detailsSongPosition:" + detailsSongPosition);
+        Log.d("MediaPlayService", "detailsPosition:" + detailsPosition);
         NetTool netTool = new NetTool();
         netTool.getDetailsSongUrl(new NetListener() {
             @Override
@@ -606,10 +359,11 @@ public class MediaPlayService extends Service {
                 songImageBigUrl = songPlayBean.getSonginfo().getPic_premium();
 
                 startPlay(songUrl);
-                liteOrm.insert(new DBSongPlayListBean(songUrl, author, songTitle, songImageUrl, songImageBigUrl));
+                liteOrm.insert(new DBSongPlayListBean(been.get(position).getSongId(), author, songTitle
+                        , songImageUrl, songImageBigUrl));
                 SharedPreferences sp = getSharedPreferences("songposition", MODE_PRIVATE);
                 SharedPreferences.Editor editor = sp.edit();
-                editor.putInt("position", detailsSongPosition);
+                editor.putInt("position", detailsPosition);
                 editor.commit();
             }
 
@@ -631,6 +385,9 @@ public class MediaPlayService extends Service {
     public void onDestroy() {
         super.onDestroy();
         EventBus.getDefault().unregister(this);
+        //服务停止时释放mediaplayer
+        mp.stop();
+        mp.release();
         unregisterReceiver(pauseMode);
         unregisterReceiver(playMode);
         unregisterReceiver(nextMode);
@@ -688,7 +445,7 @@ public class MediaPlayService extends Service {
     class ReceiveNextMode extends BroadcastReceiver {
         @Override
         public void onReceive(Context context, Intent intent) {
-            next(detailsSongPosition);
+            next(detailsPosition);
         }
     }
 
@@ -696,8 +453,9 @@ public class MediaPlayService extends Service {
     class ReceivePrevious extends BroadcastReceiver {
         @Override
         public void onReceive(Context context, Intent intent) {
-            if (detailsSongPosition > 0) {
-                next(--detailsSongPosition);
+            if (detailsPosition > 1) {
+                next(--detailsPosition);
+                Log.d("ReceivePrevious", "detailsPosition-2:" + (--detailsPosition));
             }
         }
     }
@@ -714,11 +472,11 @@ public class MediaPlayService extends Service {
 
     //notification播放按键监听
     class ReceiveNotiPlay extends BroadcastReceiver {
-        boolean play = true;
+        boolean isPlay = true;
 
         @Override
         public void onReceive(Context context, Intent intent) {
-            if (play = !play) {
+            if (isPlay = !isPlay) {
                 play();
             } else {
                 pause();
@@ -752,7 +510,7 @@ public class MediaPlayService extends Service {
                         } else if (result == 1) {
                             Toast.makeText(MediaPlayService.this, "重复下载", Toast.LENGTH_SHORT).show();
                         }
-                    }else {
+                    } else {
                         Toast.makeText(MediaPlayService.this, "开始下载", Toast.LENGTH_SHORT).show();
 
                     }

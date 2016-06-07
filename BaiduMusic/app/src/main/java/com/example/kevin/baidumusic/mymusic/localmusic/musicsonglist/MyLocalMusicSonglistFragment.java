@@ -2,13 +2,14 @@ package com.example.kevin.baidumusic.mymusic.localmusic.musicsonglist;
 
 import android.view.View;
 import android.widget.AdapterView;
+import android.widget.ImageView;
 import android.widget.ListView;
 
 import com.example.kevin.baidumusic.R;
 import com.example.kevin.baidumusic.base.BaseFragment;
 import com.example.kevin.baidumusic.db.DBSongListCacheBean;
 import com.example.kevin.baidumusic.db.LiteOrmSington;
-import com.example.kevin.baidumusic.eventbean.EventRankDetailsPositionBen;
+import com.example.kevin.baidumusic.eventbean.EventPosition;
 import com.example.kevin.baidumusic.util.LocalMusic;
 import com.example.kevin.baidumusic.util.MusicUtils;
 import com.litesuits.orm.LiteOrm;
@@ -25,6 +26,7 @@ public class MyLocalMusicSonglistFragment extends BaseFragment{
     private MyLocalMusicSongListAdapter adapter;
     private ListView listView;
     private List<LocalMusic> localMusics;
+    private ImageView ivBack;
     @Override
     public int setlayout() {
         return R.layout.fragment_mylocalmusicsong;
@@ -46,10 +48,20 @@ public class MyLocalMusicSonglistFragment extends BaseFragment{
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                EventBus.getDefault().post(new EventRankDetailsPositionBen(position));
-                EventBus.getDefault().post(localMusics);
-                LiteOrm liteOrm= LiteOrmSington.getInstance().getLiteOrm();
+                EventBus.getDefault().post(new EventPosition(position));
+                EventBus.getDefault().post(localMusics.get(position));
+                final LiteOrm liteOrm= LiteOrmSington.getInstance().getLiteOrm();
                 liteOrm.deleteAll(DBSongListCacheBean.class);
+
+                new Thread(new Runnable() {
+                    @Override
+                    public void run() {
+                        for (int i = 0; i < localMusics.size(); i++) {
+                            liteOrm.insert(new DBSongListCacheBean(localMusics.get(i).getTitle(), localMusics.get(i).getArtist(),
+                                    "", "", localMusics.get(i).getFileName()));
+                        }
+                    }
+                }).start();
 
             }
         });

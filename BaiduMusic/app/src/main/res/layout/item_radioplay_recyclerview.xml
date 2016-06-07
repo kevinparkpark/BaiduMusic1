@@ -14,8 +14,8 @@
         android:scaleType="fitXY"
         android:layout_gravity="center"
         android:src="@mipmap/radioplay_item_img"
-        android:layout_width="40dp"
-        android:layout_height="40dp"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
         android:layout_centerVertical="true"
         android:layout_centerHorizontal="true" />
     <LinearLayout

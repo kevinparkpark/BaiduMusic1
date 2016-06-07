@@ -3,10 +3,10 @@ package com.example.kevin.baidumusic.eventbean;
 /**
  * Created by kevin on 16/5/26.
  */
-public class EventRankDetailsPositionBen {
+public class EventPosition {
     int postion;
 
-    public EventRankDetailsPositionBen(int postion) {
+    public EventPosition(int postion) {
         this.postion = postion;
     }
 
