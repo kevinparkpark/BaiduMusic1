@@ -15,5 +15,6 @@ public final class BroadcastValues {
     public static final String FINISH_RADIOPLAY="com.example.kevin.baidumusic.util.finish_radioplay";
     public static final String PLAY_MODE="com.example.kevin.baidumusic.util.playmode";
     public static final String DOWNLOAD="com.example.kevin.baidumusic.util.download";
+    public static final String RECO_TO_SONGLIST="com.example.kevin.baidumusic.util.reco_to_songlist";
 
 }

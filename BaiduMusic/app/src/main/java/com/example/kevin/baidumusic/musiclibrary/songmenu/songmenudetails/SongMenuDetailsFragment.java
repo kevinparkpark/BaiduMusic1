@@ -63,7 +63,6 @@ public class SongMenuDetailsFragment extends BaseFragment{
     @Override
     protected void initData() {
         String listId=getArguments().getString("listid");
-        Log.d("SongMenuDetailsFragment","-----"+ listId);
         NetTool netTool=new NetTool();
         netTool.getUrlId(new NetListener() {
             @Override

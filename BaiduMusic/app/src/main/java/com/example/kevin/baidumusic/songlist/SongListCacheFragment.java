@@ -1,7 +1,6 @@
 package com.example.kevin.baidumusic.songlist;
 
 import android.content.Intent;
-import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
@@ -27,7 +26,8 @@ public class SongListCacheFragment extends BaseFragment{
     private List<DBSongListCacheBean>cacheBeen;
     private SongListCacheAdapter adapter;
     private ListView listView;
-    private TextView tvList;
+    private TextView tvList,tvClean;
+    private LiteOrm liteOrm;
     @Override
     public int setlayout() {
         return R.layout.fragment_songlistcache;
@@ -35,13 +35,14 @@ public class SongListCacheFragment extends BaseFragment{
 
     @Override
     protected void initView(View view) {
-        listView= (ListView) view.findViewById(R.id.songlistcache_listview);
+        listView= (ListView) view.findViewById(R.id.songplaypagelist_listview);
         tvList= (TextView) view.findViewById(R.id.tv_songlistcache_text);
+        tvClean= (TextView) view.findViewById(R.id.tv_songlistcache_clear);
     }
 
     @Override
     protected void initData() {
-        LiteOrm liteOrm= LiteOrmSington.getInstance().getLiteOrm();
+        liteOrm= LiteOrmSington.getInstance().getLiteOrm();
         cacheBeen=liteOrm.query(DBSongListCacheBean.class);
         adapter=new SongListCacheAdapter(context);
         adapter.setCacheBeen(cacheBeen);
@@ -57,6 +58,14 @@ public class SongListCacheFragment extends BaseFragment{
             @Override
             public void onClick(View v) {
                 getFragmentManager().popBackStack();
+            }
+        });
+        tvClean.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                liteOrm.deleteAll(DBSongListCacheBean.class);
+                cacheBeen=liteOrm.query(DBSongListCacheBean.class);
+                adapter.setCacheBeen(cacheBeen);
             }
         });
     }

@@ -14,7 +14,7 @@
         android:layout_height="wrap_content">
 
     <ListView
-        android:id="@+id/songlistcache_listview"
+        android:id="@+id/songplaypagelist_listview"
         android:layout_width="match_parent"
         android:layout_height="404dp"
         android:layout_alignParentBottom="true"
@@ -28,7 +28,7 @@
         android:text="正在播放列表"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_above="@+id/songlistcache_listview"
+        android:layout_above="@+id/songplaypagelist_listview"
         android:layout_centerHorizontal="true"
         android:layout_alignTop="@+id/iv_songlistcache_playorder" />
 
@@ -38,16 +38,16 @@
         android:text="全部清空"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_above="@+id/songlistcache_listview"
+        android:layout_above="@+id/songplaypagelist_listview"
         android:layout_alignParentEnd="true"
         android:layout_alignTop="@+id/tv_songlistcache_text" />
 
     <ImageView
-        android:src="@mipmap/bt_list_button_roundplay_normal"
+        android:src="@drawable/play_mode_level"
         android:id="@+id/iv_songlistcache_playorder"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_above="@+id/songlistcache_listview"
+        android:layout_above="@+id/songplaypagelist_listview"
         android:layout_alignParentStart="true" />
     </RelativeLayout>
 </LinearLayout>

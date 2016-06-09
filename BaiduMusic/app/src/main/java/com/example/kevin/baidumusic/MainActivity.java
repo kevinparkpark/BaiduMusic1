@@ -19,6 +19,7 @@ import com.example.kevin.baidumusic.kmusic.authordetails.AuthorDetailsFragment;
 import com.example.kevin.baidumusic.kmusic.authordetails.songlist.AuthorDetailsSonglistFragment;
 import com.example.kevin.baidumusic.musiclibrary.rank.RankDetailsFragment;
 import com.example.kevin.baidumusic.musiclibrary.rank.RankFragment;
+import com.example.kevin.baidumusic.musiclibrary.recommend.RecommendFragment;
 import com.example.kevin.baidumusic.musiclibrary.songmenu.SongMenuFragment;
 import com.example.kevin.baidumusic.musiclibrary.songmenu.songmenudetails.SongMenuDetailsFragment;
 import com.example.kevin.baidumusic.mymusic.MyFragment;
@@ -38,7 +39,8 @@ import org.greenrobot.eventbus.ThreadMode;
 
 public class MainActivity extends AppCompatActivity implements MyFragment.MyToLocalFragmentOnClick, RankFragment.rankToOnItemListener
         , SongMenuFragment.songMenuToDetailsOnClickListener, KMusicFragment.kMusicToDetailsOnClickListener
-        , AuthorDetailsFragment.authorDetailsToSonglistOnClickListener,MyFragment.LatelyPlaylistOnClick{
+        , AuthorDetailsFragment.authorDetailsToSonglistOnClickListener,MyFragment.LatelyPlaylistOnClick
+,RecommendFragment.RecommendToSongMenuDetailsOnClickListener,RecommendFragment.RecommendToKmusicOnClickListener{
 
     private TotalFragment totalFragment;
     private MyFragment myFragment;
@@ -177,6 +179,21 @@ public class MainActivity extends AppCompatActivity implements MyFragment.MyToLo
         bundle.putString("listid", position);
         songMenuDetailsFragment.setArguments(bundle);
     }
+    //跳转歌单详情页面
+    @Override
+    public void onRecommendToSongMenuDetailsClickListener(String listId) {
+        getSupportFragmentManager().beginTransaction().setCustomAnimations(R.anim.fragment_in, R.anim.fragment_out)
+                .add(R.id.framelayout_main, songMenuDetailsFragment).hide(totalFragment).addToBackStack(null).commit();
+        Bundle bundle = new Bundle();
+        bundle.putString("listid", listId);
+        songMenuDetailsFragment.setArguments(bundle);
+    }
+    //跳转到k歌界面
+    @Override
+    public void onRecommendToKmusicClickListener() {
+
+        totalFragment.flipPage();
+    }
 
     //歌手详情页面
     AuthorDetailsFragment authorDetailsFragment = new AuthorDetailsFragment();
@@ -230,7 +247,6 @@ public class MainActivity extends AppCompatActivity implements MyFragment.MyToLo
         EventBus.getDefault().unregister(this);
        // stopService(startIntent);
     }
-
 
 
 

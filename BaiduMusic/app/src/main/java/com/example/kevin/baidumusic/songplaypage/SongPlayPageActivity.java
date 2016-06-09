@@ -22,6 +22,7 @@ import com.example.kevin.baidumusic.eventbean.EventServiceToPauseBean;
 import com.example.kevin.baidumusic.eventbean.EventServiceToPlayBtnBean;
 import com.example.kevin.baidumusic.eventbean.EventUpDateSongUI;
 import com.example.kevin.baidumusic.netutil.NetTool;
+import com.example.kevin.baidumusic.songplaypage.playpagelist.SongPlayPageListActivity;
 import com.example.kevin.baidumusic.util.BroadcastValues;
 
 import org.greenrobot.eventbus.EventBus;
@@ -40,7 +41,7 @@ public class SongPlayPageActivity extends AppCompatActivity implements View.OnCl
     private ViewPager viewPager;
     private ArrayList<BaseFragment> fragments;
     private SongPlayPageAdapter adapter;
-    private ImageView ivSongPlay, ivNext, ivPrevious, ivMode,ivDownload;
+    private ImageView ivSongPlay, ivNext, ivPrevious, ivMode,ivDownload,ivBack,iv2More;
     private TextView tvSongPlayTitle, tvSongPlayAuthor, tvSongPlayTime, tvSongPlayMaxTime;
     private SeekBar seekBar;
     private int maxCurrent;
@@ -65,6 +66,8 @@ public class SongPlayPageActivity extends AppCompatActivity implements View.OnCl
         ivPrevious = (ImageView) findViewById(R.id.iv_songplayactivity_previous);
         ivMode = (ImageView) findViewById(R.id.iv_songplaypage_playmode);
         ivDownload= (ImageView) findViewById(R.id.iv_songplaypage_download);
+        ivBack= (ImageView) findViewById(R.id.iv_songplaypage_back);
+        iv2More= (ImageView) findViewById(R.id.iv_songplaypage_more);
 
         seekBar = (SeekBar) findViewById(R.id.seekbar_songplaypage);
 
@@ -96,6 +99,8 @@ public class SongPlayPageActivity extends AppCompatActivity implements View.OnCl
         ivPrevious.setOnClickListener(this);
         ivMode.setOnClickListener(this);
         ivDownload.setOnClickListener(this);
+        ivBack.setOnClickListener(this);
+        iv2More.setOnClickListener(this);
     }
 
     //接收服务中seekbar相关数据
@@ -192,6 +197,12 @@ public class SongPlayPageActivity extends AppCompatActivity implements View.OnCl
                 break;
             case R.id.iv_songplaypage_download:
                 sendBroadcast(new Intent(BroadcastValues.DOWNLOAD));
+                break;
+            case R.id.iv_songplaypage_back:
+                finish();
+                break;
+            case R.id.iv_songplaypage_more:
+                startActivity(new Intent(this, SongPlayPageListActivity.class));
                 break;
         }
     }

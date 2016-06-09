@@ -1,14 +1,17 @@
 package com.example.kevin.baidumusic.musiclibrary.recommend;
 
+import android.content.Intent;
 import android.os.Handler;
 import android.os.Message;
 import android.support.v4.view.ViewPager;
-import android.util.Log;
+import android.support.v7.widget.GridLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.TextView;
 
 import com.android.volley.VolleyError;
 import com.example.kevin.baidumusic.base.BaseFragment;
@@ -16,18 +19,18 @@ import com.example.kevin.baidumusic.R;
 import com.example.kevin.baidumusic.netutil.NetListener;
 import com.example.kevin.baidumusic.netutil.NetTool;
 import com.example.kevin.baidumusic.netutil.URLValues;
+import com.example.kevin.baidumusic.util.BroadcastValues;
 import com.google.gson.Gson;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Timer;
 
 /**
  * Created by kevin on 16/5/19.
  */
-public class RecommendFragment extends BaseFragment {
+public class RecommendFragment extends BaseFragment implements View.OnClickListener {
     private ViewPager viewPager;
-    private RecommendAdapter adapter;
+    private RecommendPagerAdapter adapter;
     private Handler handler;
     private boolean thredAlive = true;
     private boolean userTouch = false;
@@ -36,7 +39,11 @@ public class RecommendFragment extends BaseFragment {
     private Thread thread;
     private ViewGroup group;
     private ImageView tips[];
-    private int tipsCount;
+    private List<RecommendSongBean.ContentBean.ListBean> listBeen;
+    private RecommendRecyclerAdapter recyclerAdapter;
+    private RecyclerView recyclerView;
+    private ImageView ivAllAuthor;
+    private TextView tvSonglistMore;
 
     @Override
     public int setlayout() {
@@ -47,11 +54,17 @@ public class RecommendFragment extends BaseFragment {
     protected void initView(View view) {
         viewPager = (ViewPager) view.findViewById(R.id.recommend_viewpager);
         group = (ViewGroup) view.findViewById(R.id.recommend_viewgroup);
+        recyclerView = (RecyclerView) view.findViewById(R.id.le_recommend_recyclerview);
+        ivAllAuthor = (ImageView) view.findViewById(R.id.iv_le_recommend_allauthor);
+        tvSonglistMore= (TextView) view.findViewById(R.id.tv_recommend_songlist_more);
     }
 
     @Override
     protected void initData() {
-        adapter = new RecommendAdapter();
+        ivAllAuthor.setOnClickListener(this);
+        tvSonglistMore.setOnClickListener(this);
+
+        adapter = new RecommendPagerAdapter();
         picBeanList = new ArrayList<>();
         //设置缓存图片数量及间距
         viewPager.setOffscreenPageLimit(5);
@@ -69,7 +82,7 @@ public class RecommendFragment extends BaseFragment {
 
                 //获得tips的数量
                 tips = new ImageView[picBeanList.size()];
-                //花点点
+                //画点点
                 for (int i = 0; i < tips.length; i++) {
                     ImageView imageView = new ImageView(context);
                     if (i == 0) {
@@ -145,7 +158,9 @@ public class RecommendFragment extends BaseFragment {
 
             @Override
             public void onPageSelected(int position) {
+
                 setImageBackground(position);
+
             }
 
             @Override
@@ -154,8 +169,44 @@ public class RecommendFragment extends BaseFragment {
             }
         });
 
+        recyclerAdapter = new RecommendRecyclerAdapter(context);
+        GridLayoutManager manager = new GridLayoutManager(context, 3);
+        manager.setOrientation(GridLayoutManager.VERTICAL);
+        recyclerView.setLayoutManager(manager);
 
+        NetTool netTool1 = new NetTool();
+        netTool1.getUrl(new NetListener() {
+            @Override
+            public void onSuccessed(String result) {
+                Gson gson = new Gson();
+                RecommendSongBean bean = gson.fromJson(result, RecommendSongBean.class);
+                listBeen = new ArrayList<>();
+                listBeen.addAll(bean.getContent().getList());
+                recyclerAdapter.setListBeen(listBeen);
+                recyclerView.setAdapter(recyclerAdapter);
 
+                recyclerAdapter.setClickListener(new RecommendToSonglistOnClickListener() {
+                    @Override
+                    public void onRecommendToSonglistClickListener(int position) {
+                        ((RecommendToSongMenuDetailsOnClickListener) getActivity())
+                                .onRecommendToSongMenuDetailsClickListener(listBeen.get(position).getListid());
+                    }
+                });
+            }
+
+            @Override
+            public void onFailed(VolleyError error) {
+
+            }
+        }, URLValues.RECOMMEND_SONGLIST);
+
+    }
+
+    public interface RecommendToSongMenuDetailsOnClickListener {
+        void onRecommendToSongMenuDetailsClickListener(String listId);
+    }
+    public interface RecommendToKmusicOnClickListener{
+        void onRecommendToKmusicClickListener();
     }
 
     @Override
@@ -163,17 +214,31 @@ public class RecommendFragment extends BaseFragment {
         thredAlive = false;
         super.onDestroy();
     }
+
     //设置轮播图点点
     public void setImageBackground(int items) {
 //        int index = items % tips.length;
-        for (int i = 0; i < tips.length; i++) {
-            if (i == items%tips.length) {
-                tips[i].setBackgroundResource(R.mipmap.page_indicator_focused);
-            } else {
-                tips[i].setBackgroundResource(R.mipmap.page_indicator_unfocused);
+        if (tips.length > 0) {
+            for (int i = 0; i < tips.length; i++) {
+                if (i == items % tips.length) {
+                    tips[i].setBackgroundResource(R.mipmap.page_indicator_focused);
+                } else {
+                    tips[i].setBackgroundResource(R.mipmap.page_indicator_unfocused);
+                }
             }
         }
 
     }
 
+    @Override
+    public void onClick(View v) {
+        switch (v.getId()) {
+            case R.id.iv_le_recommend_allauthor:
+                ((RecommendToKmusicOnClickListener)getActivity()).onRecommendToKmusicClickListener();
+                break;
+            case R.id.tv_recommend_songlist_more:
+                context.sendBroadcast(new Intent(BroadcastValues.RECO_TO_SONGLIST));
+                break;
+        }
+    }
 }

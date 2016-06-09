@@ -26,6 +26,12 @@
             android:screenOrientation="portrait"/>
         <activity android:name=".musiclibrary.radio.radioplay.songplaylist.RadioPlayListActivity"
             android:screenOrientation="portrait"/>
+        <activity android:name=".loginandregister.LoginActivity"
+            android:screenOrientation="portrait"/>
+        <activity android:name=".loginandregister.RegisterActivity"
+            android:screenOrientation="portrait"/>
+        <activity android:name=".songplaypage.playpagelist.SongPlayPageListActivity"
+            android:screenOrientation="portrait"/>
         <service android:name=".service.MediaPlayService"/>
     </application>
 

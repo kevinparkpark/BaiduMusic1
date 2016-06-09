@@ -3,6 +3,7 @@ package com.example.kevin.baidumusic.util;
 import android.content.Context;
 import android.database.Cursor;
 import android.provider.MediaStore;
+import android.util.Log;
 
 import java.util.List;
 
@@ -15,6 +16,7 @@ public class MusicUtils {
         musicList.clear();
         Cursor cursor=context.getContentResolver().query(MediaStore.Audio.Media.EXTERNAL_CONTENT_URI,
                 null,null,null,MediaStore.Audio.Media.DEFAULT_SORT_ORDER);
+
         if (cursor!=null){
             while (cursor.moveToNext()){
                 int isMusic=cursor.getInt(cursor.getColumnIndex(MediaStore.Audio.Media.IS_MUSIC));
@@ -40,6 +42,7 @@ public class MusicUtils {
                 music.setUri(url);
                 music.setFileName(fileName);
                 musicList.add(music);
+                Log.d("MusicUtils","------"+ title);
             }
             cursor.close();
         }

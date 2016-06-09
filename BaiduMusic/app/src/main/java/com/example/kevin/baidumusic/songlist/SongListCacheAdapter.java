@@ -5,10 +5,13 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.example.kevin.baidumusic.R;
 import com.example.kevin.baidumusic.db.DBSongListCacheBean;
+import com.example.kevin.baidumusic.db.LiteOrmSington;
+import com.litesuits.orm.LiteOrm;
 
 import java.util.List;
 
@@ -25,6 +28,7 @@ public class SongListCacheAdapter extends BaseAdapter{
 
     public void setCacheBeen(List<DBSongListCacheBean> cacheBeen) {
         this.cacheBeen = cacheBeen;
+        notifyDataSetChanged();
     }
 
     @Override
@@ -43,7 +47,7 @@ public class SongListCacheAdapter extends BaseAdapter{
     }
 
     @Override
-    public View getView(int position, View convertView, ViewGroup parent) {
+    public View getView(final int position, View convertView, ViewGroup parent) {
         MyHolder holder=null;
         if (convertView==null){
             convertView= LayoutInflater.from(context).inflate(R.layout.item_songlistcache,parent,false);
@@ -54,15 +58,25 @@ public class SongListCacheAdapter extends BaseAdapter{
         }
         holder.tvTitle.setText(cacheBeen.get(position).getTitle());
         holder.tvAuthor.setText(cacheBeen.get(position).getAuthor());
-
+        holder.ivDel.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                LiteOrm liteOrm= LiteOrmSington.getInstance().getLiteOrm();
+                liteOrm.delete(cacheBeen.get(position));
+                cacheBeen=liteOrm.query(DBSongListCacheBean.class);
+                setCacheBeen(cacheBeen);
+            }
+        });
 
         return convertView;
     }
     class MyHolder {
         TextView tvTitle,tvAuthor;
+        ImageView ivDel;
         public MyHolder(View itemView){
             tvAuthor= (TextView) itemView.findViewById(R.id.tv_item_songlistcache_author);
             tvTitle= (TextView) itemView.findViewById(R.id.tv_item_songlistcache_title);
+            ivDel= (ImageView) itemView.findViewById(R.id.iv_item_songlistcache_del);
         }
     }
 }

@@ -63,8 +63,8 @@ public class LatelyPlaylistFragment extends SecBaseFragment{
                         dbSongPlayListBean.get(i).getAuthor(),dbSongPlayListBean.get(i).getPicUrl(),
                         dbSongPlayListBean.get(i).getPicBigUrl(),dbSongPlayListBean.get(i).getSongId()));
                 }
-
-                EventBus.getDefault().post(new EventPosition(position));
+                //previous方法-- 所以position+1
+                EventBus.getDefault().post(new EventPosition(position+1));
                 context.sendBroadcast(new Intent(BroadcastValues.PREVIOUS));
             }
         });

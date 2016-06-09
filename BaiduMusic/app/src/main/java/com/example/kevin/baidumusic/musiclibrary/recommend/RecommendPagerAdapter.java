@@ -17,7 +17,7 @@ import java.util.List;
 /**
  * Created by kevin on 16/5/31.
  */
-public class RecommendAdapter extends PagerAdapter{
+public class RecommendPagerAdapter extends PagerAdapter{
     private List<RecommendBean.PicBean> picBeanList;
 
     public void setPicBeanList(List<RecommendBean.PicBean> picBeanList) {

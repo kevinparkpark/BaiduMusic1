@@ -1,6 +1,7 @@
 package com.example.kevin.baidumusic.mymusic.localmusic.musicsonglist;
 
 import android.content.SharedPreferences;
+import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ImageView;
@@ -71,5 +72,10 @@ public class MyLocalMusicSonglistFragment extends BaseFragment{
 
             }
         });
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
     }
 }

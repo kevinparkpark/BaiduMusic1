@@ -1,5 +1,6 @@
 package com.example.kevin.baidumusic.totalfragment;
 
+import android.content.Intent;
 import android.support.design.widget.TabLayout;
 import android.support.v4.view.ViewPager;
 import android.view.View;
@@ -8,6 +9,7 @@ import android.widget.ImageView;
 import com.example.kevin.baidumusic.R;
 import com.example.kevin.baidumusic.base.BaseFragment;
 import com.example.kevin.baidumusic.kmusic.KMusicFragment;
+import com.example.kevin.baidumusic.loginandregister.LoginActivity;
 import com.example.kevin.baidumusic.musiclibrary.LeFragment;
 import com.example.kevin.baidumusic.liveFragment.LiveFragment;
 import com.example.kevin.baidumusic.mymusic.MyFragment;
@@ -22,7 +24,7 @@ public class TotalFragment extends BaseFragment {
     private ViewPager viewPager;
     private ArrayList<BaseFragment> fragments;
     private TotalFragmentPagerAdapter adapter;
-    private ImageView ivTitleSearch;
+    private ImageView ivTitleSearch,ivTitle2Login;
     private titleOnClick titleOnClick;
 
     public void setTitleOnClick(TotalFragment.titleOnClick titleOnClick) {
@@ -39,6 +41,7 @@ public class TotalFragment extends BaseFragment {
         tabLayout = (TabLayout) view.findViewById(R.id.title_tablayout);
         viewPager = (ViewPager) view.findViewById(R.id.title_viewpager);
         ivTitleSearch= (ImageView) view.findViewById(R.id.iv_title_search);
+        ivTitle2Login= (ImageView) view.findViewById(R.id.iv_title2login);
     }
 
     @Override
@@ -64,9 +67,18 @@ public class TotalFragment extends BaseFragment {
 
             }
         });
+        ivTitle2Login.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(context, LoginActivity.class));
+            }
+        });
     }
 
     public interface titleOnClick{
         void onTitleClick();
+    }
+    public void flipPage(){
+        viewPager.setCurrentItem(2);
     }
 }

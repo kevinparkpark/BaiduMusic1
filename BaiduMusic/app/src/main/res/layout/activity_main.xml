@@ -68,6 +68,7 @@
             android:layout_alignParentEnd="true" />
 
         <TextView
+            android:layout_marginTop="5dp"
             android:id="@+id/tv_main_song_title"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -83,7 +84,7 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:text="T-ara"
-            android:layout_centerVertical="true"
+            android:layout_below="@+id/tv_main_song_title"
             android:layout_toEndOf="@+id/iv_main_song_image" />
     </RelativeLayout>
 

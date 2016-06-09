@@ -1,15 +1,22 @@
 package com.example.kevin.baidumusic.db;
 
+import com.litesuits.orm.db.annotation.Column;
+import com.litesuits.orm.db.annotation.PrimaryKey;
+import com.litesuits.orm.db.enums.AssignType;
+
 /**
  * Created by kevin on 16/5/27.
  */
 public class DBSongPlayListBean {
+
+    public static final String TITLE= "title";
     String songId;
     String author;
-    String title;
     String picUrl;
     String picBigUrl;
-
+    @Column(TITLE)
+    String title;
+    @PrimaryKey(AssignType.AUTO_INCREMENT)
     int id;
 
     public DBSongPlayListBean(String songId, String author, String title, String picUrl, String picBigUrl) {

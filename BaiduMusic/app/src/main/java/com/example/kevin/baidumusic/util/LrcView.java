@@ -197,9 +197,9 @@ public class LrcView extends View {
      * 加载本地歌词文件
      */
     public void loadLocalLrc(String path) {
-        Log.d("LrcView", path);
         reset();
-        path = Environment.getExternalStorageDirectory() + "/" + path;
+        path = Environment.getExternalStorageDirectory() + "/music/lrc/" + path+".lrc";
+        Log.d("LrcView", path);
 //        Log.d("LrcView", "!new File(path).exists():" + !new File(path).exists());
         if (TextUtils.isEmpty(path) || !new File(path).exists()) {
             label = "暂无歌词";
@@ -236,16 +236,18 @@ public class LrcView extends View {
     private String temp = null;
 
     public void loadLrc(String path) {
-        if (!path.equals(temp)) {
-            Log.d("LrcView", path.substring(0, 4));
-            if (path.substring(0, 4).equals("http")) {
-                Log.d("LrcView", "if");
-                loadNetLrc(path);
-                temp = path;
-            } else {
-                Log.d("LrcView", "else");
-                loadLocalLrc(path);
-                temp = path;
+        if (path != null) {
+            if (!path.equals(temp)) {
+                Log.d("LrcView", "---------------" + path.substring(0, 4));
+                if (path.substring(0, 4).equals("http")) {
+                    Log.d("LrcView", "if");
+                    loadNetLrc(path);
+                    temp = path;
+                } else {
+                    Log.d("LrcView", "else");
+                    loadLocalLrc(path);
+                    temp = path;
+                }
             }
         }
     }

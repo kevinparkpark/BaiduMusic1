@@ -121,33 +121,33 @@ public class KMusicFragment extends BaseFragment implements View.OnClickListener
             }
         }, URLValues.KMUSIC_BANNERS);
 
-        handler = new Handler(new Handler.Callback() {
-            @Override
-            public boolean handleMessage(Message msg) {
-                int current = viewPager.getCurrentItem();
-                viewPager.setCurrentItem(current + 1);
-                return false;
-            }
-        });
-        if (thread == null || !thread.isAlive()) {
-            thread = new Thread(new Runnable() {
-                @Override
-                public void run() {
-                    while (threadAlive) {
-                        for (sleepTick = 0; sleepTick < 2; sleepTick++)
-                            try {
-                                Thread.sleep(1000);
-                            } catch (InterruptedException e) {
-                                e.printStackTrace();
-                            }
-                        if ((!userTouch)) {
-                            handler.sendEmptyMessage(0);
-                        }
-                    }
-                }
-            });
-            thread.start();
-        }
+//        handler = new Handler(new Handler.Callback() {
+//            @Override
+//            public boolean handleMessage(Message msg) {
+//                int current = viewPager.getCurrentItem();
+//                viewPager.setCurrentItem(current + 1);
+//                return false;
+//            }
+//        });
+//        if (thread == null || !thread.isAlive()) {
+//            thread = new Thread(new Runnable() {
+//                @Override
+//                public void run() {
+//                    while (threadAlive) {
+//                        for (sleepTick = 0; sleepTick < 2; sleepTick++)
+//                            try {
+//                                Thread.sleep(1000);
+//                            } catch (InterruptedException e) {
+//                                e.printStackTrace();
+//                            }
+//                        if ((!userTouch)) {
+//                            handler.sendEmptyMessage(0);
+//                        }
+//                    }
+//                }
+//            });
+//            thread.start();
+//        }
         viewPager.setOnTouchListener(new View.OnTouchListener() {
             @Override
             public boolean onTouch(View v, MotionEvent event) {
@@ -185,11 +185,13 @@ public class KMusicFragment extends BaseFragment implements View.OnClickListener
 
     public void setImageBackground(int position) {
 //        int index = position % tips.length;
-        for (int i = 0; i < tips.length; i++) {
-            if (i == position%tips.length) {
-                tips[i].setBackgroundResource(R.mipmap.page_indicator_focused);
-            } else {
-                tips[i].setBackgroundResource(R.mipmap.page_indicator_unfocused);
+        if (tips.length>0) {
+            for (int i = 0; i < tips.length; i++) {
+                if (i == position % tips.length) {
+                    tips[i].setBackgroundResource(R.mipmap.page_indicator_focused);
+                } else {
+                    tips[i].setBackgroundResource(R.mipmap.page_indicator_unfocused);
+                }
             }
         }
     }
