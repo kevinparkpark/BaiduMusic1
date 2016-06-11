@@ -9,7 +9,7 @@
         android:layout_alignParentTop="true"
         android:gravity="center"
         android:text="注册"
-        android:textSize="30sp"
+        android:textSize="25sp"
         android:id="@+id/textView2" />
 
     <ImageView
@@ -28,6 +28,7 @@
         android:layout_marginTop="56dp"
         android:id="@+id/et_register_username" />
     <EditText
+        android:inputType="textPassword"
         android:hint="密码"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

@@ -56,7 +56,7 @@ public class RecommendFragment extends BaseFragment implements View.OnClickListe
         group = (ViewGroup) view.findViewById(R.id.recommend_viewgroup);
         recyclerView = (RecyclerView) view.findViewById(R.id.le_recommend_recyclerview);
         ivAllAuthor = (ImageView) view.findViewById(R.id.iv_le_recommend_allauthor);
-        tvSonglistMore= (TextView) view.findViewById(R.id.tv_recommend_songlist_more);
+        tvSonglistMore = (TextView) view.findViewById(R.id.tv_recommend_songlist_more);
     }
 
     @Override
@@ -205,7 +205,8 @@ public class RecommendFragment extends BaseFragment implements View.OnClickListe
     public interface RecommendToSongMenuDetailsOnClickListener {
         void onRecommendToSongMenuDetailsClickListener(String listId);
     }
-    public interface RecommendToKmusicOnClickListener{
+
+    public interface RecommendToKmusicOnClickListener {
         void onRecommendToKmusicClickListener();
     }
 
@@ -218,7 +219,7 @@ public class RecommendFragment extends BaseFragment implements View.OnClickListe
     //设置轮播图点点
     public void setImageBackground(int items) {
 //        int index = items % tips.length;
-        if (tips.length > 0) {
+        if (tips != null && tips.length > 0) {
             for (int i = 0; i < tips.length; i++) {
                 if (i == items % tips.length) {
                     tips[i].setBackgroundResource(R.mipmap.page_indicator_focused);
@@ -234,7 +235,7 @@ public class RecommendFragment extends BaseFragment implements View.OnClickListe
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.iv_le_recommend_allauthor:
-                ((RecommendToKmusicOnClickListener)getActivity()).onRecommendToKmusicClickListener();
+                ((RecommendToKmusicOnClickListener) getActivity()).onRecommendToKmusicClickListener();
                 break;
             case R.id.tv_recommend_songlist_more:
                 context.sendBroadcast(new Intent(BroadcastValues.RECO_TO_SONGLIST));

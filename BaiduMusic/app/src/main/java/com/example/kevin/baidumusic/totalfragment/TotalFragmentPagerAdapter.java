@@ -12,7 +12,7 @@ import java.util.ArrayList;
  */
 public class TotalFragmentPagerAdapter extends android.support.v4.app.FragmentPagerAdapter{
     private ArrayList<BaseFragment> fragments;
-    private String[] titles={"我的","乐库","K歌","直播"};
+    private String[] titles={"我的","乐库","歌手","直播"};
 
 
     public void setFragments(ArrayList<BaseFragment> fragments) {

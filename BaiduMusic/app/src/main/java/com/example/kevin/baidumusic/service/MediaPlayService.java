@@ -344,7 +344,7 @@ public class MediaPlayService extends Service {
                 }
                 break;
         }
-        if (been.size()-1>detailsPosition) {
+        if (been.size() - 1 > detailsPosition) {
             NetTool netTool = new NetTool();
             netTool.getDetailsSongUrl(new NetListener() {
                 @Override
@@ -489,7 +489,8 @@ public class MediaPlayService extends Service {
         remoteViews.setOnClickPendingIntent(R.id.iv_remote_diestroy, destroyPendingIntent);
         builder.setContent(remoteViews);
         manager.notify(2016, builder.build());
-        if (imgUrl.length() >0) {
+        Log.d("MediaPlayService", "---------" + imgUrl);
+        if (imgUrl != null && imgUrl.length() > 0) {
             Picasso.with(this).load(imgUrl).into(remoteViews,
                     R.id.iv_remote_img, 2016, builder.build());
         } else {
@@ -607,10 +608,6 @@ public class MediaPlayService extends Service {
                     msg.what = 100;
                     msg.obj = result;
                     handler.sendMessage(msg);
-//                    if (result == 0) {
-//                        Log.d("ReceiveDownload", "下载完成");
-//                    } else if (result == 1) {
-//                    }
 
                 }
             }).start();

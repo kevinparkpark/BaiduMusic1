@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:background="@android:color/white">
+
+    <TextView
+        android:id="@+id/tv_customer_dialog_title"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:text="title"
+        android:textSize="20sp" />
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        <ImageView
+            android:layout_weight="1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentStart="true"
+            android:layout_below="@+id/tv_customer_dialog_title"
+            android:src="@mipmap/cust_dialog_hart"
+            android:id="@+id/imageView25" />
+        <ImageView
+            android:layout_weight="1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@mipmap/cust_dialog_download"
+            android:layout_below="@+id/tv_customer_dialog_title"
+            android:layout_toEndOf="@+id/imageView25"
+            android:id="@+id/imageView26" />
+        <ImageView
+            android:layout_weight="1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@mipmap/cust_dialog_more"
+            android:layout_below="@+id/tv_customer_dialog_title"
+            android:layout_toStartOf="@+id/imageView24"
+            android:id="@+id/imageView27" />
+        <ImageView
+            android:layout_weight="1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@mipmap/cust_dialog_add"
+            android:id="@+id/imageView24"
+            android:layout_alignBottom="@+id/imageView27"
+            android:layout_alignParentEnd="true" />
+    </LinearLayout>
+<RelativeLayout
+    android:orientation="horizontal"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <TextView
+        android:layout_weight="1"
+        android:text="喜欢"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="29dp"
+        android:id="@+id/textView15"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentStart="true" />
+
+
+    <TextView
+        android:gravity="center"
+        android:layout_weight="1"
+        android:text="下载"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="62dp"
+        android:layout_alignParentTop="true"
+        android:layout_toStartOf="@+id/textView17" />
+
+
+    <TextView
+        android:gravity="center"
+        android:layout_weight="1"
+        android:text="分享"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="56dp"
+        android:layout_alignParentTop="true"
+        android:layout_toStartOf="@+id/textView16"
+        android:id="@+id/textView17" />
+
+
+    <TextView
+        android:gravity="center"
+        android:layout_weight="1"
+        android:text="添加到"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="25dp"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentEnd="true"
+        android:id="@+id/textView16" />
+</RelativeLayout>
+
+</LinearLayout>
