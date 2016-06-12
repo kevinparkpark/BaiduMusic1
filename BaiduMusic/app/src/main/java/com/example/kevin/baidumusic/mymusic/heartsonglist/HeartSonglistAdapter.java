@@ -1,4 +1,4 @@
-package com.example.kevin.baidumusic.kmusic.authordetails.songlist;
+package com.example.kevin.baidumusic.mymusic.heartsonglist;
 
 import android.content.Context;
 import android.view.LayoutInflater;
@@ -10,34 +10,38 @@ import android.widget.PopupWindow;
 import android.widget.TextView;
 
 import com.example.kevin.baidumusic.R;
+import com.example.kevin.baidumusic.db.DBHeart;
+import com.example.kevin.baidumusic.kmusic.authordetails.songlist.AuthorDetailsSonglistBean;
+import com.example.kevin.baidumusic.kmusic.authordetails.songlist.AuthorDetailsSonglistOnClickListener;
 
 import java.util.List;
 
 /**
- * Created by kevin on 16/6/1.
+ * Created by kevin on 16/6/12.
  */
-public class AuthorDetailsSonglistAdapter extends BaseAdapter {
-    private List<AuthorDetailsSonglistBean.SonglistBean> songlistBeanList;
+public class HeartSonglistAdapter extends BaseAdapter{
+    private List<DBHeart> dbHearts;
     private Context context;
     private PopupWindow popupWindow;
     private View popView;
     private AuthorDetailsSonglistOnClickListener onClickListener;
 
+    public HeartSonglistAdapter(Context context) {
+        this.context = context;
+    }
+
+    public void setDbHearts(List<DBHeart> dbHearts) {
+        this.dbHearts = dbHearts;
+        notifyDataSetChanged();
+    }
+
     public void setOnClickListener(AuthorDetailsSonglistOnClickListener onClickListener) {
         this.onClickListener = onClickListener;
     }
 
-    public AuthorDetailsSonglistAdapter(Context context) {
-        this.context = context;
-    }
-
-    public void setSonglistBeanList(List<AuthorDetailsSonglistBean.SonglistBean> songlistBeanList) {
-        this.songlistBeanList = songlistBeanList;
-    }
-
     @Override
     public int getCount() {
-        return songlistBeanList == null ? 0 : songlistBeanList.size();
+        return dbHearts==null?0:dbHearts.size();
     }
 
     @Override
@@ -60,9 +64,8 @@ public class AuthorDetailsSonglistAdapter extends BaseAdapter {
         } else {
             holder = (MyHolder) convertView.getTag();
         }
-        holder.tvtitle.setText(songlistBeanList.get(position).getTitle());
-        holder.tvAlbumTitle.setText(songlistBeanList.get(position).getAlbum_title());
-        final MyHolder finalHolder = holder;
+        holder.tvtitle.setText(dbHearts.get(position).getTitle());
+        holder.tvAlbumTitle.setText(dbHearts.get(position).getTitle());
         holder.ivMore.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -85,5 +88,4 @@ public class AuthorDetailsSonglistAdapter extends BaseAdapter {
             ivMore = (ImageView) itemView.findViewById(R.id.iv_item_k_authordetails_songlist_more);
         }
     }
-
 }

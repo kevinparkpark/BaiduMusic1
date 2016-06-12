@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -19,16 +20,28 @@ import cn.bmob.v3.listener.SaveListener;
 /**
  * Created by kevin on 16/6/8.
  */
-public class LoginActivity extends AppCompatActivity implements View.OnClickListener {
+public class LoginActivity extends AppCompatActivity implements View.OnClickListener,LoginFragment.Login2LogOutOnClcikListener {
     private ImageView ivWifi,ivClock,ivDesk,ivScreen,ivBack;
     private TextView tv2reg;
     private EditText etUser,etPw;
     private Button btnLogin;
     private boolean flag;
+    private LoginFragment loginFragment;
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
+
+        String user=getIntent().getStringExtra("user");
+        if (user!=null){
+            loginFragment=new LoginFragment();
+            getSupportFragmentManager().beginTransaction()
+                    .replace(R.id.relativelayout_login,loginFragment).commit();
+            Bundle bundle=new Bundle();
+            bundle.putString("user",user);
+            loginFragment.setArguments(bundle);
+        }
+
         ivWifi= (ImageView) findViewById(R.id.iv_login_wifi);
         ivClock= (ImageView) findViewById(R.id.iv_login_clock);
         ivDesk= (ImageView) findViewById(R.id.iv_desk);
@@ -46,6 +59,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         ivBack.setOnClickListener(this);
         tv2reg.setOnClickListener(this);
         btnLogin.setOnClickListener(this);
+
     }
 
     @Override
@@ -93,6 +107,14 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                     @Override
                     public void onSuccess() {
                         Toast.makeText(LoginActivity.this, "登录成功", Toast.LENGTH_SHORT).show();
+                            loginFragment=new LoginFragment();
+                            getSupportFragmentManager().beginTransaction()
+                                    .replace(R.id.relativelayout_login,loginFragment).commit();
+                            Bundle bundle=new Bundle();
+                            bundle.putString("user",etUser.getText().toString());
+                            loginFragment.setArguments(bundle);
+                        etUser.setText("");
+                        etPw.setText("");
                     }
 
                     @Override
@@ -102,5 +124,10 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                 });
                 break;
         }
+    }
+
+    @Override
+    public void onLogin2LogOutClickListener() {
+        getSupportFragmentManager().beginTransaction().hide(loginFragment).commit();
     }
 }

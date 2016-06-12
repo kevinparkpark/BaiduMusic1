@@ -21,11 +21,6 @@ public class RankFragment extends BaseFragment {
     private ListView listView;
     private RankAdapter adapter;
     private List<RankBean.ContentBean> contentBeans;
-    private RankFragment.rankToOnItemListener rankToOnItemListener;
-
-    public void setRankToOnItemListener(RankFragment.rankToOnItemListener rankToOnItemListener) {
-        this.rankToOnItemListener = rankToOnItemListener;
-    }
 
     @Override
     public int setlayout() {

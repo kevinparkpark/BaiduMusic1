@@ -5,6 +5,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.example.kevin.baidumusic.R;
@@ -17,6 +18,11 @@ import java.util.List;
 public class SongMenuDetailsAdapter extends BaseAdapter{
     private List<SongMenuDetailsBean.ContentBean> contentBeanList;
     private Context context;
+    private SongMenuDetailsOnClickListener clickListener;
+
+    public void setClickListener(SongMenuDetailsOnClickListener clickListener) {
+        this.clickListener = clickListener;
+    }
 
     public SongMenuDetailsAdapter(Context context) {
         this.context = context;
@@ -43,7 +49,7 @@ public class SongMenuDetailsAdapter extends BaseAdapter{
     }
 
     @Override
-    public View getView(int position, View convertView, ViewGroup parent) {
+    public View getView(final int position, View convertView, ViewGroup parent) {
         MyHolder holder=null;
         if (convertView==null){
             convertView= LayoutInflater.from(context).inflate(R.layout.item_songmenudetails,parent,false);
@@ -55,15 +61,23 @@ public class SongMenuDetailsAdapter extends BaseAdapter{
 
         holder.tvTitle.setText(contentBeanList.get(position).getTitle());
         holder.tvAuthor.setText(contentBeanList.get(position).getAuthor());
+        holder.ivMore.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                clickListener.onSongMenuDetailsClickListener(position);
+            }
+        });
 
         return convertView;
     }
     class MyHolder{
         TextView tvTitle,tvAuthor;
+        ImageView ivMore;
 
         public MyHolder(View itemView){
             tvAuthor= (TextView) itemView.findViewById(R.id.tv_songmenudetails_author);
             tvTitle= (TextView) itemView.findViewById(R.id.tv_songmenudetails_title);
+            ivMore= (ImageView) itemView.findViewById(R.id.iv_songmenudetails_more);
         }
     }
 }

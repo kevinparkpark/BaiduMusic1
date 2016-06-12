@@ -111,7 +111,9 @@ public class AuthorDetailsFragment extends SecBaseFragment implements OnRefreshL
 
     @Override
     public void onDestroy() {
-        ((MainActivity)getActivity()).showTitleFragment();
+        if (!getActivity().isDestroyed()) {
+            ((MainActivity) getActivity()).showTitleFragment();
+        }
         super.onDestroy();
     }
 }

@@ -47,7 +47,7 @@ public class LeFragment extends BaseFragment {
         broadcast=new ReceviceRecToSonglistBroadcast();
         context.registerReceiver(broadcast,new IntentFilter(BroadcastValues.RECO_TO_SONGLIST));
 
-        adapter = new LeFragmentPagerAdapter(getActivity().getSupportFragmentManager());
+        adapter = new LeFragmentPagerAdapter(getChildFragmentManager());
         fragments = new ArrayList<>();
 
         fragments.add(new RecommendFragment());

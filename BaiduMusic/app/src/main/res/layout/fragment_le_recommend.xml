@@ -13,7 +13,7 @@
         <RelativeLayout
             android:clipChildren="false"
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
+            android:layout_height="wrap_content">
 
             <!--clipChilden 子类元素超出部分不切掉
             给marginleft,right属性-->

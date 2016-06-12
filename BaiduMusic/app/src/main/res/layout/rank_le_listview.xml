@@ -21,18 +21,16 @@
         android:layout_height="wrap_content">
 
         <TextView
-            android:maxLines="1"
-            android:maxEms="10"
             android:id="@+id/tv_le_rank_new"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="新歌榜"
-            android:textSize="18sp" />
+            android:textSize="15sp" />
 
         <TextView
             android:maxLines="1"
             android:maxEms="10"
-            android:textSize="15sp"
+            android:textSize="12sp"
             android:id="@+id/tv_le_rank_no1"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -42,7 +40,7 @@
         <TextView
             android:maxLines="1"
             android:maxEms="10"
-            android:textSize="15sp"
+            android:textSize="12sp"
             android:id="@+id/tv_le_rank_no2"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -52,7 +50,7 @@
         <TextView
             android:maxLines="1"
             android:maxEms="10"
-            android:textSize="15sp"
+            android:textSize="12sp"
             android:id="@+id/tv_le_rank_no3"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"

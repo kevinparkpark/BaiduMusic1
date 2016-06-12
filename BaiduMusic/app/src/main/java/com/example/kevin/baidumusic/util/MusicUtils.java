@@ -42,7 +42,6 @@ public class MusicUtils {
                 music.setUri(url);
                 music.setFileName(fileName);
                 musicList.add(music);
-                Log.d("MusicUtils","------"+ title);
             }
             cursor.close();
         }

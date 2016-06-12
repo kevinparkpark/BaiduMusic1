@@ -10,6 +10,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.example.kevin.baidumusic.R;
+import com.example.kevin.baidumusic.musiclibrary.rank.songplay.RankDetailsOnClickListener;
 import com.squareup.picasso.Picasso;
 
 import java.util.List;
@@ -21,6 +22,11 @@ public class RankDetailsAdapter extends BaseAdapter{
 
     private List<RankDetailsBean.SongListBean> songListBeen;
     private Context context;
+    private RankDetailsOnClickListener onClickListener;
+
+    public void setOnClickListener(RankDetailsOnClickListener onClickListener) {
+        this.onClickListener = onClickListener;
+    }
 
     public RankDetailsAdapter(Context context) {
         this.context = context;
@@ -47,7 +53,7 @@ public class RankDetailsAdapter extends BaseAdapter{
     }
 
     @Override
-    public View getView(int position, View convertView, ViewGroup parent) {
+    public View getView(final int position, View convertView, ViewGroup parent) {
         ViewHolder holder=null;
         if (convertView==null){
             convertView= LayoutInflater.from(context).inflate(R.layout.item_le_rankdetails,parent,false);
@@ -68,6 +74,13 @@ public class RankDetailsAdapter extends BaseAdapter{
             Picasso.with(context).load(songListBeen.get(position).getPic_small()).resize(150,150).into(holder.imageView);
         }
 
+        holder.ivMore.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                onClickListener.onRankDetailsClickListener(position);
+            }
+        });
+
 //        ImageLoader loader = VolleySingleton.getInstance().getImageLoader();
 //        loader.get(songListBeen.get(position).getPic_big(),ImageLoader.getImageListener(
 //                holder.imageView,R.mipmap.ic_launcher,R.mipmap.ic_launcher));
@@ -76,7 +89,7 @@ public class RankDetailsAdapter extends BaseAdapter{
     }
     class ViewHolder{
         TextView tv_song,tv_author,tv_count;
-        ImageView imageView;
+        ImageView imageView,ivMore;
 
         public ViewHolder(View itemView){
 
@@ -84,6 +97,7 @@ public class RankDetailsAdapter extends BaseAdapter{
             tv_count= (TextView) itemView.findViewById(R.id.tv_le_rankdetails_count);
             tv_song= (TextView) itemView.findViewById(R.id.tv_le_rankdetails_song);
             imageView= (ImageView) itemView.findViewById(R.id.iv_le_rankdetails);
+            ivMore= (ImageView) itemView.findViewById(R.id.iv_le_rankdetails_more);
         }
     }
 }

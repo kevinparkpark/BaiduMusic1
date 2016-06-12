@@ -173,6 +173,8 @@ public class RecommendFragment extends BaseFragment implements View.OnClickListe
         GridLayoutManager manager = new GridLayoutManager(context, 3);
         manager.setOrientation(GridLayoutManager.VERTICAL);
         recyclerView.setLayoutManager(manager);
+        //取消recyclerview焦点,加载后先显示viewpager
+        recyclerView.setFocusable(false);
 
         NetTool netTool1 = new NetTool();
         netTool1.getUrl(new NetListener() {

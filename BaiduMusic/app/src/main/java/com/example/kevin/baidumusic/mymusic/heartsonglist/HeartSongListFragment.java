@@ -1,4 +1,4 @@
-package com.example.kevin.baidumusic.musiclibrary.songmenu.songmenudetails;
+package com.example.kevin.baidumusic.mymusic.heartsonglist;
 
 import android.graphics.drawable.BitmapDrawable;
 import android.util.Log;
@@ -6,6 +6,7 @@ import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.WindowManager;
 import android.widget.AdapterView;
 import android.widget.ImageView;
 import android.widget.ListView;
@@ -14,24 +15,24 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.android.volley.VolleyError;
-import com.example.kevin.baidumusic.MainActivity;
+import com.android.volley.toolbox.ImageLoader;
 import com.example.kevin.baidumusic.R;
-import com.example.kevin.baidumusic.base.BaseFragment;
+import com.example.kevin.baidumusic.base.SecBaseFragment;
 import com.example.kevin.baidumusic.db.DBHeart;
 import com.example.kevin.baidumusic.db.DBSongListCacheBean;
 import com.example.kevin.baidumusic.db.LiteOrmSington;
 import com.example.kevin.baidumusic.eventbean.EventGenericBean;
 import com.example.kevin.baidumusic.eventbean.EventPosition;
-import com.example.kevin.baidumusic.musiclibrary.radio.radioplay.songplaylist.RadioPlayListBean;
+import com.example.kevin.baidumusic.kmusic.authordetails.songlist.AuthorDetailsSonglistOnClickListener;
 import com.example.kevin.baidumusic.musiclibrary.rank.songplay.SongPlayBean;
+import com.example.kevin.baidumusic.musiclibrary.songmenu.songmenudetails.SongMenuDetailsBean;
 import com.example.kevin.baidumusic.netutil.DownloadUtils;
 import com.example.kevin.baidumusic.netutil.NetListener;
 import com.example.kevin.baidumusic.netutil.NetTool;
-import com.example.kevin.baidumusic.netutil.URLValues;
+import com.example.kevin.baidumusic.netutil.VolleySingleton;
 import com.google.gson.Gson;
 import com.litesuits.orm.LiteOrm;
 import com.litesuits.orm.db.assit.QueryBuilder;
-import com.squareup.picasso.Picasso;
 
 import org.greenrobot.eventbus.EventBus;
 
@@ -39,141 +40,119 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Created by kevin on 16/5/28.
+ * Created by kevin on 16/6/12.
  */
-public class SongMenuDetailsFragment extends BaseFragment {
+public class HeartSongListFragment extends SecBaseFragment {
+    private HeartSonglistAdapter adapter;
+    private List<DBHeart> dbHearts;
     private ListView listView;
-    private SongMenuDetailsAdapter adapter;
-    private List<SongMenuDetailsBean.ContentBean> contentBeanList;
-    private View view;
-    private ImageView ivSongMenuDetailsHeadImg;
-    private TextView tvTitle, tvListNum, tvTag, tvCollectNum;
-    private SongMenuDetailsBean bean;
+    private TextView tvCount;
+    private ImageView ivImg1, ivImg2, ivImg3;
+    private LiteOrm liteOrm;
     private PopupWindow popupWindow;
     private boolean flag = false;
-    private LiteOrm liteOrm;
+    private SongPlayBean songPlayBean;
 
     @Override
     public int setlayout() {
-        return R.layout.fragment_songmenudetails;
+        return R.layout.fragment_heartsonglist;
     }
 
     @Override
     protected void initView(View view) {
-        listView = (ListView) view.findViewById(R.id.songmenudetails_listview);
-    }
-
-    public void headView() {
-        view = LayoutInflater.from(context).inflate(R.layout.head_songmenudetails, null);
-        ivSongMenuDetailsHeadImg = (ImageView) view.findViewById(R.id.iv_songmenudetails_headbac);
-        tvCollectNum = (TextView) view.findViewById(R.id.tv_songmenudetails_head_collectnum);
-        tvListNum = (TextView) view.findViewById(R.id.tv_songmenudetails_head_listnum);
-        tvTag = (TextView) view.findViewById(R.id.tv_songmenudetails_head_tag);
-        tvTitle = (TextView) view.findViewById(R.id.tv_songmenudetails_title);
+        listView = (ListView) view.findViewById(R.id.heartsonglist_listview);
+        tvCount = (TextView) view.findViewById(R.id.tv_heartsonglist_totalcount);
+        ivImg1 = (ImageView) view.findViewById(R.id.iv_heartsonglist_img1);
+        ivImg2 = (ImageView) view.findViewById(R.id.iv_heartsonglist_img2);
+        ivImg3 = (ImageView) view.findViewById(R.id.iv_heartsonglist_img3);
     }
 
     @Override
     protected void initData() {
+        adapter = new HeartSonglistAdapter(context);
+
         liteOrm = LiteOrmSington.getInstance().getLiteOrm();
-        adapter = new SongMenuDetailsAdapter(context);
-        String listId = getArguments().getString("listid");
-        NetTool netTool = new NetTool();
-        netTool.getUrlId(new NetListener() {
-            @Override
-            public void onSuccessed(String result) {
-                Gson gson = new Gson();
-                bean = gson.fromJson(result, SongMenuDetailsBean.class);
-                contentBeanList = bean.getContent();
-                adapter.setContentBeanList(contentBeanList);
-                headView();
-                Picasso.with(context).load(bean.getPic_500()).resize(1000, 700).
-                        centerCrop().into(ivSongMenuDetailsHeadImg);
-                tvTag.setText(bean.getTag());
-                tvTitle.setText(bean.getTitle());
-                tvListNum.setText(bean.getListenum());
-                tvCollectNum.setText(bean.getCollectnum());
-                listView.addHeaderView(view, null, false);
-                listView.setAdapter(adapter);
-            }
+        dbHearts = liteOrm.query(DBHeart.class);
+        loadImg(dbHearts);
 
-            @Override
-            public void onFailed(VolleyError error) {
+        tvCount.setText(dbHearts.size() + "首");
 
-            }
-        }, URLValues.LE_SONGMENUDETAILS_LIST1, listId, URLValues.LE_SONGMENUDETAILS_LIST2);
+        adapter.setDbHearts(dbHearts);
+        listView.setAdapter(adapter);
 
-        //点击歌曲时播放并删除cache所有歌曲
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-
                 List<EventGenericBean> eventGenericBeen = new ArrayList<EventGenericBean>();
 
                 liteOrm.deleteAll(DBSongListCacheBean.class);
-                for (SongMenuDetailsBean.ContentBean contentBean : bean.getContent()) {
 
-                    EventGenericBean bean1 = new EventGenericBean(contentBean.getTitle(), contentBean.getAuthor(),
-                            bean.getPic_300(), bean.getPic_500(), contentBean.getSong_id());
-                    eventGenericBeen.add(bean1);
+                for (DBHeart dbHeart : dbHearts) {
+                    EventGenericBean been = new EventGenericBean(dbHeart.getTitle(), dbHeart.getAuthor()
+                            , dbHeart.getImageUrl(), dbHeart.getImageBigUrl(), dbHeart.getSongId());
+                    eventGenericBeen.add(been);
                 }
-
-                EventBus.getDefault().post(new EventPosition(position - 1));
+                EventBus.getDefault().post(new EventPosition(position));
                 EventBus.getDefault().post(eventGenericBeen);
             }
         });
-        //popupwindow
-        adapter.setClickListener(new SongMenuDetailsOnClickListener() {
+
+        adapter.setOnClickListener(new AuthorDetailsSonglistOnClickListener() {
             @Override
-            public void onSongMenuDetailsClickListener(final int position) {
+            public void onAuthorDetailsSonglistClickListener(final int position) {
                 View contentView = LayoutInflater.from(context).inflate(R.layout.customer_dialog, null);
                 popupWindow = new PopupWindow(contentView, ViewGroup.LayoutParams.MATCH_PARENT
                         , ViewGroup.LayoutParams.WRAP_CONTENT);
                 popupWindow.setFocusable(true);
-                popupWindow.setBackgroundDrawable(new BitmapDrawable());
+//                popupWindow.setBackgroundDrawable(new BitmapDrawable());
                 popupWindow.showAtLocation(contentView, Gravity.BOTTOM, 0, 0);
 
                 final ImageView ivHart = (ImageView) contentView.findViewById(R.id.iv_customer_hart);
                 ImageView ivDownload= (ImageView) contentView.findViewById(R.id.iv_customer_download);
-                //设置title
-                TextView tvTi= (TextView) contentView.findViewById(R.id.tv_customer_dialog_title);
-                tvTi.setText(contentBeanList.get(position).getTitle());
-                //点击其他地方隐藏
+                TextView tvTitle = (TextView) contentView.findViewById(R.id.tv_customer_dialog_title);
+                tvTitle.setText(dbHearts.get(position).getTitle());
+
                 contentView.findViewById(R.id.relativelayout_customer_dialog_other).setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
                         popupWindow.dismiss();
                     }
                 });
+
+
                 QueryBuilder<DBHeart> list = new QueryBuilder<DBHeart>(DBHeart.class).whereEquals
-                        (DBHeart.TITLE, contentBeanList.get(position).getTitle());
+                        (DBHeart.TITLE, dbHearts.get(position).getTitle());
 
                 if (list != null && liteOrm.query(list).size() > 0) {
                     ivHart.setImageResource(R.mipmap.cust_heart_press);
                     flag = true;
                 }
-                //红心收藏
+                //歌曲收藏
                 ivHart.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
                         if (flag = !flag) {
                             ivHart.setImageResource(R.mipmap.cust_heart_press);
-                            liteOrm.insert(new DBHeart(contentBeanList.get(position).getTitle(),
-                                    contentBeanList.get(position).getAuthor(), bean.getPic_300()
-                                    , bean.getPic_500(), contentBeanList.get(position).getSong_id()));
+                            liteOrm.insert(new DBHeart(dbHearts.get(position).getTitle(),
+                                    dbHearts.get(position).getAuthor(), dbHearts.get(position).getImageUrl()
+                                    , dbHearts.get(position).getImageBigUrl(), dbHearts.get(position).getSongId()));
                             popupWindow.dismiss();
                             Toast.makeText(context, "已添加到我喜欢的音乐", Toast.LENGTH_SHORT).show();
                         } else {
                             ivHart.setImageResource(R.mipmap.cust_dialog_hart);
 
                             QueryBuilder<DBHeart> list = new QueryBuilder<DBHeart>(DBHeart.class).whereEquals
-                                    (DBHeart.TITLE, contentBeanList.get(position).getTitle());
+                                    (DBHeart.TITLE, dbHearts.get(position).getTitle());
 
-                            List<DBHeart> dbHearts = liteOrm.query(list);
-                            if (dbHearts.size() > 0) {
-                                liteOrm.delete(dbHearts);
+                            List<DBHeart> hearts = liteOrm.query(list);
+                            if (hearts.size() > 0) {
+                                liteOrm.delete(hearts);
                             }
-                            popupWindow.dismiss();
+                            List<DBHeart> dbHeartList=liteOrm.query(DBHeart.class);
+                            loadImg(dbHeartList);
+                            adapter.setDbHearts(dbHeartList);
                             Toast.makeText(context, "已取消喜欢的音乐", Toast.LENGTH_SHORT).show();
+                            popupWindow.dismiss();
                         }
                     }
                 });
@@ -190,12 +169,11 @@ public class SongMenuDetailsFragment extends BaseFragment {
                                 result = result.replace("(", "");
                                 result = result.replace(")", "");
                                 result = result.replace(";", "");
-                                SongPlayBean songPlayBean=new SongPlayBean();
+                                songPlayBean=new SongPlayBean();
                                 songPlayBean=gson.fromJson(result,SongPlayBean.class);
                                 String songUrl=songPlayBean.getBitrate().getFile_link();
                                 String lrc=songPlayBean.getSonginfo().getLrclink();
                                 String songTitle = songPlayBean.getSonginfo().getTitle();
-                                Log.d("HeartSongListFragment","-------"+ songUrl);
                                 //下载歌曲
                                 DownloadUtils downloadUtils=new DownloadUtils(songUrl,songTitle,lrc);
                             }
@@ -204,19 +182,33 @@ public class SongMenuDetailsFragment extends BaseFragment {
                             public void onFailed(VolleyError error) {
 
                             }
-                        },contentBeanList.get(position).getSong_id());
+                        },dbHearts.get(position).getSongId());
                     }
                 });
             }
         });
     }
-
-    @Override
-    public void onDestroy() {
-        if (!getActivity().isDestroyed()) {
-            ((MainActivity) getActivity()).showTitleFragment();
+    //title图片
+    public void loadImg(List<DBHeart> dbHearts){
+        ImageLoader imageLoader = VolleySingleton.getInstance().getImageLoader();
+        if (dbHearts.size() > 2) {
+            imageLoader.get(dbHearts.get(dbHearts.size() - 1).getImageBigUrl(), ImageLoader.getImageListener(
+                    ivImg1, R.mipmap.default_live_ic, R.mipmap.default_live_ic));
+            imageLoader.get(dbHearts.get(dbHearts.size() - 2).getImageBigUrl(), ImageLoader.getImageListener(
+                    ivImg2, R.mipmap.default_live_ic, R.mipmap.default_live_ic));
+            imageLoader.get(dbHearts.get(dbHearts.size() - 3).getImageBigUrl(), ImageLoader.getImageListener(
+                    ivImg3, R.mipmap.default_live_ic, R.mipmap.default_live_ic));
+        } else if (dbHearts.size() == 2) {
+            imageLoader.get(dbHearts.get(dbHearts.size() - 1).getImageBigUrl(), ImageLoader.getImageListener(
+                    ivImg1, R.mipmap.default_live_ic, R.mipmap.default_live_ic));
+            imageLoader.get(dbHearts.get(dbHearts.size() - 2).getImageBigUrl(), ImageLoader.getImageListener(
+                    ivImg2, R.mipmap.default_live_ic, R.mipmap.default_live_ic));
+            ivImg3.setImageResource(R.mipmap.default_live_ic);
+        } else if (dbHearts.size() == 1) {
+            imageLoader.get(dbHearts.get(dbHearts.size() - 1).getImageBigUrl(), ImageLoader.getImageListener(
+                    ivImg1, R.mipmap.default_live_ic, R.mipmap.default_live_ic));
+            ivImg2.setImageResource(R.mipmap.default_live_ic);
+            ivImg3.setImageResource(R.mipmap.default_live_ic);
         }
-        super.onDestroy();
-
     }
 }

@@ -23,6 +23,7 @@ import com.example.kevin.baidumusic.musiclibrary.recommend.RecommendFragment;
 import com.example.kevin.baidumusic.musiclibrary.songmenu.SongMenuFragment;
 import com.example.kevin.baidumusic.musiclibrary.songmenu.songmenudetails.SongMenuDetailsFragment;
 import com.example.kevin.baidumusic.mymusic.MyFragment;
+import com.example.kevin.baidumusic.mymusic.heartsonglist.HeartSongListFragment;
 import com.example.kevin.baidumusic.mymusic.latelyplaylist.LatelyPlaylistFragment;
 import com.example.kevin.baidumusic.mymusic.localmusic.MyLocalMusicFragment;
 import com.example.kevin.baidumusic.search.SearchFragment;
@@ -44,7 +45,8 @@ import cn.bmob.v3.listener.SaveListener;
 public class MainActivity extends AppCompatActivity implements MyFragment.MyToLocalFragmentOnClick, RankFragment.rankToOnItemListener
         , SongMenuFragment.songMenuToDetailsOnClickListener, KMusicFragment.kMusicToDetailsOnClickListener
         , AuthorDetailsFragment.authorDetailsToSonglistOnClickListener,MyFragment.LatelyPlaylistOnClick
-,RecommendFragment.RecommendToSongMenuDetailsOnClickListener,RecommendFragment.RecommendToKmusicOnClickListener{
+,RecommendFragment.RecommendToSongMenuDetailsOnClickListener,RecommendFragment.RecommendToKmusicOnClickListener
+,MyFragment.HeartSongListOnClick{
 
     private TotalFragment totalFragment;
     private MyFragment myFragment;
@@ -160,6 +162,13 @@ public class MainActivity extends AppCompatActivity implements MyFragment.MyToLo
         getSupportFragmentManager().beginTransaction().hide(totalFragment).setCustomAnimations(R.anim.fragment_in, R.anim.fragment_out)
                 .add(R.id.framelayout_main, new LatelyPlaylistFragment()).addToBackStack(null).commit();
     }
+    //跳转到我喜欢的音乐
+    @Override
+    public void onHeartSongListClick() {
+        getSupportFragmentManager().beginTransaction().hide(totalFragment).setCustomAnimations(R.anim.fragment_in, R.anim.fragment_out)
+                .add(R.id.framelayout_main, new HeartSongListFragment()).addToBackStack(null).commit();
+    }
+
     //跳转到排行榜
     RankDetailsFragment rankDetailsFragment = new RankDetailsFragment();
     @Override
@@ -251,6 +260,7 @@ public class MainActivity extends AppCompatActivity implements MyFragment.MyToLo
         EventBus.getDefault().unregister(this);
        // stopService(startIntent);
     }
+
 
 
 

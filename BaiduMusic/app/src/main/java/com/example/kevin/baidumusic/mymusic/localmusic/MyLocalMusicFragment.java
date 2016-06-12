@@ -37,7 +37,7 @@ public class MyLocalMusicFragment extends BaseFragment{
 
     @Override
     protected void initData() {
-        adapter=new LocalMusicAdapter(getActivity().getSupportFragmentManager());
+        adapter=new LocalMusicAdapter(getChildFragmentManager());
         fragments=new ArrayList<>();
         fragments.add(new MyLocalMusicSonglistFragment());
         fragments.add(new MyLocalMusicFolderFragment());
