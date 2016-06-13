@@ -65,7 +65,7 @@ public class HeartSonglistAdapter extends BaseAdapter{
             holder = (MyHolder) convertView.getTag();
         }
         holder.tvtitle.setText(dbHearts.get(position).getTitle());
-        holder.tvAlbumTitle.setText(dbHearts.get(position).getTitle());
+        holder.tvAlbumTitle.setText(dbHearts.get(position).getAuthor());
         holder.ivMore.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

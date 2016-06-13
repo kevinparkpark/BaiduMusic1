@@ -17,6 +17,7 @@ import android.widget.Toast;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.ImageLoader;
 import com.example.kevin.baidumusic.R;
+import com.example.kevin.baidumusic.app.MyApp;
 import com.example.kevin.baidumusic.base.SecBaseFragment;
 import com.example.kevin.baidumusic.db.DBHeart;
 import com.example.kevin.baidumusic.db.DBSongListCacheBean;
@@ -29,6 +30,7 @@ import com.example.kevin.baidumusic.musiclibrary.songmenu.songmenudetails.SongMe
 import com.example.kevin.baidumusic.netutil.DownloadUtils;
 import com.example.kevin.baidumusic.netutil.NetListener;
 import com.example.kevin.baidumusic.netutil.NetTool;
+import com.example.kevin.baidumusic.netutil.ShowShare;
 import com.example.kevin.baidumusic.netutil.VolleySingleton;
 import com.google.gson.Gson;
 import com.litesuits.orm.LiteOrm;
@@ -38,6 +40,9 @@ import org.greenrobot.eventbus.EventBus;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import cn.sharesdk.framework.ShareSDK;
+import cn.sharesdk.onekeyshare.OnekeyShare;
 
 /**
  * Created by kevin on 16/6/12.
@@ -50,7 +55,6 @@ public class HeartSongListFragment extends SecBaseFragment {
     private ImageView ivImg1, ivImg2, ivImg3;
     private LiteOrm liteOrm;
     private PopupWindow popupWindow;
-    private boolean flag = false;
     private SongPlayBean songPlayBean;
 
     @Override
@@ -105,11 +109,13 @@ public class HeartSongListFragment extends SecBaseFragment {
                         , ViewGroup.LayoutParams.WRAP_CONTENT);
                 popupWindow.setFocusable(true);
 //                popupWindow.setBackgroundDrawable(new BitmapDrawable());
+                popupWindow.setAnimationStyle(R.style.contextMenuAnim);
                 popupWindow.showAtLocation(contentView, Gravity.BOTTOM, 0, 0);
 
                 final ImageView ivHart = (ImageView) contentView.findViewById(R.id.iv_customer_hart);
                 ImageView ivDownload= (ImageView) contentView.findViewById(R.id.iv_customer_download);
                 TextView tvTitle = (TextView) contentView.findViewById(R.id.tv_customer_dialog_title);
+                ImageView ivShare= (ImageView) contentView.findViewById(R.id.iv_customer_Share);
                 tvTitle.setText(dbHearts.get(position).getTitle());
 
                 contentView.findViewById(R.id.relativelayout_customer_dialog_other).setOnClickListener(new View.OnClickListener() {
@@ -120,18 +126,17 @@ public class HeartSongListFragment extends SecBaseFragment {
                 });
 
 
-                QueryBuilder<DBHeart> list = new QueryBuilder<DBHeart>(DBHeart.class).whereEquals
+                final QueryBuilder<DBHeart> list = new QueryBuilder<DBHeart>(DBHeart.class).whereEquals
                         (DBHeart.TITLE, dbHearts.get(position).getTitle());
 
                 if (list != null && liteOrm.query(list).size() > 0) {
                     ivHart.setImageResource(R.mipmap.cust_heart_press);
-                    flag = true;
                 }
                 //歌曲收藏
                 ivHart.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        if (flag = !flag) {
+                        if (liteOrm.query(list).size() == 0) {
                             ivHart.setImageResource(R.mipmap.cust_heart_press);
                             liteOrm.insert(new DBHeart(dbHearts.get(position).getTitle(),
                                     dbHearts.get(position).getAuthor(), dbHearts.get(position).getImageUrl()
@@ -176,6 +181,7 @@ public class HeartSongListFragment extends SecBaseFragment {
                                 String songTitle = songPlayBean.getSonginfo().getTitle();
                                 //下载歌曲
                                 DownloadUtils downloadUtils=new DownloadUtils(songUrl,songTitle,lrc);
+                                popupWindow.dismiss();
                             }
 
                             @Override
@@ -183,6 +189,14 @@ public class HeartSongListFragment extends SecBaseFragment {
 
                             }
                         },dbHearts.get(position).getSongId());
+                    }
+                });
+                ivShare.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        ShowShare showShare=new ShowShare();
+                        showShare.showShare();
+                        popupWindow.dismiss();
                     }
                 });
             }
@@ -211,4 +225,5 @@ public class HeartSongListFragment extends SecBaseFragment {
             ivImg3.setImageResource(R.mipmap.default_live_ic);
         }
     }
+
 }

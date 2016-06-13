@@ -24,11 +24,11 @@ public class MvPlayActivity extends AppCompatActivity{
         Log.d("MvPlayActivity","---------------"+ url);
         videoView.setMediaController(new MediaController(this));
         videoView.setVideoURI(Uri.parse(url));
+        videoView.start();
     }
 
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        finish();
     }
 }

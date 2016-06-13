@@ -12,6 +12,11 @@ import java.util.List;
  */
 public class MusicUtils {
 
+    public static void delMusic(Context context,String title){
+       context.getContentResolver().delete(MediaStore.Audio.Media.EXTERNAL_CONTENT_URI,
+               MediaStore.Audio.Media.TITLE+" = ?",new String[]{String.valueOf(title)});
+    }
+
     public static void scanMusic(Context context, List<LocalMusic> musicList){
         musicList.clear();
         Cursor cursor=context.getContentResolver().query(MediaStore.Audio.Media.EXTERNAL_CONTENT_URI,

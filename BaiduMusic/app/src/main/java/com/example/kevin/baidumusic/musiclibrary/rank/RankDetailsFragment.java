@@ -28,6 +28,7 @@ import com.example.kevin.baidumusic.musiclibrary.rank.songplay.SongPlayBean;
 import com.example.kevin.baidumusic.netutil.DownloadUtils;
 import com.example.kevin.baidumusic.netutil.NetListener;
 import com.example.kevin.baidumusic.netutil.NetTool;
+import com.example.kevin.baidumusic.netutil.ShowShare;
 import com.example.kevin.baidumusic.util.RefreshListView;
 import com.example.kevin.baidumusic.util.myinterface.OnRefreshListener;
 import com.google.gson.Gson;
@@ -56,7 +57,6 @@ public class RankDetailsFragment extends BaseFragment implements OnRefreshListen
     private String url;
     private PopupWindow popupWindow;
     private LiteOrm liteOrm;
-    private boolean flag = false;
 
     @Override
     public int setlayout() {
@@ -126,7 +126,7 @@ public class RankDetailsFragment extends BaseFragment implements OnRefreshListen
                 popupWindow = new PopupWindow(contentView, ViewGroup.LayoutParams.MATCH_PARENT
                         , ViewGroup.LayoutParams.WRAP_CONTENT);
                 popupWindow.setFocusable(true);
-                popupWindow.setBackgroundDrawable(new BitmapDrawable());
+                popupWindow.setAnimationStyle(R.style.contextMenuAnim);
                 popupWindow.showAtLocation(contentView, Gravity.BOTTOM, 0, 0);
 
                 final ImageView ivHart = (ImageView) contentView.findViewById(R.id.iv_customer_hart);
@@ -140,18 +140,17 @@ public class RankDetailsFragment extends BaseFragment implements OnRefreshListen
                     }
                 });
 
-                QueryBuilder<DBHeart> list = new QueryBuilder<DBHeart>(DBHeart.class).whereEquals
+                final QueryBuilder<DBHeart> list = new QueryBuilder<DBHeart>(DBHeart.class).whereEquals
                         (DBHeart.TITLE, songListBeen.get(position).getTitle());
 
-                if (list!=null&&liteOrm.query(list).size() > 0) {
+                if (liteOrm.query(list).size() > 0) {
                     ivHart.setImageResource(R.mipmap.cust_heart_press);
-                    flag = true;
                 }
 
                 ivHart.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        if (flag = !flag) {
+                        if (liteOrm.query(list).size() == 0) {
                             ivHart.setImageResource(R.mipmap.cust_heart_press);
                             liteOrm.insert(new DBHeart(songListBeen.get(position).getTitle(),
                                     songListBeen.get(position).getAuthor(), songListBeen.get(position).getPic_small()
@@ -194,6 +193,7 @@ public class RankDetailsFragment extends BaseFragment implements OnRefreshListen
                                 Log.d("HeartSongListFragment","-------"+ songUrl);
                                 //下载歌曲
                                 DownloadUtils downloadUtils=new DownloadUtils(songUrl,songTitle,lrc);
+                                popupWindow.dismiss();
                             }
 
                             @Override
@@ -201,6 +201,15 @@ public class RankDetailsFragment extends BaseFragment implements OnRefreshListen
 
                             }
                         },songListBeen.get(position).getSong_id());
+                    }
+                });
+                ImageView ivShare= (ImageView) contentView.findViewById(R.id.iv_customer_Share);
+                ivShare.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        ShowShare showShare=new ShowShare();
+                        showShare.showShare();
+                        popupWindow.dismiss();
                     }
                 });
             }

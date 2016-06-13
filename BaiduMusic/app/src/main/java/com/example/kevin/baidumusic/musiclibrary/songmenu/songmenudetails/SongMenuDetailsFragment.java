@@ -27,6 +27,7 @@ import com.example.kevin.baidumusic.musiclibrary.rank.songplay.SongPlayBean;
 import com.example.kevin.baidumusic.netutil.DownloadUtils;
 import com.example.kevin.baidumusic.netutil.NetListener;
 import com.example.kevin.baidumusic.netutil.NetTool;
+import com.example.kevin.baidumusic.netutil.ShowShare;
 import com.example.kevin.baidumusic.netutil.URLValues;
 import com.google.gson.Gson;
 import com.litesuits.orm.LiteOrm;
@@ -50,7 +51,6 @@ public class SongMenuDetailsFragment extends BaseFragment {
     private TextView tvTitle, tvListNum, tvTag, tvCollectNum;
     private SongMenuDetailsBean bean;
     private PopupWindow popupWindow;
-    private boolean flag = false;
     private LiteOrm liteOrm;
 
     @Override
@@ -129,11 +129,12 @@ public class SongMenuDetailsFragment extends BaseFragment {
                 popupWindow = new PopupWindow(contentView, ViewGroup.LayoutParams.MATCH_PARENT
                         , ViewGroup.LayoutParams.WRAP_CONTENT);
                 popupWindow.setFocusable(true);
-                popupWindow.setBackgroundDrawable(new BitmapDrawable());
+                popupWindow.setAnimationStyle(R.style.contextMenuAnim);
                 popupWindow.showAtLocation(contentView, Gravity.BOTTOM, 0, 0);
 
                 final ImageView ivHart = (ImageView) contentView.findViewById(R.id.iv_customer_hart);
                 ImageView ivDownload= (ImageView) contentView.findViewById(R.id.iv_customer_download);
+
                 //设置title
                 TextView tvTi= (TextView) contentView.findViewById(R.id.tv_customer_dialog_title);
                 tvTi.setText(contentBeanList.get(position).getTitle());
@@ -144,18 +145,17 @@ public class SongMenuDetailsFragment extends BaseFragment {
                         popupWindow.dismiss();
                     }
                 });
-                QueryBuilder<DBHeart> list = new QueryBuilder<DBHeart>(DBHeart.class).whereEquals
+                final QueryBuilder<DBHeart> list = new QueryBuilder<DBHeart>(DBHeart.class).whereEquals
                         (DBHeart.TITLE, contentBeanList.get(position).getTitle());
 
                 if (list != null && liteOrm.query(list).size() > 0) {
                     ivHart.setImageResource(R.mipmap.cust_heart_press);
-                    flag = true;
                 }
                 //红心收藏
                 ivHart.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        if (flag = !flag) {
+                        if (liteOrm.query(list).size() == 0) {
                             ivHart.setImageResource(R.mipmap.cust_heart_press);
                             liteOrm.insert(new DBHeart(contentBeanList.get(position).getTitle(),
                                     contentBeanList.get(position).getAuthor(), bean.getPic_300()
@@ -198,6 +198,7 @@ public class SongMenuDetailsFragment extends BaseFragment {
                                 Log.d("HeartSongListFragment","-------"+ songUrl);
                                 //下载歌曲
                                 DownloadUtils downloadUtils=new DownloadUtils(songUrl,songTitle,lrc);
+                                popupWindow.dismiss();
                             }
 
                             @Override
@@ -205,6 +206,16 @@ public class SongMenuDetailsFragment extends BaseFragment {
 
                             }
                         },contentBeanList.get(position).getSong_id());
+                    }
+                });
+                //分享
+                ImageView ivShare= (ImageView) contentView.findViewById(R.id.iv_customer_Share);
+                ivShare.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        ShowShare showShare=new ShowShare();
+                        showShare.showShare();
+                        popupWindow.dismiss();
                     }
                 });
             }

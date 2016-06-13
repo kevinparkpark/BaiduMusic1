@@ -1,7 +1,9 @@
 package com.example.kevin.baidumusic;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
+import android.os.CountDownTimer;
 
 import com.bartoszlipinski.recyclerviewheader.RecyclerViewHeader;
 
@@ -16,5 +18,18 @@ public class WelcomeActivity extends Activity{
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_welcome);
 
+        CountDownTimer timer=new CountDownTimer(3000,1000) {
+            @Override
+            public void onTick(long millisUntilFinished) {
+
+            }
+
+            @Override
+            public void onFinish() {
+
+                startActivity(new Intent(WelcomeActivity.this,MainActivity.class));
+                finish();
+            }
+        }.start();
     }
 }

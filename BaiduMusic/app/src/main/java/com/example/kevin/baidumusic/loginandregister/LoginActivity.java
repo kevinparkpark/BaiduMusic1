@@ -32,13 +32,16 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
 
-        String user=getIntent().getStringExtra("user");
-        if (user!=null){
+        BmobUser bmobUser=BmobUser.getCurrentUser(this);
+        Log.d("LoginActivity","-------"+ bmobUser.getUsername());
+
+//        String user=getIntent().getStringExtra("user");
+        if (bmobUser.getUsername()!=null){
             loginFragment=new LoginFragment();
             getSupportFragmentManager().beginTransaction()
                     .replace(R.id.relativelayout_login,loginFragment).commit();
             Bundle bundle=new Bundle();
-            bundle.putString("user",user);
+            bundle.putString("user",bmobUser.getUsername());
             loginFragment.setArguments(bundle);
         }
 

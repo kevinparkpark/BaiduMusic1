@@ -198,7 +198,7 @@ public class LrcView extends View {
      */
     public void loadLocalLrc(String path) {
         reset();
-        path = Environment.getExternalStorageDirectory() + "/music/lrc/" + path+".lrc";
+        path = Environment.getExternalStorageDirectory() + "/music/lrc/" + path + ".lrc";
         Log.d("LrcView", path);
 //        Log.d("LrcView", "!new File(path).exists():" + !new File(path).exists());
         if (TextUtils.isEmpty(path) || !new File(path).exists()) {
@@ -238,8 +238,7 @@ public class LrcView extends View {
     public void loadLrc(String path) {
         if (path != null) {
             if (!path.equals(temp)) {
-                Log.d("LrcView", "---------------" + path.substring(0, 4));
-                if (path.substring(0, 4).equals("http")) {
+                if (path.length() > 3 && path.substring(0, 4).equals("http")) {
                     Log.d("LrcView", "if");
                     loadNetLrc(path);
                     temp = path;
