@@ -36,49 +36,12 @@
                     android:textColor="@android:color/white" />
             </LinearLayout>
 
-            <RelativeLayout
-                android:id="@+id/relativelayout_login"
+            <FrameLayout
+                android:id="@+id/framelayout_login"
                 android:layout_width="match_parent"
-                android:layout_height="120dp"
-                android:background="@android:color/white">
+                android:layout_height="120dp">
 
-                <EditText
-                    android:layout_marginTop="10dp"
-                    android:background="@drawable/shape"
-                    android:hint="请输入账号"
-                    android:layout_width="200dp"
-                    android:layout_height="wrap_content"
-                    android:layout_alignParentTop="true"
-                    android:layout_alignStart="@+id/et_login_pw"
-                    android:id="@+id/et_login_id" />
-                <EditText
-                    android:inputType="textPassword"
-                    android:background="@drawable/shape"
-                    android:hint="请输入密码"
-                    android:layout_width="200dp"
-                    android:layout_height="wrap_content"
-                    android:id="@+id/et_login_pw"
-                    android:layout_below="@+id/et_login_id"
-                    android:layout_centerHorizontal="true" />
-
-                <Button
-                    android:id="@+id/btn_login_login"
-                    android:layout_width="wrap_content"
-                    android:layout_height="30dp"
-                    android:background="@drawable/shape_loginbtn"
-                    android:text="立即登录"
-                    android:layout_below="@+id/et_login_pw"
-                    android:layout_centerHorizontal="true"
-                    android:layout_marginTop="18dp" />
-
-                <TextView
-                    android:id="@+id/tv_login_register"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="注册账号"
-                    android:layout_alignBottom="@+id/btn_login_login"
-                    android:layout_toEndOf="@+id/et_login_pw" />
-            </RelativeLayout>
+            </FrameLayout>
 
             <LinearLayout
                 android:layout_width="match_parent"

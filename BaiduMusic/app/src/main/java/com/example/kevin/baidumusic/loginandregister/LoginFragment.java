@@ -6,6 +6,8 @@ import android.widget.TextView;
 import com.example.kevin.baidumusic.R;
 import com.example.kevin.baidumusic.base.BaseFragment;
 
+import cn.bmob.v3.BmobUser;
+
 /**
  * Created by kevin on 16/6/11.
  */
@@ -24,8 +26,10 @@ public class LoginFragment extends BaseFragment{
 
     @Override
     protected void initData() {
-        String user=getArguments().getString("user");
-        tvUsername.setText("欢迎"+user);
+//        String user=getArguments().getString("user");
+        BmobUser bmobUser=BmobUser.getCurrentUser(context);
+
+        tvUsername.setText("欢迎 "+bmobUser.getUsername());
         tvLogOut.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

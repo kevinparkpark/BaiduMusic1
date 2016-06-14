@@ -85,6 +85,7 @@
             android:src="@mipmap/bt_sceneplay_down_press" />
 
         <ImageView
+            android:id="@+id/iv_songplaypage_heart"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerHorizontal="true"

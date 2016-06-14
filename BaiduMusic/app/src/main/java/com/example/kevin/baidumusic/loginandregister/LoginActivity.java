@@ -20,11 +20,9 @@ import cn.bmob.v3.listener.SaveListener;
 /**
  * Created by kevin on 16/6/8.
  */
-public class LoginActivity extends AppCompatActivity implements View.OnClickListener,LoginFragment.Login2LogOutOnClcikListener {
+public class LoginActivity extends AppCompatActivity implements View.OnClickListener,LoginFragment.Login2LogOutOnClcikListener
+,Login2LogFragment.Login2LogedOnClickListener{
     private ImageView ivWifi,ivClock,ivDesk,ivScreen,ivBack;
-    private TextView tv2reg;
-    private EditText etUser,etPw;
-    private Button btnLogin;
     private boolean flag;
     private LoginFragment loginFragment;
     @Override
@@ -33,16 +31,18 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         setContentView(R.layout.activity_login);
 
         BmobUser bmobUser=BmobUser.getCurrentUser(this);
-        Log.d("LoginActivity","-------"+ bmobUser.getUsername());
 
 //        String user=getIntent().getStringExtra("user");
         if (bmobUser.getUsername()!=null){
             loginFragment=new LoginFragment();
             getSupportFragmentManager().beginTransaction()
-                    .replace(R.id.relativelayout_login,loginFragment).commit();
+                    .replace(R.id.framelayout_login,loginFragment).commit();
             Bundle bundle=new Bundle();
             bundle.putString("user",bmobUser.getUsername());
             loginFragment.setArguments(bundle);
+        }else {
+            getSupportFragmentManager().beginTransaction()
+                    .replace(R.id.framelayout_login,new Login2LogFragment()).commit();
         }
 
         ivWifi= (ImageView) findViewById(R.id.iv_login_wifi);
@@ -50,18 +50,12 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         ivDesk= (ImageView) findViewById(R.id.iv_desk);
         ivScreen= (ImageView) findViewById(R.id.iv_login_screen);
         ivBack= (ImageView) findViewById(R.id.iv_login_back);
-        tv2reg= (TextView) findViewById(R.id.tv_login_register);
-        btnLogin= (Button) findViewById(R.id.btn_login_login);
-        etUser= (EditText) findViewById(R.id.et_login_id);
-        etPw= (EditText) findViewById(R.id.et_login_pw);
 
         ivWifi.setOnClickListener(this);
         ivClock.setOnClickListener(this);
         ivDesk.setOnClickListener(this);
         ivScreen.setOnClickListener(this);
         ivBack.setOnClickListener(this);
-        tv2reg.setOnClickListener(this);
-        btnLogin.setOnClickListener(this);
 
     }
 
@@ -99,38 +93,16 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
             case R.id.iv_login_back:
                 finish();
                 break;
-            case R.id.tv_login_register:
-                startActivity(new Intent(this,RegisterActivity.class));
-                break;
-            case R.id.btn_login_login:
-                BmobUser bmobUser=new BmobUser();
-                bmobUser.setUsername(etUser.getText().toString());
-                bmobUser.setPassword(etPw.getText().toString());
-                bmobUser.login(this, new SaveListener() {
-                    @Override
-                    public void onSuccess() {
-                        Toast.makeText(LoginActivity.this, "登录成功", Toast.LENGTH_SHORT).show();
-                            loginFragment=new LoginFragment();
-                            getSupportFragmentManager().beginTransaction()
-                                    .replace(R.id.relativelayout_login,loginFragment).commit();
-                            Bundle bundle=new Bundle();
-                            bundle.putString("user",etUser.getText().toString());
-                            loginFragment.setArguments(bundle);
-                        etUser.setText("");
-                        etPw.setText("");
-                    }
-
-                    @Override
-                    public void onFailure(int i, String s) {
-                        Toast.makeText(LoginActivity.this, "登录失败", Toast.LENGTH_SHORT).show();
-                    }
-                });
-                break;
         }
     }
 
     @Override
     public void onLogin2LogOutClickListener() {
-        getSupportFragmentManager().beginTransaction().hide(loginFragment).commit();
+        getSupportFragmentManager().beginTransaction().replace(R.id.framelayout_login,new Login2LogFragment()).commit();
+    }
+
+    @Override
+    public void onLogin2LogedClickListener() {
+        getSupportFragmentManager().beginTransaction().replace(R.id.framelayout_login,new LoginFragment()).commit();
     }
 }

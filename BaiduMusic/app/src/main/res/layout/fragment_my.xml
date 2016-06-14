@@ -38,9 +38,9 @@
                     android:layout_height="match_parent"
                     android:text="本地音乐"
                     android:textSize="16sp"
+                    android:layout_marginStart="30dp"
                     android:layout_centerVertical="true"
-                    android:layout_toStartOf="@+id/tv_localmusic_count"
-                    android:layout_marginEnd="32dp" />
+                    android:layout_toEndOf="@+id/iv_my_disc" />
 
                 <TextView
                     android:id="@+id/tv_localmusic_count"
@@ -80,16 +80,12 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
-                    android:layout_weight="0.17"
                     android:text="最近播放"
                     android:textSize="16sp"
                     android:id="@+id/textView"
-                    android:layout_marginLeft="15dp"
-                    android:layout_marginRight="15dp"
+                    android:layout_marginEnd="6dp"
                     android:layout_centerVertical="true"
-                    android:layout_alignTop="@+id/tv_latelyPlaylist_count"
-                    android:layout_toStartOf="@+id/tv_latelyPlaylist_count"
-                    android:layout_marginEnd="14dp" />
+                    android:layout_toStartOf="@+id/tv_latelyPlaylist_count" />
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -115,7 +111,8 @@
                     android:layout_marginLeft="10dp"
                     android:layout_marginRight="10dp"
                     android:layout_alignBottom="@+id/imageView"
-                    android:layout_alignParentEnd="true" />
+                    android:layout_alignParentEnd="true"
+                    android:id="@+id/imageView25" />
 
             </RelativeLayout>
             <RelativeLayout
@@ -132,6 +129,7 @@
                     android:id="@+id/imageView2" />
 
                 <TextView
+                    android:layout_centerVertical="true"
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
                     android:layout_weight="0.17"
@@ -140,9 +138,9 @@
                     android:id="@+id/textView3"
                     android:layout_marginLeft="15dp"
                     android:layout_marginRight="15dp"
-                    android:layout_centerVertical="true"
-                    android:layout_toStartOf="@+id/textView4"
-                    android:layout_marginEnd="21dp" />
+                    android:layout_marginEnd="17dp"
+                    android:layout_alignTop="@+id/textView4"
+                    android:layout_toStartOf="@+id/textView4" />
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -190,11 +188,10 @@
                     android:layout_weight="0.17"
                     android:text="我的K歌"
                     android:textSize="16sp"
-                    android:layout_centerVertical="true"
                     android:layout_marginLeft="15dp"
                     android:layout_marginRight="15dp"
-                    android:layout_marginEnd="25dp"
-                    android:layout_alignParentTop="true"
+                    android:layout_marginEnd="20dp"
+                    android:layout_centerVertical="true"
                     android:layout_toStartOf="@+id/textView5" />
 
                 <TextView
@@ -251,7 +248,8 @@
                     android:text="我收藏的单曲"
                     android:id="@+id/textView11"
                     android:layout_below="@+id/textView6"
-                    android:layout_toEndOf="@+id/textView6" />
+                    android:layout_toEndOf="@+id/textView6"
+                    android:layout_marginStart="10dp" />
                 <TextView
                     android:textSize="14sp"
                     android:layout_width="wrap_content"
@@ -292,7 +290,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:id="@+id/textView9"
-                    android:layout_marginStart="26dp"
+                    android:layout_marginStart="29dp"
                     android:layout_alignBottom="@+id/imageView5"
                     android:layout_toEndOf="@+id/imageView5" />
             </RelativeLayout>

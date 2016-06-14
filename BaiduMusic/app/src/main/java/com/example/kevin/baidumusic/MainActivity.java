@@ -11,6 +11,7 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.android.volley.toolbox.ImageLoader;
 import com.example.kevin.baidumusic.eventbean.EventServiceToPauseBean;
 import com.example.kevin.baidumusic.eventbean.EventServiceToPlayBtnBean;
 import com.example.kevin.baidumusic.eventbean.EventUpDateSongUI;
@@ -26,6 +27,7 @@ import com.example.kevin.baidumusic.mymusic.MyFragment;
 import com.example.kevin.baidumusic.mymusic.heartsonglist.HeartSongListFragment;
 import com.example.kevin.baidumusic.mymusic.latelyplaylist.LatelyPlaylistFragment;
 import com.example.kevin.baidumusic.mymusic.localmusic.MyLocalMusicFragment;
+import com.example.kevin.baidumusic.netutil.VolleySingleton;
 import com.example.kevin.baidumusic.search.SearchFragment;
 import com.example.kevin.baidumusic.service.MediaPlayService;
 import com.example.kevin.baidumusic.songlist.SongListCacheFragment;
@@ -82,12 +84,6 @@ public class MainActivity extends AppCompatActivity implements MyFragment.MyToLo
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(new Intent(MainActivity.this, SongPlayPageActivity.class));
-//                if (eventUpDateSongUI !=null) {
-//                    intent.putExtra("title", eventUpDateSongUI.getTitle());
-//                    intent.putExtra("imageurl", eventUpDateSongUI.getImageBigUrl());
-//                    intent.putExtra("author", eventUpDateSongUI.getAuthor());
-//                    Log.d("MainActivity", "getimageurl------" + eventUpDateSongUI.getImageBigUrl());
-//                }
                 startActivity(intent);
             }
         });
@@ -147,7 +143,12 @@ public class MainActivity extends AppCompatActivity implements MyFragment.MyToLo
     public void setMainSongInfo(EventUpDateSongUI bean) {
         tvSongTitle.setText(bean.getTitle());
         tvSongAuthor.setText(bean.getAuthor());
-        Picasso.with(this).load(bean.getImageUrl()).fit().into(ivSongImage);
+        if (bean.getImageUrl()!=null){
+            ImageLoader imageLoader= VolleySingleton.getInstance().getImageLoader();
+            imageLoader.get(bean.getImageUrl(),ImageLoader.getImageListener(ivSongImage,R.mipmap.yuan
+                    ,R.mipmap.yuan));
+//        Picasso.with(this).load(bean.getImageUrl()).fit().into(ivSongImage);
+        }
     }
 
     //跳转到本地音乐

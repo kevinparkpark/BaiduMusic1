@@ -1,5 +1,6 @@
 package com.example.kevin.baidumusic.search;
 
+import android.app.ProgressDialog;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.EditText;
@@ -37,6 +38,7 @@ public class SearchFragment extends SecBaseFragment {
     private ListView listView;
     private EditText etSearch;
     private ImageView ivSearchIcon;
+    private ProgressDialog mProgressDialog;
 
 
     public void setSearchOnClick(SearchOnClick searchOnClick) {
@@ -58,11 +60,11 @@ public class SearchFragment extends SecBaseFragment {
 
     @Override
     protected void initData() {
+
         //返回键
         ivSearchBack.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-//                searchOnClick.onSearchClick();
                 //返回上一个fragment
                 getFragmentManager().popBackStack();
             }
@@ -97,6 +99,7 @@ public class SearchFragment extends SecBaseFragment {
                     //将输入法隐藏，mPasswordEditText 代表密码输入框
 //                    InputMethodManager imm =(InputMethodManager) context.getSystemService(Context.INPUT_METHOD_SERVICE);
 //                    imm.hideSoftInputFromWindow(ivSearchIcon.getWindowToken(), 0);
+
                 }
             }
         });

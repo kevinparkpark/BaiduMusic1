@@ -12,6 +12,7 @@
         android:src="@mipmap/le_rank_details" />
 
     <TextView
+        android:textColor="@android:color/white"
         android:id="@+id/tv_head_k_authordetails_songlist_author"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -21,6 +22,7 @@
         android:text="author" />
 
     <TextView
+        android:textColor="@android:color/white"
         android:id="@+id/tv_head_k_authordetails_songlist_country"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -30,6 +32,7 @@
         android:text="country" />
 
     <TextView
+        android:textColor="@android:color/white"
         android:id="@+id/textView10"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"

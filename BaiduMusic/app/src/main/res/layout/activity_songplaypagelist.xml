@@ -15,6 +15,9 @@
             android:layout_alignParentStart="true">
 
         </ListView>
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
 
         <TextView
             android:textColor="@android:color/white"
@@ -23,9 +26,8 @@
             android:text="正在播放列表"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_above="@+id/songplaypagelist_listview"
-            android:layout_centerHorizontal="true"
-            android:layout_alignTop="@+id/iv_songlistcache_playorder" />
+            android:layout_centerVertical="true"
+            android:layout_centerHorizontal="true" />
 
         <TextView
             android:textColor="@android:color/white"
@@ -34,16 +36,16 @@
             android:text="全部清空"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_above="@+id/songplaypagelist_listview"
-            android:layout_alignParentEnd="true"
-            android:layout_alignTop="@+id/tv_songlistcache_text" />
+            android:layout_centerVertical="true"
+            android:layout_alignParentEnd="true" />
 
         <ImageView
             android:src="@drawable/play_mode_level"
             android:id="@+id/iv_songplaypagelist_playmode"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_above="@+id/songplaypagelist_listview"
             android:layout_alignParentStart="true" />
+        </RelativeLayout>
+
     </RelativeLayout>
 </LinearLayout>

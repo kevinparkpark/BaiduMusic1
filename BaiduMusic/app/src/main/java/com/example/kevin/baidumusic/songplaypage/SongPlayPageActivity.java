@@ -16,6 +16,8 @@ import android.widget.Toast;
 
 import com.example.kevin.baidumusic.R;
 import com.example.kevin.baidumusic.base.BaseFragment;
+import com.example.kevin.baidumusic.db.DBHeart;
+import com.example.kevin.baidumusic.db.LiteOrmSington;
 import com.example.kevin.baidumusic.eventbean.EventProgressBean;
 import com.example.kevin.baidumusic.eventbean.EventSeekToBean;
 import com.example.kevin.baidumusic.eventbean.EventServiceToPauseBean;
@@ -24,6 +26,8 @@ import com.example.kevin.baidumusic.eventbean.EventUpDateSongUI;
 import com.example.kevin.baidumusic.netutil.NetTool;
 import com.example.kevin.baidumusic.songplaypage.playpagelist.SongPlayPageListActivity;
 import com.example.kevin.baidumusic.util.BroadcastValues;
+import com.litesuits.orm.LiteOrm;
+import com.litesuits.orm.db.assit.QueryBuilder;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -32,6 +36,7 @@ import org.greenrobot.eventbus.ThreadMode;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by kevin on 16/5/26.
@@ -41,7 +46,7 @@ public class SongPlayPageActivity extends AppCompatActivity implements View.OnCl
     private ViewPager viewPager;
     private ArrayList<BaseFragment> fragments;
     private SongPlayPageAdapter adapter;
-    private ImageView ivSongPlay, ivNext, ivPrevious, ivMode,ivDownload,ivBack,iv2More;
+    private ImageView ivSongPlay, ivNext, ivPrevious, ivMode,ivDownload,ivBack,iv2More,ivHeart;
     private TextView tvSongPlayTitle, tvSongPlayAuthor, tvSongPlayTime, tvSongPlayMaxTime;
     private SeekBar seekBar;
     private int maxCurrent;
@@ -51,6 +56,8 @@ public class SongPlayPageActivity extends AppCompatActivity implements View.OnCl
     private final int MODE_ONE = 2;//单曲循环
     private final int MODE_LOOP = 0;//列表循环
     private int mode = 0;//播放方式
+    private LiteOrm liteOrm;
+    private String title,author,img,bigImg,songId;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -68,10 +75,12 @@ public class SongPlayPageActivity extends AppCompatActivity implements View.OnCl
         ivDownload= (ImageView) findViewById(R.id.iv_songplaypage_download);
         ivBack= (ImageView) findViewById(R.id.iv_songplaypage_back);
         iv2More= (ImageView) findViewById(R.id.iv_songplaypage_more);
+        ivHeart= (ImageView) findViewById(R.id.iv_songplaypage_heart);
 
         seekBar = (SeekBar) findViewById(R.id.seekbar_songplaypage);
 
         EventBus.getDefault().register(this);
+        liteOrm= LiteOrmSington.getInstance().getLiteOrm();
 
         //接收赋值显示
 //        Intent intent = getIntent();
@@ -101,6 +110,8 @@ public class SongPlayPageActivity extends AppCompatActivity implements View.OnCl
         ivDownload.setOnClickListener(this);
         ivBack.setOnClickListener(this);
         iv2More.setOnClickListener(this);
+        ivHeart.setOnClickListener(this);
+
     }
 
     //接收服务中seekbar相关数据
@@ -149,9 +160,22 @@ public class SongPlayPageActivity extends AppCompatActivity implements View.OnCl
     }
 
     @Subscribe(threadMode = ThreadMode.MAIN)
-    public void serviceToplaySong(EventUpDateSongUI songUI) {
-        tvSongPlayAuthor.setText(songUI.getAuthor());
-        tvSongPlayTitle.setText(songUI.getTitle());
+    public void serviceToplaySong(EventUpDateSongUI songUi) {
+
+        title=songUi.getTitle();
+        author=songUi.getAuthor();
+        img=songUi.getImageUrl();
+        bigImg=songUi.getImageBigUrl();
+        songId=songUi.getSongId();
+
+        tvSongPlayAuthor.setText(songUi.getAuthor());
+        tvSongPlayTitle.setText(songUi.getTitle());
+        QueryBuilder<DBHeart> list = new QueryBuilder<DBHeart>(DBHeart.class).whereEquals
+                (DBHeart.TITLE, songUi.getTitle());
+
+        if (liteOrm.query(list).size() > 0) {
+            ivHeart.setImageResource(R.mipmap.bt_sceneplay_collect_selected);
+        }
     }
 
     @Override
@@ -203,6 +227,24 @@ public class SongPlayPageActivity extends AppCompatActivity implements View.OnCl
                 break;
             case R.id.iv_songplaypage_more:
                 startActivity(new Intent(this, SongPlayPageListActivity.class));
+                break;
+            case R.id.iv_songplaypage_heart:
+                QueryBuilder<DBHeart> list = new QueryBuilder<DBHeart>(DBHeart.class).whereEquals
+                        (DBHeart.TITLE,title);
+                if (liteOrm.query(list).size() == 0) {
+                    ivHeart.setImageResource(R.mipmap.bt_sceneplay_collect_selected);
+                    liteOrm.insert(new DBHeart(title,author,img,bigImg,songId));
+                    Toast.makeText(this, "已添加到我喜欢的音乐", Toast.LENGTH_SHORT).show();
+                } else {
+                    ivHeart.setImageResource(R.mipmap.bt_sceneplay_collect_press);
+
+                    List<DBHeart> dbHearts = liteOrm.query(list);
+                    if (dbHearts.size() > 0) {
+                        liteOrm.delete(dbHearts);
+                    }
+                    Toast.makeText(this, "已取消喜欢的音乐", Toast.LENGTH_SHORT).show();
+                }
+
                 break;
         }
     }

@@ -20,6 +20,7 @@ import android.widget.RemoteViews;
 import android.widget.Toast;
 
 import com.android.volley.VolleyError;
+import com.example.kevin.baidumusic.MainActivity;
 import com.example.kevin.baidumusic.R;
 import com.example.kevin.baidumusic.db.DBSongListCacheBean;
 import com.example.kevin.baidumusic.db.DBSongPlayListBean;
@@ -80,7 +81,7 @@ public class MediaPlayService extends Service {
     private Notification.Builder builder;
     private NotificationManager manager;
     private String lrc;
-    private String songAuthor, songTitle, songImageUrl, songImageBigUrl;
+    private String songAuthor, songTitle, songImageUrl, songImageBigUrl,songId;
     private final int MODE_RANDOM = 1;//随机播放
     private final int MODE_ONE = 2;//单曲循环
     private final int MODE_LOOP = 0;//列表循环
@@ -133,7 +134,7 @@ public class MediaPlayService extends Service {
         if (dbSongListCacheBeen.size() != 0) {
             EventBus.getDefault().post(new EventUpDateSongUI(dbSongListCacheBeen.get(detailsPosition).getTitle(),
                     dbSongListCacheBeen.get(detailsPosition).getAuthor(), dbSongListCacheBeen.get(detailsPosition).getImageUrl(),
-                    dbSongListCacheBeen.get(detailsPosition).getImageBigUrl()));
+                    dbSongListCacheBeen.get(detailsPosition).getImageBigUrl(),dbSongListCacheBeen.get(detailsPosition).getSongId()));
         }
     }
 
@@ -164,6 +165,7 @@ public class MediaPlayService extends Service {
                 songTitle = songPlayBean.getSonginfo().getTitle();
                 songImageUrl = songPlayBean.getSonginfo().getPic_small();
                 songImageBigUrl = songPlayBean.getSonginfo().getPic_premium();
+                songId=songPlayBean.getSonginfo().getSong_id();
                 EventBus.getDefault().post(new EventSongLastPlayListBean(songTitle, songAuthor, songImageUrl, songImageBigUrl));
 
                 new Thread(new Runnable() {
@@ -231,7 +233,7 @@ public class MediaPlayService extends Service {
                             current = mp.getCurrentPosition();
                             EventBus.getDefault().post(new EventProgressBean(current, maxCurrent, lrc));
                             EventBus.getDefault().post(new EventUpDateSongUI(songTitle, songAuthor,
-                                    songImageUrl, songImageBigUrl));
+                                    songImageUrl, songImageBigUrl,songId));
                             if (mp.isPlaying()) {
                                 EventBus.getDefault().post(new EventServiceToPlayBtnBean(true));
                             } else {
@@ -481,12 +483,15 @@ public class MediaPlayService extends Service {
         Intent intent = new Intent(BroadcastValues.NOTI_PLAY);
         Intent pauseIntent = new Intent(BroadcastValues.NEXT);
         Intent destroyIntent = new Intent(BroadcastValues.DESTORY);
+        Intent remote2ActIntent=new Intent(this, MainActivity.class);
+        PendingIntent remote2ActPendingIntent=PendingIntent.getActivity(this,0,remote2ActIntent,PendingIntent.FLAG_UPDATE_CURRENT);
         PendingIntent destroyPendingIntent = PendingIntent.getBroadcast(this, 0, destroyIntent, 0);
         PendingIntent pausePendingIntent = PendingIntent.getBroadcast(this, 0, pauseIntent, 0);
         PendingIntent pendingIntent = PendingIntent.getBroadcast(this, 0, intent, 0);
         remoteViews.setOnClickPendingIntent(R.id.iv_remote_play, pendingIntent);
         remoteViews.setOnClickPendingIntent(R.id.iv_remote_next, pausePendingIntent);
         remoteViews.setOnClickPendingIntent(R.id.iv_remote_diestroy, destroyPendingIntent);
+        remoteViews.setOnClickPendingIntent(R.id.remote_view_linearlayout,remote2ActPendingIntent);
         builder.setContent(remoteViews);
         manager.notify(2016, builder.build());
         Log.d("MediaPlayService", "---------" + imgUrl);
