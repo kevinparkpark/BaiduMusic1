@@ -1,4 +1,4 @@
-package com.example.kevin.baidumusic.musiclibrary.rank.songplay;
+package com.example.kevin.baidumusic.service.songplay;
 
 /**
  * Created by kevin on 16/5/24.

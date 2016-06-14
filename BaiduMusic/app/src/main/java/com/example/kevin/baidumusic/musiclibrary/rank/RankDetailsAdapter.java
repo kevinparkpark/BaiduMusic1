@@ -10,7 +10,6 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.example.kevin.baidumusic.R;
-import com.example.kevin.baidumusic.musiclibrary.rank.songplay.RankDetailsOnClickListener;
 import com.squareup.picasso.Picasso;
 
 import java.util.List;

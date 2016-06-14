@@ -1,6 +1,7 @@
 package com.example.kevin.baidumusic.musiclibrary.radio.radioplay.songplaylist;
 
 import android.content.Context;
+import android.content.Intent;
 import android.support.v4.view.PagerAdapter;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -17,6 +18,7 @@ import com.example.kevin.baidumusic.eventbean.EventServiceToPlayBtnBean;
 import com.example.kevin.baidumusic.eventbean.EventUpDateSongUI;
 import com.example.kevin.baidumusic.musiclibrary.radio.radioplay.songplaylist.RadioPlayListBean;
 import com.example.kevin.baidumusic.netutil.VolleySingleton;
+import com.example.kevin.baidumusic.util.BroadcastValues;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -68,7 +70,6 @@ public class RadioPlayListPagerAdapter extends PagerAdapter{
 
             viewGroup.add(group);
         }
-//        this.songlistBeanList = songlistBeanList;
         notifyDataSetChanged();
     }
 
@@ -86,6 +87,21 @@ public class RadioPlayListPagerAdapter extends PagerAdapter{
     public Object instantiateItem(ViewGroup container, int position) {
 
         group=viewGroup.get(position);
+
+        ivPlay = (ImageView) group.findViewById(R.id.iv_view_playlist_play);
+        ivPlay.setOnClickListener(new View.OnClickListener() {
+            boolean flag=false;
+            @Override
+            public void onClick(View v) {
+                if (flag=!flag){
+                context.sendBroadcast(new Intent(BroadcastValues.PAUSE));
+                ivPlay.setImageResource(R.mipmap.scenario_drive_pause_button_normal);
+                }else {
+                    context.sendBroadcast(new Intent(BroadcastValues.PLAY));
+                    ivPlay.setImageResource(R.mipmap.scenario_drive_play_button_normal);
+                }
+            }
+        });
 
 //        tvTitle.setText(songlistBeanList.get(position).getTitle());
 //        tvAuthor.setText(songlistBeanList.get(position).getAuthor());

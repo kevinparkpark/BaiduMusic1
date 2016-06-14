@@ -3,8 +3,11 @@ package com.example.kevin.baidumusic.totalfragment;
 import android.content.Intent;
 import android.support.design.widget.TabLayout;
 import android.support.v4.view.ViewPager;
+import android.util.Log;
+import android.view.KeyEvent;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.Toast;
 
 import com.example.kevin.baidumusic.R;
 import com.example.kevin.baidumusic.base.BaseFragment;
@@ -81,4 +84,5 @@ public class TotalFragment extends BaseFragment {
     public void flipPage(){
         viewPager.setCurrentItem(2);
     }
+
 }

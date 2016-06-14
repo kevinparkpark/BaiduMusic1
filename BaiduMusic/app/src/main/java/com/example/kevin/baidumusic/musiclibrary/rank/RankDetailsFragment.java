@@ -6,7 +6,6 @@ import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.WindowManager;
 import android.widget.AdapterView;
 import android.widget.ImageView;
 import android.widget.PopupWindow;
@@ -19,12 +18,10 @@ import com.example.kevin.baidumusic.R;
 import com.example.kevin.baidumusic.base.BaseFragment;
 import com.example.kevin.baidumusic.db.DBHeart;
 import com.example.kevin.baidumusic.db.DBSongListCacheBean;
-import com.example.kevin.baidumusic.db.DBSongPlayListBean;
 import com.example.kevin.baidumusic.db.LiteOrmSington;
 import com.example.kevin.baidumusic.eventbean.EventGenericBean;
 import com.example.kevin.baidumusic.eventbean.EventPosition;
-import com.example.kevin.baidumusic.musiclibrary.rank.songplay.RankDetailsOnClickListener;
-import com.example.kevin.baidumusic.musiclibrary.rank.songplay.SongPlayBean;
+import com.example.kevin.baidumusic.service.songplay.SongPlayBean;
 import com.example.kevin.baidumusic.netutil.DownloadUtils;
 import com.example.kevin.baidumusic.netutil.NetListener;
 import com.example.kevin.baidumusic.netutil.NetTool;
@@ -34,7 +31,6 @@ import com.example.kevin.baidumusic.util.myinterface.OnRefreshListener;
 import com.google.gson.Gson;
 import com.litesuits.orm.LiteOrm;
 import com.litesuits.orm.db.assit.QueryBuilder;
-import com.litesuits.orm.db.assit.WhereBuilder;
 import com.squareup.picasso.Picasso;
 
 import org.greenrobot.eventbus.EventBus;
@@ -65,6 +61,7 @@ public class RankDetailsFragment extends BaseFragment implements OnRefreshListen
 
     @Override
     protected void initView(View view) {
+        //自定义listview
         refreshListView = (RefreshListView) view.findViewById(R.id.rankdetails_listview);
         ivRankdetailsBack = (ImageView) view.findViewById(R.id.iv_rankdetails_back);
 
@@ -75,7 +72,7 @@ public class RankDetailsFragment extends BaseFragment implements OnRefreshListen
             }
         });
     }
-
+    //添加头部
     public void headView() {
 
         view = LayoutInflater.from(context).inflate(R.layout.head_rankdetails, null);
@@ -126,6 +123,7 @@ public class RankDetailsFragment extends BaseFragment implements OnRefreshListen
                 popupWindow = new PopupWindow(contentView, ViewGroup.LayoutParams.MATCH_PARENT
                         , ViewGroup.LayoutParams.WRAP_CONTENT);
                 popupWindow.setFocusable(true);
+                popupWindow.setBackgroundDrawable(new BitmapDrawable());
                 popupWindow.setAnimationStyle(R.style.contextMenuAnim);
                 popupWindow.showAtLocation(contentView, Gravity.BOTTOM, 0, 0);
 
@@ -146,7 +144,7 @@ public class RankDetailsFragment extends BaseFragment implements OnRefreshListen
                 if (liteOrm.query(list).size() > 0) {
                     ivHart.setImageResource(R.mipmap.cust_heart_press);
                 }
-
+                //红心点击事件
                 ivHart.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
@@ -203,6 +201,7 @@ public class RankDetailsFragment extends BaseFragment implements OnRefreshListen
                         },songListBeen.get(position).getSong_id());
                     }
                 });
+                //分享
                 ImageView ivShare= (ImageView) contentView.findViewById(R.id.iv_customer_Share);
                 ivShare.setOnClickListener(new View.OnClickListener() {
                     @Override

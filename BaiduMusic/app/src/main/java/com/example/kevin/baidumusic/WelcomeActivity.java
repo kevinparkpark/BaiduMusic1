@@ -17,7 +17,7 @@ public class WelcomeActivity extends Activity{
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_welcome);
-
+        //3秒跳转
         CountDownTimer timer=new CountDownTimer(3000,1000) {
             @Override
             public void onTick(long millisUntilFinished) {

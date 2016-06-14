@@ -2,7 +2,54 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="vertical" android:layout_width="match_parent"
     android:layout_height="match_parent">
+    <RelativeLayout
+        android:background="#1fb5fc"
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:weightSum="1">
+        <RelativeLayout
+            android:id="@+id/back_to_mylocalmusic"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
+            <ImageView
+                android:src="@mipmap/ic_back_normal"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_weight="0.05"
+                android:id="@+id/iv_search_back" />
+            <TextView
+                android:textColor="@android:color/white"
+                android:textSize="18sp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="本地音乐"
+                android:layout_centerVertical="true"
+                android:layout_toEndOf="@+id/iv_search_back" />
+        </RelativeLayout>
 
+        <ImageView
+            android:id="@+id/iv_serach_icon"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@mipmap/bt_titlebar_new_search_normal"
+            android:layout_marginEnd="59dp"
+            android:layout_centerVertical="true"
+            android:layout_toStartOf="@+id/imageView7" />
+        <ImageView
+            android:src="@mipmap/ic_localmusic_scan"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentTop="true"
+            android:layout_toStartOf="@+id/imageView7" />
+        <ImageView
+            android:src="@mipmap/ic_localmusic_sort"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentTop="true"
+            android:layout_alignParentEnd="true"
+            android:id="@+id/imageView7" />
+    </RelativeLayout>
 <ListView
     android:id="@+id/my_localmusic_songlist_listview"
     android:layout_width="match_parent"

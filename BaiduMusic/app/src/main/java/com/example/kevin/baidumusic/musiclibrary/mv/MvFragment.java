@@ -68,7 +68,7 @@ public class MvFragment extends BaseFragment {
 
 
     }
-
+    //刷新方法
     public void reFresh() {
         final NetTool netTool = new NetTool();
         netTool.getUrl(new NetListener() {
@@ -139,6 +139,7 @@ public class MvFragment extends BaseFragment {
             reFresh();
         }
     };
+    //上拉
     private OnLoadMoreListener onLoadMoreListener = new OnLoadMoreListener() {
         @Override
         public void loadMore() {

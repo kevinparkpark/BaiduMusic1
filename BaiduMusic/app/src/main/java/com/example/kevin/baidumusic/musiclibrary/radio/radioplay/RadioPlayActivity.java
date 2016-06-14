@@ -47,7 +47,7 @@ public class RadioPlayActivity extends AppCompatActivity {
         fragments=new ArrayList<>();
 
 
-
+        //fragment复用
         RadioPlayFragment radioPlayFragment1=new RadioPlayFragment();
         Bundle bundle1=new Bundle();
         bundle1.putString("url", URLValues.RADIOPLAY_EXERCISE);

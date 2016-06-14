@@ -2,6 +2,7 @@ package com.example.kevin.baidumusic.songplaypage;
 
 import android.app.DownloadManager;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -82,12 +83,6 @@ public class SongPlayPageActivity extends AppCompatActivity implements View.OnCl
         EventBus.getDefault().register(this);
         liteOrm= LiteOrmSington.getInstance().getLiteOrm();
 
-        //接收赋值显示
-//        Intent intent = getIntent();
-//        tvSongPlayTitle.setText(intent.getStringExtra("title"));
-//        tvSongPlayAuthor.setText(intent.getStringExtra("author"));
-//        String imageUrl = intent.getStringExtra("imageurl");
-
         fragments = new ArrayList<>();
         AuthorImgFragment authorImgFragment = new AuthorImgFragment();
         fragments.add(new AuthorInfFragment());
@@ -98,10 +93,6 @@ public class SongPlayPageActivity extends AppCompatActivity implements View.OnCl
         viewPager.setAdapter(adapter);
         viewPager.setCurrentItem(1);
 
-//        Bundle bundle = new Bundle();
-//        bundle.putString("imagebigurl", imageUrl);
-//        authorImgFragment.setArguments(bundle);
-
         //播放按键监听
         ivSongPlay.setOnClickListener(this);
         ivNext.setOnClickListener(this);
@@ -111,6 +102,11 @@ public class SongPlayPageActivity extends AppCompatActivity implements View.OnCl
         ivBack.setOnClickListener(this);
         iv2More.setOnClickListener(this);
         ivHeart.setOnClickListener(this);
+
+        //读取播放模式
+        SharedPreferences getsp = getSharedPreferences("mode", MODE_PRIVATE);
+        mode = getsp.getInt("mode", 0);
+        ivMode.setImageLevel(mode);
 
     }
 
@@ -217,7 +213,10 @@ public class SongPlayPageActivity extends AppCompatActivity implements View.OnCl
                     mode = 0;
                 }
                 swithPlayMode(mode);
-                Log.d("SongPlayPageActivity", "mode:" + mode);
+                SharedPreferences sp = getSharedPreferences("mode", MODE_PRIVATE);
+                SharedPreferences.Editor editor = sp.edit();
+                editor.putInt("mode", mode);
+                editor.commit();
                 break;
             case R.id.iv_songplaypage_download:
                 sendBroadcast(new Intent(BroadcastValues.DOWNLOAD));

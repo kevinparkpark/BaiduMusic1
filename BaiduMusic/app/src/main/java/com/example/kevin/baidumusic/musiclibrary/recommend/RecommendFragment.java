@@ -236,9 +236,11 @@ public class RecommendFragment extends BaseFragment implements View.OnClickListe
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
+            //全部歌手
             case R.id.iv_le_recommend_allauthor:
                 ((RecommendToKmusicOnClickListener) getActivity()).onRecommendToKmusicClickListener();
                 break;
+            //歌曲推荐-更多
             case R.id.tv_recommend_songlist_more:
                 context.sendBroadcast(new Intent(BroadcastValues.RECO_TO_SONGLIST));
                 break;

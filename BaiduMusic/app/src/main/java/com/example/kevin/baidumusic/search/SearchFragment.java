@@ -30,7 +30,6 @@ import java.util.List;
  * Created by kevin on 16/5/21.
  */
 public class SearchFragment extends SecBaseFragment {
-    private SearchOnClick searchOnClick;
     private ImageView ivSearchBack;
     private List<SearchBean.ResultBean.SongInfoBean.SongListBean> songListBeen;
     private SearchBean searchBean;
@@ -38,12 +37,6 @@ public class SearchFragment extends SecBaseFragment {
     private ListView listView;
     private EditText etSearch;
     private ImageView ivSearchIcon;
-    private ProgressDialog mProgressDialog;
-
-
-    public void setSearchOnClick(SearchOnClick searchOnClick) {
-        this.searchOnClick = searchOnClick;
-    }
 
     @Override
     public int setlayout() {
@@ -132,14 +125,9 @@ public class SearchFragment extends SecBaseFragment {
         });
     }
 
-    public interface SearchOnClick {
-        void onSearchClick();
-    }
-
     @Override
     public void onDestroy() {
         super.onDestroy();
-        getActivity().overridePendingTransition(R.anim.fragment_in, R.anim.fragment_out);
     }
 
 }

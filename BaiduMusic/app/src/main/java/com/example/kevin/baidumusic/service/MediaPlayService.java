@@ -32,18 +32,16 @@ import com.example.kevin.baidumusic.eventbean.EventServiceToPauseBean;
 import com.example.kevin.baidumusic.eventbean.EventServiceToPlayBtnBean;
 import com.example.kevin.baidumusic.eventbean.EventSongLastPlayListBean;
 import com.example.kevin.baidumusic.eventbean.EventUpDateSongUI;
-import com.example.kevin.baidumusic.musiclibrary.rank.songplay.SongPlayBean;
 import com.example.kevin.baidumusic.netutil.HttpDownloader;
 import com.example.kevin.baidumusic.netutil.NetListener;
 import com.example.kevin.baidumusic.netutil.NetTool;
+import com.example.kevin.baidumusic.service.songplay.SongPlayBean;
 import com.example.kevin.baidumusic.util.BroadcastValues;
 import com.example.kevin.baidumusic.db.LiteOrmSington;
 import com.example.kevin.baidumusic.util.LocalMusic;
 import com.google.gson.Gson;
 import com.litesuits.orm.LiteOrm;
 import com.litesuits.orm.db.assit.QueryBuilder;
-import com.litesuits.orm.db.assit.WhereBuilder;
-import com.litesuits.orm.db.model.ConflictAlgorithm;
 import com.squareup.picasso.Picasso;
 
 import org.greenrobot.eventbus.EventBus;
@@ -81,7 +79,7 @@ public class MediaPlayService extends Service {
     private Notification.Builder builder;
     private NotificationManager manager;
     private String lrc;
-    private String songAuthor, songTitle, songImageUrl, songImageBigUrl,songId;
+    private String songAuthor, songTitle, songImageUrl, songImageBigUrl, songId;
     private final int MODE_RANDOM = 1;//随机播放
     private final int MODE_ONE = 2;//单曲循环
     private final int MODE_LOOP = 0;//列表循环
@@ -134,7 +132,7 @@ public class MediaPlayService extends Service {
         if (dbSongListCacheBeen.size() != 0) {
             EventBus.getDefault().post(new EventUpDateSongUI(dbSongListCacheBeen.get(detailsPosition).getTitle(),
                     dbSongListCacheBeen.get(detailsPosition).getAuthor(), dbSongListCacheBeen.get(detailsPosition).getImageUrl(),
-                    dbSongListCacheBeen.get(detailsPosition).getImageBigUrl(),dbSongListCacheBeen.get(detailsPosition).getSongId()));
+                    dbSongListCacheBeen.get(detailsPosition).getImageBigUrl(), dbSongListCacheBeen.get(detailsPosition).getSongId()));
         }
     }
 
@@ -165,7 +163,7 @@ public class MediaPlayService extends Service {
                 songTitle = songPlayBean.getSonginfo().getTitle();
                 songImageUrl = songPlayBean.getSonginfo().getPic_small();
                 songImageBigUrl = songPlayBean.getSonginfo().getPic_premium();
-                songId=songPlayBean.getSonginfo().getSong_id();
+                songId = songPlayBean.getSonginfo().getSong_id();
                 EventBus.getDefault().post(new EventSongLastPlayListBean(songTitle, songAuthor, songImageUrl, songImageBigUrl));
 
                 new Thread(new Runnable() {
@@ -233,7 +231,7 @@ public class MediaPlayService extends Service {
                             current = mp.getCurrentPosition();
                             EventBus.getDefault().post(new EventProgressBean(current, maxCurrent, lrc));
                             EventBus.getDefault().post(new EventUpDateSongUI(songTitle, songAuthor,
-                                    songImageUrl, songImageBigUrl,songId));
+                                    songImageUrl, songImageBigUrl, songId));
                             if (mp.isPlaying()) {
                                 EventBus.getDefault().post(new EventServiceToPlayBtnBean(true));
                             } else {
@@ -346,7 +344,7 @@ public class MediaPlayService extends Service {
                 }
                 break;
         }
-        if (been.size() - 1 > detailsPosition) {
+        if (been.size() > detailsPosition) {
             NetTool netTool = new NetTool();
             netTool.getDetailsSongUrl(new NetListener() {
                 @Override
@@ -483,15 +481,15 @@ public class MediaPlayService extends Service {
         Intent intent = new Intent(BroadcastValues.NOTI_PLAY);
         Intent pauseIntent = new Intent(BroadcastValues.NEXT);
         Intent destroyIntent = new Intent(BroadcastValues.DESTORY);
-        Intent remote2ActIntent=new Intent(this, MainActivity.class);
-        PendingIntent remote2ActPendingIntent=PendingIntent.getActivity(this,0,remote2ActIntent,PendingIntent.FLAG_UPDATE_CURRENT);
+        Intent remote2ActIntent = new Intent(this, MainActivity.class);
+        PendingIntent remote2ActPendingIntent = PendingIntent.getActivity(this, 0, remote2ActIntent, PendingIntent.FLAG_UPDATE_CURRENT);
         PendingIntent destroyPendingIntent = PendingIntent.getBroadcast(this, 0, destroyIntent, 0);
         PendingIntent pausePendingIntent = PendingIntent.getBroadcast(this, 0, pauseIntent, 0);
         PendingIntent pendingIntent = PendingIntent.getBroadcast(this, 0, intent, 0);
         remoteViews.setOnClickPendingIntent(R.id.iv_remote_play, pendingIntent);
         remoteViews.setOnClickPendingIntent(R.id.iv_remote_next, pausePendingIntent);
         remoteViews.setOnClickPendingIntent(R.id.iv_remote_diestroy, destroyPendingIntent);
-        remoteViews.setOnClickPendingIntent(R.id.remote_view_linearlayout,remote2ActPendingIntent);
+        remoteViews.setOnClickPendingIntent(R.id.remote_view_linearlayout, remote2ActPendingIntent);
         builder.setContent(remoteViews);
         manager.notify(2016, builder.build());
         Log.d("MediaPlayService", "---------" + imgUrl);
@@ -564,6 +562,7 @@ public class MediaPlayService extends Service {
         }
     }
 
+    //接收播放模式广播
     class ReceivePlayListMode extends BroadcastReceiver {
 
         @Override
@@ -573,7 +572,7 @@ public class MediaPlayService extends Service {
         }
     }
 
-
+    //接收下载广播
     class ReceiveDownload extends BroadcastReceiver {
 
         @Override

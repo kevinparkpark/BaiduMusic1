@@ -45,14 +45,15 @@ public class MyFragment extends BaseFragment implements View.OnClickListener {
         rllMyLocalMusic.setOnClickListener(this);
         rllLatelyPlaylist.setOnClickListener(this);
         rllHeartMore.setOnClickListener(this);
-
+        //本地歌曲
         musicList=new ArrayList<>();
         MusicUtils.scanMusic(context,musicList);
         tvDownloadCount.setText("共"+musicList.size()+"首");
-
+        //最近播放列表
         LiteOrm liteOrm= LiteOrmSington.getInstance().getLiteOrm();
         List<DBSongPlayListBean> dbSongPlayListBeen=liteOrm.query(DBSongPlayListBean.class);
         tvLatelyPlaylistCount.setText("共"+dbSongPlayListBeen.size()+"首");
+        //红心列表
         List<DBHeart> dbHearts=liteOrm.query(DBHeart.class);
         tvHeartCount.setText(dbHearts.size()+"首");
     }
@@ -60,12 +61,15 @@ public class MyFragment extends BaseFragment implements View.OnClickListener {
     @Override
     public void onClick(View v) {
         switch (v.getId()){
+            //本地音乐
             case R.id.rl_my_local_music:
                 ( (MyToLocalFragmentOnClick) getActivity()).onMyToLocalFragmentClick();
                 break;
+            //最近播放
             case R.id.relativelayout_latelyplaylist:
                 ((LatelyPlaylistOnClick)getActivity()).onLatelyPlaylistClick();
                 break;
+            //红心列表
             case R.id.my_heart_more:
                 ((HeartSongListOnClick)getActivity()).onHeartSongListClick();
                 break;

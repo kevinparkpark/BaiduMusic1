@@ -22,8 +22,7 @@ import com.example.kevin.baidumusic.db.DBSongListCacheBean;
 import com.example.kevin.baidumusic.db.LiteOrmSington;
 import com.example.kevin.baidumusic.eventbean.EventGenericBean;
 import com.example.kevin.baidumusic.eventbean.EventPosition;
-import com.example.kevin.baidumusic.musiclibrary.radio.radioplay.songplaylist.RadioPlayListBean;
-import com.example.kevin.baidumusic.musiclibrary.rank.songplay.SongPlayBean;
+import com.example.kevin.baidumusic.service.songplay.SongPlayBean;
 import com.example.kevin.baidumusic.netutil.DownloadUtils;
 import com.example.kevin.baidumusic.netutil.NetListener;
 import com.example.kevin.baidumusic.netutil.NetTool;
@@ -129,6 +128,7 @@ public class SongMenuDetailsFragment extends BaseFragment {
                 popupWindow = new PopupWindow(contentView, ViewGroup.LayoutParams.MATCH_PARENT
                         , ViewGroup.LayoutParams.WRAP_CONTENT);
                 popupWindow.setFocusable(true);
+                popupWindow.setBackgroundDrawable(new BitmapDrawable());
                 popupWindow.setAnimationStyle(R.style.contextMenuAnim);
                 popupWindow.showAtLocation(contentView, Gravity.BOTTOM, 0, 0);
 

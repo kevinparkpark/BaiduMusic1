@@ -2,7 +2,6 @@ package com.example.kevin.baidumusic.mymusic.localmusic.musicsonglist;
 
 import android.content.DialogInterface;
 import android.content.SharedPreferences;
-import android.os.Environment;
 import android.support.v7.app.AlertDialog;
 import android.util.Log;
 import android.view.Gravity;
@@ -13,25 +12,21 @@ import android.widget.AdapterView;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.PopupWindow;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.android.volley.VolleyError;
+import com.example.kevin.baidumusic.MainActivity;
 import com.example.kevin.baidumusic.R;
 import com.example.kevin.baidumusic.base.BaseFragment;
 import com.example.kevin.baidumusic.db.DBHeart;
 import com.example.kevin.baidumusic.db.DBSongListCacheBean;
 import com.example.kevin.baidumusic.db.LiteOrmSington;
 import com.example.kevin.baidumusic.eventbean.EventPosition;
-import com.example.kevin.baidumusic.musiclibrary.rank.songplay.RankDetailsOnClickListener;
-import com.example.kevin.baidumusic.musiclibrary.rank.songplay.SongPlayBean;
-import com.example.kevin.baidumusic.netutil.DownloadUtils;
-import com.example.kevin.baidumusic.netutil.NetListener;
-import com.example.kevin.baidumusic.netutil.NetTool;
+import com.example.kevin.baidumusic.musiclibrary.rank.RankDetailsOnClickListener;
 import com.example.kevin.baidumusic.netutil.ShowShare;
 import com.example.kevin.baidumusic.util.LocalMusic;
 import com.example.kevin.baidumusic.util.MusicUtils;
-import com.google.gson.Gson;
 import com.litesuits.orm.LiteOrm;
 import com.litesuits.orm.db.assit.QueryBuilder;
 
@@ -50,6 +45,7 @@ public class MyLocalMusicSonglistFragment extends BaseFragment {
     private List<LocalMusic> localMusics;
     private PopupWindow popupWindow;
     private LiteOrm liteOrm;
+    private RelativeLayout relativeLayout;
 
     @Override
     public int setlayout() {
@@ -59,12 +55,13 @@ public class MyLocalMusicSonglistFragment extends BaseFragment {
     @Override
     protected void initView(View view) {
         listView = (ListView) view.findViewById(R.id.my_localmusic_songlist_listview);
+        relativeLayout= (RelativeLayout) view.findViewById(R.id.back_to_mylocalmusic);
     }
 
     @Override
     protected void initData() {
         localMusics = new ArrayList<>();
-        final LiteOrm liteOrm = LiteOrmSington.getInstance().getLiteOrm();
+        liteOrm = LiteOrmSington.getInstance().getLiteOrm();
         adapter = new MyLocalMusicSongListAdapter(context);
         MusicUtils.scanMusic(context, localMusics);
         adapter.setMusicList(localMusics);
@@ -166,6 +163,7 @@ public class MyLocalMusicSonglistFragment extends BaseFragment {
                         Toast.makeText(context, "已下载", Toast.LENGTH_SHORT).show();
                     }
                 });
+                //红心
                 ImageView ivShare = (ImageView) contentView.findViewById(R.id.iv_customer_Share);
                 ivShare.setOnClickListener(new View.OnClickListener() {
                     @Override
@@ -177,14 +175,23 @@ public class MyLocalMusicSonglistFragment extends BaseFragment {
                 });
             }
         });
+        relativeLayout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                getFragmentManager().popBackStack();
+            }
+        });
     }
 
     @Override
     public void onDestroy() {
+        if (!getActivity().isDestroyed()) {
+            ((MainActivity) getActivity()).showTitleFragment();
+        }
         super.onDestroy();
     }
 
-    //alertDialog
+    //删除事件
     public void showAlertDialog(final String path, final int position) {
 
         AlertDialog.Builder alert1 = new AlertDialog.Builder(context);
@@ -232,4 +239,5 @@ public class MyLocalMusicSonglistFragment extends BaseFragment {
         alert1.show();
 
     }
+
 }

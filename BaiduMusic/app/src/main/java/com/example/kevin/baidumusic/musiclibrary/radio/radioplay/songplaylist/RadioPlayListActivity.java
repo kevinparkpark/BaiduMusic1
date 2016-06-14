@@ -67,8 +67,8 @@ public class RadioPlayListActivity extends AppCompatActivity {
 
     public void initData() {
         String sceneId = getIntent().getStringExtra("sceneid");
-        Log.d("RadioPlayListActivity", "----------" + sceneId);
-        String sceneName = getIntent().getStringExtra("scenename");
+        String sceneName = getIntent().getStringExtra("sceneName");
+        tvScene.setText(sceneName);
 
         adapter = new RadioPlayListPagerAdapter(this);
         viewPager.setOffscreenPageLimit(3);
@@ -97,16 +97,7 @@ public class RadioPlayListActivity extends AppCompatActivity {
                 }
                 EventBus.getDefault().post(new EventPosition(0));
                 EventBus.getDefault().post(eventGenericBeen);
-
-
-//                for (RankDetailsBean.SongListBean songListBean : rankDetailsBean.getSong_list()) {
-//                    EventGenericBean bean=new EventGenericBean(songListBean.getTitle(),songListBean.getAuthor(),
-//                            songListBean.getPic_small(),songListBean.getPic_big(),songListBean.getSong_id());
-//                    eventGenericBeen.add(bean);
-//                }
-//                EventBus.getDefault().post(new EventPosition(position-2));
-//                EventBus.getDefault().post(eventGenericBeen);
-
+                //滑动事件
                 viewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
                     @Override
                     public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
@@ -116,10 +107,6 @@ public class RadioPlayListActivity extends AppCompatActivity {
                     @Override
                     public void onPageSelected(int position) {
                         adapter.setPos(position);
-//                        EventBus.getDefault().post(new EventPosition(position));
-//                        EventBus.getDefault().post(bean);
-//                        LiteOrm liteOrm = LiteOrmSington.getInstance().getLiteOrm();
-//                        liteOrm.deleteAll(DBSongListCacheBean.class);
 
                         List<EventGenericBean> eventGenericBeen = new ArrayList<EventGenericBean>();
 

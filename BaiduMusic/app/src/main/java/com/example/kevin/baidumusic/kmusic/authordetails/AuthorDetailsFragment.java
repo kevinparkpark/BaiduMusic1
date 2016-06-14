@@ -41,7 +41,7 @@ public class AuthorDetailsFragment extends SecBaseFragment implements OnRefreshL
         tvTitle= (TextView) view.findViewById(R.id.tv_k_authordetails_text_title);
         ivBack= (ImageView) view.findViewById(R.id.iv_k_authordetails_back);
         refreshListView= (RefreshListView) view.findViewById(R.id.k_authordetails_refreshlistview);
-
+        //返回监听
         ivBack.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -71,6 +71,7 @@ public class AuthorDetailsFragment extends SecBaseFragment implements OnRefreshL
             }
         });
     }
+    //刷新
     public void refesh(int page){
         NetTool netTool=new NetTool();
         netTool.getUrl(new NetListener() {
@@ -91,7 +92,7 @@ public class AuthorDetailsFragment extends SecBaseFragment implements OnRefreshL
             }
         },url1+String.valueOf(page)+url2);
     }
-
+    //下拉
     @Override
     public void onDownPullRefresh() {
 //        artistBeanList=new ArrayList<>();
@@ -99,7 +100,7 @@ public class AuthorDetailsFragment extends SecBaseFragment implements OnRefreshL
 //        refesh(page);
         refreshListView.hideHeaderView();
     }
-
+    //上拉
     @Override
     public void onLoadingMore() {
         refesh(++page);

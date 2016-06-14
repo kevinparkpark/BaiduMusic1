@@ -1,12 +1,10 @@
 package com.example.kevin.baidumusic.mymusic.heartsonglist;
 
 import android.graphics.drawable.BitmapDrawable;
-import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.WindowManager;
 import android.widget.AdapterView;
 import android.widget.ImageView;
 import android.widget.ListView;
@@ -17,7 +15,6 @@ import android.widget.Toast;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.ImageLoader;
 import com.example.kevin.baidumusic.R;
-import com.example.kevin.baidumusic.app.MyApp;
 import com.example.kevin.baidumusic.base.SecBaseFragment;
 import com.example.kevin.baidumusic.db.DBHeart;
 import com.example.kevin.baidumusic.db.DBSongListCacheBean;
@@ -25,8 +22,7 @@ import com.example.kevin.baidumusic.db.LiteOrmSington;
 import com.example.kevin.baidumusic.eventbean.EventGenericBean;
 import com.example.kevin.baidumusic.eventbean.EventPosition;
 import com.example.kevin.baidumusic.kmusic.authordetails.songlist.AuthorDetailsSonglistOnClickListener;
-import com.example.kevin.baidumusic.musiclibrary.rank.songplay.SongPlayBean;
-import com.example.kevin.baidumusic.musiclibrary.songmenu.songmenudetails.SongMenuDetailsBean;
+import com.example.kevin.baidumusic.service.songplay.SongPlayBean;
 import com.example.kevin.baidumusic.netutil.DownloadUtils;
 import com.example.kevin.baidumusic.netutil.NetListener;
 import com.example.kevin.baidumusic.netutil.NetTool;
@@ -40,9 +36,6 @@ import org.greenrobot.eventbus.EventBus;
 
 import java.util.ArrayList;
 import java.util.List;
-
-import cn.sharesdk.framework.ShareSDK;
-import cn.sharesdk.onekeyshare.OnekeyShare;
 
 /**
  * Created by kevin on 16/6/12.
@@ -100,7 +93,7 @@ public class HeartSongListFragment extends SecBaseFragment {
                 EventBus.getDefault().post(eventGenericBeen);
             }
         });
-
+        //popupwindow监听
         adapter.setOnClickListener(new AuthorDetailsSonglistOnClickListener() {
             @Override
             public void onAuthorDetailsSonglistClickListener(final int position) {
@@ -108,14 +101,14 @@ public class HeartSongListFragment extends SecBaseFragment {
                 popupWindow = new PopupWindow(contentView, ViewGroup.LayoutParams.MATCH_PARENT
                         , ViewGroup.LayoutParams.WRAP_CONTENT);
                 popupWindow.setFocusable(true);
-//                popupWindow.setBackgroundDrawable(new BitmapDrawable());
+                popupWindow.setBackgroundDrawable(new BitmapDrawable());
                 popupWindow.setAnimationStyle(R.style.contextMenuAnim);
                 popupWindow.showAtLocation(contentView, Gravity.BOTTOM, 0, 0);
 
                 final ImageView ivHart = (ImageView) contentView.findViewById(R.id.iv_customer_hart);
-                ImageView ivDownload= (ImageView) contentView.findViewById(R.id.iv_customer_download);
+                ImageView ivDownload = (ImageView) contentView.findViewById(R.id.iv_customer_download);
                 TextView tvTitle = (TextView) contentView.findViewById(R.id.tv_customer_dialog_title);
-                ImageView ivShare= (ImageView) contentView.findViewById(R.id.iv_customer_Share);
+                ImageView ivShare = (ImageView) contentView.findViewById(R.id.iv_customer_Share);
                 tvTitle.setText(dbHearts.get(position).getTitle());
 
                 contentView.findViewById(R.id.relativelayout_customer_dialog_other).setOnClickListener(new View.OnClickListener() {
@@ -153,7 +146,7 @@ public class HeartSongListFragment extends SecBaseFragment {
                             if (hearts.size() > 0) {
                                 liteOrm.delete(hearts);
                             }
-                            List<DBHeart> dbHeartList=liteOrm.query(DBHeart.class);
+                            List<DBHeart> dbHeartList = liteOrm.query(DBHeart.class);
                             loadImg(dbHeartList);
                             adapter.setDbHearts(dbHeartList);
                             Toast.makeText(context, "已取消喜欢的音乐", Toast.LENGTH_SHORT).show();
@@ -163,24 +156,25 @@ public class HeartSongListFragment extends SecBaseFragment {
                 });
                 //歌曲下载
                 ivDownload.setOnClickListener(new View.OnClickListener() {
-                    List<DBHeart> dbHeartList=liteOrm.query(DBHeart.class);
+                    List<DBHeart> dbHeartList = liteOrm.query(DBHeart.class);
+
                     @Override
                     public void onClick(View v) {
-                        NetTool netTool=new NetTool();
+                        NetTool netTool = new NetTool();
                         netTool.getDetailsSongUrl(new NetListener() {
                             @Override
                             public void onSuccessed(String result) {
-                                Gson gson=new Gson();
+                                Gson gson = new Gson();
                                 result = result.replace("(", "");
                                 result = result.replace(")", "");
                                 result = result.replace(";", "");
-                                songPlayBean=new SongPlayBean();
-                                songPlayBean=gson.fromJson(result,SongPlayBean.class);
-                                String songUrl=songPlayBean.getBitrate().getFile_link();
-                                String lrc=songPlayBean.getSonginfo().getLrclink();
+                                songPlayBean = new SongPlayBean();
+                                songPlayBean = gson.fromJson(result, SongPlayBean.class);
+                                String songUrl = songPlayBean.getBitrate().getFile_link();
+                                String lrc = songPlayBean.getSonginfo().getLrclink();
                                 String songTitle = songPlayBean.getSonginfo().getTitle();
                                 //下载歌曲
-                                DownloadUtils downloadUtils=new DownloadUtils(songUrl,songTitle,lrc);
+                                DownloadUtils downloadUtils = new DownloadUtils(songUrl, songTitle, lrc);
                                 popupWindow.dismiss();
                             }
 
@@ -188,13 +182,14 @@ public class HeartSongListFragment extends SecBaseFragment {
                             public void onFailed(VolleyError error) {
 
                             }
-                        },dbHearts.get(position).getSongId());
+                        }, dbHearts.get(position).getSongId());
                     }
                 });
+                //分享
                 ivShare.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        ShowShare showShare=new ShowShare();
+                        ShowShare showShare = new ShowShare();
                         showShare.showShare();
                         popupWindow.dismiss();
                     }
@@ -202,25 +197,42 @@ public class HeartSongListFragment extends SecBaseFragment {
             }
         });
     }
+
     //title图片
-    public void loadImg(List<DBHeart> dbHearts){
+    public void loadImg(List<DBHeart> dbHearts) {
         ImageLoader imageLoader = VolleySingleton.getInstance().getImageLoader();
         if (dbHearts.size() > 2) {
-            imageLoader.get(dbHearts.get(dbHearts.size() - 1).getImageBigUrl(), ImageLoader.getImageListener(
-                    ivImg1, R.mipmap.default_live_ic, R.mipmap.default_live_ic));
-            imageLoader.get(dbHearts.get(dbHearts.size() - 2).getImageBigUrl(), ImageLoader.getImageListener(
-                    ivImg2, R.mipmap.default_live_ic, R.mipmap.default_live_ic));
-            imageLoader.get(dbHearts.get(dbHearts.size() - 3).getImageBigUrl(), ImageLoader.getImageListener(
-                    ivImg3, R.mipmap.default_live_ic, R.mipmap.default_live_ic));
+            if (dbHearts.get(dbHearts.size() - 1).getImageBigUrl() != null) {
+                imageLoader.get(dbHearts.get(dbHearts.size() - 1).getImageBigUrl(), ImageLoader.getImageListener(
+                        ivImg1, R.mipmap.default_live_ic, R.mipmap.default_live_ic));
+            }
+            if (dbHearts.get(dbHearts.size() - 2).getImageBigUrl() != null) {
+                imageLoader.get(dbHearts.get(dbHearts.size() - 2).getImageBigUrl(), ImageLoader.getImageListener(
+                        ivImg2, R.mipmap.default_live_ic, R.mipmap.default_live_ic));
+            }
+            if (dbHearts.get(dbHearts.size() - 3).getImageBigUrl() != null) {
+                imageLoader.get(dbHearts.get(dbHearts.size() - 3).getImageBigUrl(), ImageLoader.getImageListener(
+                        ivImg3, R.mipmap.default_live_ic, R.mipmap.default_live_ic));
+            }
         } else if (dbHearts.size() == 2) {
-            imageLoader.get(dbHearts.get(dbHearts.size() - 1).getImageBigUrl(), ImageLoader.getImageListener(
-                    ivImg1, R.mipmap.default_live_ic, R.mipmap.default_live_ic));
-            imageLoader.get(dbHearts.get(dbHearts.size() - 2).getImageBigUrl(), ImageLoader.getImageListener(
-                    ivImg2, R.mipmap.default_live_ic, R.mipmap.default_live_ic));
+            if (dbHearts.get(dbHearts.size() - 1).getImageBigUrl() != null) {
+                imageLoader.get(dbHearts.get(dbHearts.size() - 1).getImageBigUrl(), ImageLoader.getImageListener(
+                        ivImg1, R.mipmap.default_live_ic, R.mipmap.default_live_ic));
+            }
+            if (dbHearts.get(dbHearts.size() - 2).getImageBigUrl() != null) {
+                imageLoader.get(dbHearts.get(dbHearts.size() - 2).getImageBigUrl(), ImageLoader.getImageListener(
+                        ivImg2, R.mipmap.default_live_ic, R.mipmap.default_live_ic));
+            }
             ivImg3.setImageResource(R.mipmap.default_live_ic);
         } else if (dbHearts.size() == 1) {
-            imageLoader.get(dbHearts.get(dbHearts.size() - 1).getImageBigUrl(), ImageLoader.getImageListener(
-                    ivImg1, R.mipmap.default_live_ic, R.mipmap.default_live_ic));
+            if (dbHearts.get(dbHearts.size() - 1).getImageBigUrl() != null) {
+                imageLoader.get(dbHearts.get(dbHearts.size() - 1).getImageBigUrl(), ImageLoader.getImageListener(
+                        ivImg1, R.mipmap.default_live_ic, R.mipmap.default_live_ic));
+            }
+            ivImg2.setImageResource(R.mipmap.default_live_ic);
+            ivImg3.setImageResource(R.mipmap.default_live_ic);
+        } else if (dbHearts.size() == 0) {
+            ivImg1.setImageResource(R.mipmap.default_live_ic);
             ivImg2.setImageResource(R.mipmap.default_live_ic);
             ivImg3.setImageResource(R.mipmap.default_live_ic);
         }

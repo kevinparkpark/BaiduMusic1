@@ -1,4 +1,4 @@
-package com.example.kevin.baidumusic.songlist;
+package com.example.kevin.baidumusic.totalfragment;
 
 import android.content.Context;
 import android.view.LayoutInflater;
@@ -16,13 +16,13 @@ import com.litesuits.orm.LiteOrm;
 import java.util.List;
 
 /**
- * Created by kevin on 16/5/30.
+ * Created by kevin on 16/6/14.
  */
-public class SongListCacheAdapter extends BaseAdapter{
+public class MainPopAdapter extends BaseAdapter{
     private List<DBSongListCacheBean> cacheBeen;
     private Context context;
 
-    public SongListCacheAdapter(Context context) {
+    public MainPopAdapter(Context context) {
         this.context = context;
     }
 
@@ -50,7 +50,7 @@ public class SongListCacheAdapter extends BaseAdapter{
     public View getView(final int position, View convertView, ViewGroup parent) {
         MyHolder holder=null;
         if (convertView==null){
-            convertView= LayoutInflater.from(context).inflate(R.layout.item_songlistcache,parent,false);
+            convertView= LayoutInflater.from(context).inflate(R.layout.item_main_popupwindow,parent,false);
             holder=new MyHolder(convertView);
             convertView.setTag(holder);
         }else {

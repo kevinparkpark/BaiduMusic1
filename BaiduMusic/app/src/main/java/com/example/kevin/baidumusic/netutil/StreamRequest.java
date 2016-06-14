@@ -10,6 +10,7 @@ import java.io.InputStream;
 
 /**
  * Created by kevin on 16/5/23.
+ * 歌词读取
  */
 public class StreamRequest extends Request<InputStream> {
 

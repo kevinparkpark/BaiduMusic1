@@ -33,6 +33,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         BmobUser bmobUser=BmobUser.getCurrentUser(this);
 
 //        String user=getIntent().getStringExtra("user");
+        //如果有登录信息直接跳转
         if (bmobUser.getUsername()!=null){
             loginFragment=new LoginFragment();
             getSupportFragmentManager().beginTransaction()
@@ -41,6 +42,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
             bundle.putString("user",bmobUser.getUsername());
             loginFragment.setArguments(bundle);
         }else {
+            //登录界面
             getSupportFragmentManager().beginTransaction()
                     .replace(R.id.framelayout_login,new Login2LogFragment()).commit();
         }

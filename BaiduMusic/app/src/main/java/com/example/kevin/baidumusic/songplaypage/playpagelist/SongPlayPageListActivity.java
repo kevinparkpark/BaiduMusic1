@@ -1,6 +1,7 @@
 package com.example.kevin.baidumusic.songplaypage.playpagelist;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
@@ -14,7 +15,7 @@ import android.widget.Toast;
 import com.example.kevin.baidumusic.R;
 import com.example.kevin.baidumusic.db.DBSongListCacheBean;
 import com.example.kevin.baidumusic.db.LiteOrmSington;
-import com.example.kevin.baidumusic.songlist.SongListCacheAdapter;
+import com.example.kevin.baidumusic.totalfragment.MainPopAdapter;
 import com.example.kevin.baidumusic.util.BroadcastValues;
 import com.litesuits.orm.LiteOrm;
 
@@ -24,7 +25,7 @@ import java.util.List;
  * Created by kevin on 16/6/9.
  */
 public class SongPlayPageListActivity extends AppCompatActivity implements View.OnClickListener {
-    private SongListCacheAdapter adapter;
+    private MainPopAdapter adapter;
     private ListView listView;
     private List<DBSongListCacheBean> cacheBeen;
     private final int MODE_RANDOM = 1;//随机播放
@@ -46,11 +47,16 @@ public class SongPlayPageListActivity extends AppCompatActivity implements View.
         ivMode.setOnClickListener(this);
         tvClear.setOnClickListener(this);
 
-        adapter=new SongListCacheAdapter(this);
+        adapter=new MainPopAdapter(this);
         liteOrm= LiteOrmSington.getInstance().getLiteOrm();
         cacheBeen=liteOrm.query(DBSongListCacheBean.class);
         adapter.setCacheBeen(cacheBeen);
         listView.setAdapter(adapter);
+
+        //读取播放模式
+        SharedPreferences getsp = getSharedPreferences("mode", MODE_PRIVATE);
+        mode = getsp.getInt("mode", 0);
+        ivMode.setImageLevel(mode);
     }
 
     @Override
@@ -63,6 +69,10 @@ public class SongPlayPageListActivity extends AppCompatActivity implements View.
                     mode = 0;
                 }
                 swithPlayMode(mode);
+                SharedPreferences sp = getSharedPreferences("mode", MODE_PRIVATE);
+                SharedPreferences.Editor editor = sp.edit();
+                editor.putInt("mode", mode);
+                editor.commit();
                 break;
             case R.id.tv_songplaypagelist_clear:
                 liteOrm.deleteAll(DBSongListCacheBean.class);

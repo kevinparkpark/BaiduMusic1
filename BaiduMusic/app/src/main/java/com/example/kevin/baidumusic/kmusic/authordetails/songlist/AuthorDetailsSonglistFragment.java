@@ -6,7 +6,6 @@ import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.WindowManager;
 import android.widget.AdapterView;
 import android.widget.ImageView;
 import android.widget.PopupWindow;
@@ -21,8 +20,7 @@ import com.example.kevin.baidumusic.db.DBSongListCacheBean;
 import com.example.kevin.baidumusic.db.LiteOrmSington;
 import com.example.kevin.baidumusic.eventbean.EventGenericBean;
 import com.example.kevin.baidumusic.eventbean.EventPosition;
-import com.example.kevin.baidumusic.musiclibrary.radio.radioplay.songplaylist.RadioPlayListBean;
-import com.example.kevin.baidumusic.musiclibrary.rank.songplay.SongPlayBean;
+import com.example.kevin.baidumusic.service.songplay.SongPlayBean;
 import com.example.kevin.baidumusic.netutil.DownloadUtils;
 import com.example.kevin.baidumusic.netutil.NetListener;
 import com.example.kevin.baidumusic.netutil.NetTool;
@@ -125,6 +123,7 @@ public class AuthorDetailsSonglistFragment extends SecBaseFragment implements On
 
             }
         }, URLValues.AUTHORDETAILS_SONGLIST_TINGUID1 + tingUid + URLValues.AUTHORDETAILS_SONGLIST_TINGUID2);
+        //popupwindow 点击事件
         adapter.setOnClickListener(new AuthorDetailsSonglistOnClickListener() {
             @Override
             public void onAuthorDetailsSonglistClickListener(final int position) {
@@ -132,6 +131,7 @@ public class AuthorDetailsSonglistFragment extends SecBaseFragment implements On
                 popupWindow = new PopupWindow(contentView, ViewGroup.LayoutParams.MATCH_PARENT
                         , ViewGroup.LayoutParams.WRAP_CONTENT);
                 popupWindow.setFocusable(true);
+                popupWindow.setBackgroundDrawable(new BitmapDrawable());
                 popupWindow.setAnimationStyle(R.style.contextMenuAnim);
                 popupWindow.showAtLocation(contentView, Gravity.BOTTOM, 0, 0);
 //                backgroundAlpha(0.4f);
@@ -155,6 +155,7 @@ public class AuthorDetailsSonglistFragment extends SecBaseFragment implements On
                 if (list != null && liteOrm.query(list).size() > 0) {
                     ivHart.setImageResource(R.mipmap.cust_heart_press);
                 }
+                //红心点击事件
                 ivHart.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
@@ -211,6 +212,7 @@ public class AuthorDetailsSonglistFragment extends SecBaseFragment implements On
                         },songlistBeanList.get(position).getSong_id());
                     }
                 });
+                //分享
                 ImageView ivShare= (ImageView) contentView.findViewById(R.id.iv_customer_Share);
                 ivShare.setOnClickListener(new View.OnClickListener() {
                     @Override

@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+<RelativeLayout
+    android:id="@+id/popupwindow_main_relativelayout"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="#66000000">
+
+    <RelativeLayout
+        android:layout_alignParentBottom="true"
+        android:layout_width="match_parent"
+        android:layout_height="442dp"
+        android:background="@android:color/white">
+
+        <TextView
+            android:id="@+id/tv_main_popupwindow_text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_above="@+id/popupwindow_main_listview"
+            android:layout_alignTop="@+id/iv_main_popupwindow_playorder"
+            android:layout_centerHorizontal="true"
+            android:gravity="center"
+            android:text="正在播放列表" />
+
+        <TextView
+            android:id="@+id/tv_main_popupwindow_clear"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_above="@+id/popupwindow_main_listview"
+            android:layout_alignParentEnd="true"
+            android:layout_alignTop="@+id/tv_main_popupwindow_text"
+            android:gravity="center"
+            android:text="全部清空" />
+
+        <ImageView
+            android:id="@+id/iv_main_popupwindow_playorder"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_above="@+id/popupwindow_main_listview"
+            android:layout_alignParentStart="true"
+            android:layout_marginStart="19dp"
+            android:src="@drawable/play_mode_level" />
+
+        <ListView
+            android:id="@+id/popupwindow_main_listview"
+            android:layout_width="match_parent"
+            android:layout_height="400dp"
+            android:layout_alignParentBottom="true"
+            android:layout_alignParentStart="true">
+
+        </ListView>
+    </RelativeLayout>
+</RelativeLayout>
+</LinearLayout>
