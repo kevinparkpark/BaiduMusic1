@@ -2,15 +2,20 @@ package com.example.kevin.baidumusic;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Rect;
 import android.graphics.drawable.BitmapDrawable;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.util.DisplayMetrics;
+import android.view.Display;
 import android.view.Gravity;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.WindowManager;
 import android.widget.AdapterView;
+import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.PopupWindow;
@@ -73,6 +78,7 @@ public class MainActivity extends AppCompatActivity implements MyFragment.MyToLo
     private final int MODE_LOOP = 0;//列表循环
     private int mode = 0;//播放方式
     private ImageView ivMode;
+    private FrameLayout frameLayout;
 
     public void setSonglistCacheIsCreated(boolean songlistCacheIsCreated) {
         this.songlistCacheIsCreated = songlistCacheIsCreated;
@@ -87,6 +93,8 @@ public class MainActivity extends AppCompatActivity implements MyFragment.MyToLo
         //启动服务
         startIntent = new Intent(this, MediaPlayService.class);
         startService(startIntent);
+
+        frameLayout= (FrameLayout) findViewById(R.id.framelayout_main);
 
         ivPlay = (ImageView) findViewById(R.id.iv_main_play);
         ivSongImage = (ImageView) findViewById(R.id.iv_main_song_image);
@@ -128,13 +136,6 @@ public class MainActivity extends AppCompatActivity implements MyFragment.MyToLo
         ivSongListCache.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-//                if (!songlistCacheIsCreated) {
-//                    getSupportFragmentManager().beginTransaction().hide(totalFragment).add(R.id.framelayout_main, new SongListCacheFragment())
-//                            .addToBackStack(null).commit();
-//                    songlistCacheIsCreated = true;
-//                }else {
-//                    showTitleFragment();
-//                }
                 showSongListCache();
             }
         });
@@ -316,17 +317,26 @@ public class MainActivity extends AppCompatActivity implements MyFragment.MyToLo
         }
         return super.onKeyDown(keyCode, event);
     }
+
     //popupwindow songlistcache
     private void showSongListCache() {
-
+        //获取屏幕高度
+        WindowManager windowManager = getWindowManager();
+        Display display = windowManager.getDefaultDisplay();
+        DisplayMetrics displayMetrics = new DisplayMetrics();
+        display.getMetrics(displayMetrics);
+        //获取通知栏高度
+        Rect outRect = new Rect();
+        getWindow().getDecorView().getWindowVisibleDisplayFrame(outRect);
 
         View contentView=LayoutInflater.from(this).inflate(R.layout.popupwindow_main,null);
         popupWindow=new PopupWindow(contentView,ViewGroup.LayoutParams.MATCH_PARENT
-        ,ViewGroup.LayoutParams.WRAP_CONTENT);
+        ,displayMetrics.heightPixels-linearLayoutMainPlaylist.getLayoutParams().height-outRect.top);
         popupWindow.setFocusable(true);
+
         popupWindow.setBackgroundDrawable(new BitmapDrawable());
         popupWindow.setAnimationStyle(R.style.contextMenuAnim);
-        popupWindow.showAtLocation(contentView,Gravity.BOTTOM,0,0);
+        popupWindow.showAtLocation(frameLayout,Gravity.TOP,0,0);
 
         ListView popListView= (ListView) contentView.findViewById(R.id.popupwindow_main_listview);
         TextView tvClear= (TextView) contentView.findViewById(R.id.tv_main_popupwindow_clear);
