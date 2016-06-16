@@ -36,7 +36,7 @@ public class RadioPlayFragment extends BaseFragment{
 
     @Override
     protected void initData() {
-        String url=getArguments().getString("url");
+        String url=getArguments().getString(context.getString(R.string.radioplay_url));
         adapter=new RadioPlayRecyclerAdapter(context);
         GridLayoutManager manager=new GridLayoutManager(context,3);
         manager.setOrientation(GridLayoutManager.VERTICAL);
@@ -56,8 +56,8 @@ public class RadioPlayFragment extends BaseFragment{
                     @Override
                     public void onRadioPlayRecyclerViewCliclListener(int position) {
                         Intent intent=new Intent(getActivity(),RadioPlayListActivity.class);
-                        intent.putExtra("sceneid",resultBeanList.get(position).getScene_id());
-                        intent.putExtra("sceneName",resultBeanList.get(position).getScene_name());
+                        intent.putExtra(context.getString(R.string.sceneid),resultBeanList.get(position).getScene_id());
+                        intent.putExtra(context.getString(R.string.scenename),resultBeanList.get(position).getScene_name());
                         startActivity(intent);
                     }
                 });

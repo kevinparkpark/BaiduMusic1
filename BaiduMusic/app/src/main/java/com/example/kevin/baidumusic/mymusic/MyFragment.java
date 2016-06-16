@@ -1,5 +1,9 @@
 package com.example.kevin.baidumusic.mymusic;
 
+import android.content.BroadcastReceiver;
+import android.content.Context;
+import android.content.Intent;
+import android.content.IntentFilter;
 import android.util.Log;
 import android.view.View;
 import android.widget.RelativeLayout;
@@ -10,6 +14,7 @@ import com.example.kevin.baidumusic.R;
 import com.example.kevin.baidumusic.db.DBHeart;
 import com.example.kevin.baidumusic.db.DBSongPlayListBean;
 import com.example.kevin.baidumusic.db.LiteOrmSington;
+import com.example.kevin.baidumusic.util.BroadcastValues;
 import com.example.kevin.baidumusic.util.LocalMusic;
 import com.example.kevin.baidumusic.util.MusicUtils;
 import com.litesuits.orm.LiteOrm;
@@ -24,6 +29,7 @@ public class MyFragment extends BaseFragment implements View.OnClickListener {
     private RelativeLayout rllMyLocalMusic,rllLatelyPlaylist,rllHeartMore;
     private TextView tvDownloadCount,tvLatelyPlaylistCount,tvHeartCount;
     private List<LocalMusic> musicList;
+    private LiteOrm liteOrm;
 
     @Override
     public int setlayout() {
@@ -42,20 +48,21 @@ public class MyFragment extends BaseFragment implements View.OnClickListener {
 
     @Override
     protected void initData() {
+
         rllMyLocalMusic.setOnClickListener(this);
         rllLatelyPlaylist.setOnClickListener(this);
         rllHeartMore.setOnClickListener(this);
         //本地歌曲
         musicList=new ArrayList<>();
         MusicUtils.scanMusic(context,musicList);
-        tvDownloadCount.setText("共"+musicList.size()+"首");
+        tvDownloadCount.setText(context.getString(R.string.total)+musicList.size()+context.getString(R.string.song));
         //最近播放列表
-        LiteOrm liteOrm= LiteOrmSington.getInstance().getLiteOrm();
+        liteOrm= LiteOrmSington.getInstance().getLiteOrm();
         List<DBSongPlayListBean> dbSongPlayListBeen=liteOrm.query(DBSongPlayListBean.class);
-        tvLatelyPlaylistCount.setText("共"+dbSongPlayListBeen.size()+"首");
+        tvLatelyPlaylistCount.setText(context.getString(R.string.total)+dbSongPlayListBeen.size()+context.getString(R.string.song));
         //红心列表
         List<DBHeart> dbHearts=liteOrm.query(DBHeart.class);
-        tvHeartCount.setText(dbHearts.size()+"首");
+        tvHeartCount.setText(dbHearts.size()+context.getString(R.string.song));
     }
 
     @Override
@@ -84,5 +91,10 @@ public class MyFragment extends BaseFragment implements View.OnClickListener {
     }
     public interface HeartSongListOnClick{
         void onHeartSongListClick();
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
     }
 }

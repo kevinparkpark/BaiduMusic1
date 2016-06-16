@@ -4,28 +4,28 @@
     android:layout_height="match_parent"
     android:id="@+id/framelauout_raidoplay_activity">
     <LinearLayout
-        android:background="#1fb5fc"
+        android:background="@color/radio"
         android:orientation="vertical"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
 <android.support.design.widget.TabLayout
-    android:background="#1fb5fc"
+    android:background="@color/radio"
     android:id="@+id/radioplay_tablayout"
     android:layout_width="match_parent"
     android:layout_height="wrap_content">
 
 </android.support.design.widget.TabLayout>
     <android.support.v4.view.ViewPager
-        android:background="#1fb5fc"
+        android:background="@color/radio"
         android:id="@+id/radioplay_viewpager"
         android:layout_width="match_parent"
-        android:layout_height="550dp">
+        android:layout_height="@dimen/five_five_zero_dp">
 
     </android.support.v4.view.ViewPager>
         <ImageView
             android:id="@+id/iv_activity_radioplay_back"
-            android:background="#1fb5fc"
+            android:background="@color/radio"
             android:src="@mipmap/bt_sceneplay_close"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"

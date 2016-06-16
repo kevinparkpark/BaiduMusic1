@@ -6,5 +6,9 @@
     <color name="maincolor">#54B0E9</color>
     <color name="white">#ffffff</color>
     <color name="radionormal">#5fd0fd</color>
+    <color name="radio">#1fb5fc</color>
+    <color name="songplaylistpage">#666666</color>
+    <color name="customer_dialog">#66000000</color>
+    <color name="authordetails">#29b2ef</color>
 
 </resources>

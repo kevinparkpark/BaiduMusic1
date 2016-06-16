@@ -22,25 +22,25 @@
                 <ImageView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="5dp"
+                    android:layout_marginTop="@dimen/five_dp"
                     android:src="@mipmap/songmenu_image2" />
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="6dp"
-                    android:text="热门歌手" />
+                    android:layout_marginTop="@dimen/six_dp"
+                    android:text="@string/hotauthor" />
 
                 <TextView
-                    android:layout_width="250dp"
+                    android:layout_width="@dimen/two_five_zero_dp"
                     android:layout_height="wrap_content" />
 
                 <TextView
                     android:id="@+id/k_more"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="9dp"
-                    android:text="更多" />
+                    android:layout_marginTop="@dimen/nine_dp"
+                    android:text="@string/more" />
 
                 <ImageView
                     android:layout_width="match_parent"
@@ -56,9 +56,9 @@
                 <android.support.v4.view.ViewPager
                     android:id="@+id/k_viewpager"
                     android:layout_width="match_parent"
-                    android:layout_height="200dp"
-                    android:layout_marginLeft="50dp"
-                    android:layout_marginRight="50dp"
+                    android:layout_height="@dimen/two_zero_zero_dp"
+                    android:layout_marginLeft="@dimen/five_zero_dp"
+                    android:layout_marginRight="@dimen/five_zero_dp"
                     android:clipChildren="false">
 
                 </android.support.v4.view.ViewPager>
@@ -68,7 +68,7 @@
                 android:id="@+id/kmusic_viewgroup"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="18dp"
+                android:layout_marginBottom="@dimen/one_eight_dp"
                 android:gravity="center_horizontal"
                 android:orientation="horizontal">
 
@@ -83,16 +83,16 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginLeft="20dp"
-                    android:layout_marginTop="8dp"
-                    android:text="华语男歌手" />
+                    android:layout_marginLeft="@dimen/two_zero_dp"
+                    android:layout_marginTop="@dimen/eight_dp"
+                    android:text="@string/cn_man_author" />
 
                 <ImageView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_alignParentEnd="true"
                     android:layout_alignParentTop="true"
-                    android:layout_marginRight="10dp"
+                    android:layout_marginRight="@dimen/tendp"
                     android:src="@mipmap/ic_songlist_detail_nor" />
             </RelativeLayout>
 
@@ -105,16 +105,16 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginLeft="20dp"
-                    android:layout_marginTop="8dp"
-                    android:text="华语女歌手" />
+                    android:layout_marginLeft="@dimen/two_zero_dp"
+                    android:layout_marginTop="@dimen/eight_dp"
+                    android:text="@string/cn_wo_author" />
 
                 <ImageView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_alignParentEnd="true"
                     android:layout_alignParentTop="true"
-                    android:layout_marginRight="10dp"
+                    android:layout_marginRight="@dimen/tendp"
                     android:src="@mipmap/ic_songlist_detail_nor" />
             </RelativeLayout>
 
@@ -127,23 +127,23 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginLeft="20dp"
-                    android:layout_marginTop="8dp"
-                    android:text="华语组合" />
+                    android:layout_marginLeft="@dimen/two_zero_dp"
+                    android:layout_marginTop="@dimen/eight_dp"
+                    android:text="@string/cn_group" />
 
                 <ImageView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_alignParentEnd="true"
                     android:layout_alignParentTop="true"
-                    android:layout_marginRight="10dp"
+                    android:layout_marginRight="@dimen/tendp"
                     android:src="@mipmap/ic_songlist_detail_nor" />
 
             </RelativeLayout>
 
             <Button
                 android:layout_width="match_parent"
-                android:layout_height="1dp"
+                android:layout_height="@dimen/one_dp"
                 android:background="@android:color/darker_gray" />
 
             <RelativeLayout
@@ -155,16 +155,16 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginLeft="20dp"
-                    android:layout_marginTop="8dp"
-                    android:text="欧美男歌手" />
+                    android:layout_marginLeft="@dimen/two_zero_dp"
+                    android:layout_marginTop="@dimen/eight_dp"
+                    android:text="@string/eu_man_author" />
 
                 <ImageView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_alignParentEnd="true"
                     android:layout_alignParentTop="true"
-                    android:layout_marginRight="10dp"
+                    android:layout_marginRight="@dimen/tendp"
                     android:src="@mipmap/ic_songlist_detail_nor" />
             </RelativeLayout>
 
@@ -177,16 +177,16 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginLeft="20dp"
-                    android:layout_marginTop="8dp"
-                    android:text="欧美女歌手" />
+                    android:layout_marginLeft="@dimen/two_zero_dp"
+                    android:layout_marginTop="@dimen/eight_dp"
+                    android:text="@string/eu_wo_author" />
 
                 <ImageView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_alignParentEnd="true"
                     android:layout_alignParentTop="true"
-                    android:layout_marginRight="10dp"
+                    android:layout_marginRight="@dimen/tendp"
                     android:src="@mipmap/ic_songlist_detail_nor" />
             </RelativeLayout>
 
@@ -199,22 +199,22 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginLeft="20dp"
-                    android:layout_marginTop="8dp"
-                    android:text="欧美组合" />
+                    android:layout_marginLeft="@dimen/two_zero_dp"
+                    android:layout_marginTop="@dimen/eight_dp"
+                    android:text="@string/eu_group" />
 
                 <ImageView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_alignParentEnd="true"
                     android:layout_alignParentTop="true"
-                    android:layout_marginRight="10dp"
+                    android:layout_marginRight="@dimen/tendp"
                     android:src="@mipmap/ic_songlist_detail_nor" />
             </RelativeLayout>
 
             <Button
                 android:layout_width="match_parent"
-                android:layout_height="1dp"
+                android:layout_height="@dimen/one_dp"
                 android:background="@android:color/darker_gray" />
 
             <RelativeLayout
@@ -226,16 +226,16 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginLeft="20dp"
-                    android:layout_marginTop="8dp"
-                    android:text="韩国男歌手" />
+                    android:layout_marginLeft="@dimen/two_zero_dp"
+                    android:layout_marginTop="@dimen/eight_dp"
+                    android:text="@string/kr_man_author" />
 
                 <ImageView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_alignParentEnd="true"
                     android:layout_alignParentTop="true"
-                    android:layout_marginRight="10dp"
+                    android:layout_marginRight="@dimen/tendp"
                     android:src="@mipmap/ic_songlist_detail_nor" />
             </RelativeLayout>
 
@@ -248,16 +248,16 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginLeft="20dp"
-                    android:layout_marginTop="8dp"
-                    android:text="韩国女歌手" />
+                    android:layout_marginLeft="@dimen/two_zero_dp"
+                    android:layout_marginTop="@dimen/eight_dp"
+                    android:text="@string/kr_wo_author" />
 
                 <ImageView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_alignParentEnd="true"
                     android:layout_alignParentTop="true"
-                    android:layout_marginRight="10dp"
+                    android:layout_marginRight="@dimen/tendp"
                     android:src="@mipmap/ic_songlist_detail_nor" />
             </RelativeLayout>
 
@@ -270,22 +270,22 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginLeft="20dp"
-                    android:layout_marginTop="8dp"
-                    android:text="韩国组合" />
+                    android:layout_marginLeft="@dimen/two_zero_dp"
+                    android:layout_marginTop="@dimen/eight_dp"
+                    android:text="@string/kr_group" />
 
                 <ImageView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_alignParentEnd="true"
                     android:layout_alignParentTop="true"
-                    android:layout_marginRight="10dp"
+                    android:layout_marginRight="@dimen/tendp"
                     android:src="@mipmap/ic_songlist_detail_nor" />
             </RelativeLayout>
 
             <Button
                 android:layout_width="match_parent"
-                android:layout_height="1dp"
+                android:layout_height="@dimen/one_dp"
                 android:background="@android:color/darker_gray" />
 
             <RelativeLayout
@@ -297,16 +297,16 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginLeft="20dp"
-                    android:layout_marginTop="8dp"
-                    android:text="日本男歌手" />
+                    android:layout_marginLeft="@dimen/two_zero_dp"
+                    android:layout_marginTop="@dimen/eight_dp"
+                    android:text="@string/jp_man_author" />
 
                 <ImageView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_alignParentEnd="true"
                     android:layout_alignParentTop="true"
-                    android:layout_marginRight="10dp"
+                    android:layout_marginRight="@dimen/tendp"
                     android:src="@mipmap/ic_songlist_detail_nor" />
             </RelativeLayout>
 
@@ -319,16 +319,16 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginLeft="20dp"
-                    android:layout_marginTop="8dp"
-                    android:text="日本女歌手" />
+                    android:layout_marginLeft="@dimen/two_zero_dp"
+                    android:layout_marginTop="@dimen/eight_dp"
+                    android:text="@string/jp_wo_author" />
 
                 <ImageView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_alignParentEnd="true"
                     android:layout_alignParentTop="true"
-                    android:layout_marginRight="10dp"
+                    android:layout_marginRight="@dimen/tendp"
                     android:src="@mipmap/ic_songlist_detail_nor" />
             </RelativeLayout>
 
@@ -341,22 +341,22 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginLeft="20dp"
-                    android:layout_marginTop="8dp"
-                    android:text="日本组合" />
+                    android:layout_marginLeft="@dimen/two_zero_dp"
+                    android:layout_marginTop="@dimen/eight_dp"
+                    android:text="@string/jp_group" />
 
                 <ImageView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_alignParentEnd="true"
                     android:layout_alignParentTop="true"
-                    android:layout_marginRight="10dp"
+                    android:layout_marginRight="@dimen/tendp"
                     android:src="@mipmap/ic_songlist_detail_nor" />
             </RelativeLayout>
 
             <Button
                 android:layout_width="match_parent"
-                android:layout_height="1dp"
+                android:layout_height="@dimen/one_dp"
                 android:background="@android:color/darker_gray" />
 
             <RelativeLayout
@@ -368,16 +368,16 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginLeft="20dp"
-                    android:layout_marginTop="8dp"
-                    android:text="其他歌手" />
+                    android:layout_marginLeft="@dimen/two_zero_dp"
+                    android:layout_marginTop="@dimen/eight_dp"
+                    android:text="@string/other_author" />
 
                 <ImageView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_alignParentEnd="true"
                     android:layout_alignParentTop="true"
-                    android:layout_marginRight="10dp"
+                    android:layout_marginRight="@dimen/tendp"
                     android:src="@mipmap/ic_songlist_detail_nor" />
             </RelativeLayout>
         </LinearLayout>

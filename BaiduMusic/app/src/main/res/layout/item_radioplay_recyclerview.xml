@@ -7,15 +7,15 @@
     android:layout_margin="10dp"
     android:orientation="vertical"
     android:background="@drawable/shape_item_radioplay"
-    android:layout_width="80dp"
-    android:layout_height="80dp">
+    android:layout_width="@dimen/eight_zero_dp"
+    android:layout_height="@dimen/eight_zero_dp">
     <ImageView
         android:id="@+id/iv_item_radioplay_recyclerview"
         android:scaleType="fitXY"
         android:layout_gravity="center"
         android:src="@mipmap/radioplay_item_img"
-        android:layout_width="50dp"
-        android:layout_height="50dp"
+        android:layout_width="@dimen/five_zero_dp"
+        android:layout_height="@dimen/five_zero_dp"
         android:layout_centerVertical="true"
         android:layout_centerHorizontal="true" />
     <LinearLayout
@@ -26,7 +26,7 @@
         android:textColor="@android:color/white"
         android:id="@+id/tv_item_radioplay_recyclerview"
         android:gravity="center"
-        android:text="70年代"
+        android:text="@string/radio_details"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@+id/iv_item_radioplay_recyclerview"

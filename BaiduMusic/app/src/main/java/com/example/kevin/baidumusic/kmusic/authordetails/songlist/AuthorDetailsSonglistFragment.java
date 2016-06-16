@@ -73,10 +73,10 @@ public class AuthorDetailsSonglistFragment extends SecBaseFragment implements On
 
     @Override
     protected void initData() {
-        tingUid = getArguments().getString("tinguid");
-        author = getArguments().getString("author");
-        country = getArguments().getString("country");
-        imgUrl = getArguments().getString("imgurl");
+        tingUid = getArguments().getString(context.getString(R.string.tinguid));
+        author = getArguments().getString(context.getString(R.string.author));
+        country = getArguments().getString(context.getString(R.string.country));
+        imgUrl = getArguments().getString(context.getString(R.string.imgurl));
 
         final LiteOrm liteOrm = LiteOrmSington.getInstance().getLiteOrm();
         headView();
@@ -165,7 +165,7 @@ public class AuthorDetailsSonglistFragment extends SecBaseFragment implements On
                                     songlistBeanList.get(position).getAuthor(), songlistBeanList.get(position).getPic_small()
                                     , songlistBeanList.get(position).getPic_big(), songlistBeanList.get(position).getSong_id()));
                             popupWindow.dismiss();
-                            Toast.makeText(context, "已添加到我喜欢的音乐", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(context, R.string.add_to_heart, Toast.LENGTH_SHORT).show();
                         } else {
                             ivHart.setImageResource(R.mipmap.cust_dialog_hart);
 
@@ -177,7 +177,7 @@ public class AuthorDetailsSonglistFragment extends SecBaseFragment implements On
                                 liteOrm.delete(dbHearts);
                             }
                             popupWindow.dismiss();
-                            Toast.makeText(context, "已取消喜欢的音乐", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(context, R.string.del_heart, Toast.LENGTH_SHORT).show();
                         }
                     }
                 });
@@ -199,7 +199,6 @@ public class AuthorDetailsSonglistFragment extends SecBaseFragment implements On
                                 String songUrl=songPlayBean.getBitrate().getFile_link();
                                 String lrc=songPlayBean.getSonginfo().getLrclink();
                                 String songTitle = songPlayBean.getSonginfo().getTitle();
-                                Log.d("HeartSongListFragment","-------"+ songUrl);
                                 //下载歌曲
                                 DownloadUtils downloadUtils=new DownloadUtils(songUrl,songTitle,lrc);
                                 popupWindow.dismiss();

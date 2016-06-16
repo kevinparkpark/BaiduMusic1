@@ -66,8 +66,8 @@ public class RadioPlayListActivity extends AppCompatActivity {
     }
 
     public void initData() {
-        String sceneId = getIntent().getStringExtra("sceneid");
-        String sceneName = getIntent().getStringExtra("sceneName");
+        String sceneId = getIntent().getStringExtra(getString(R.string.sceneid));
+        String sceneName = getIntent().getStringExtra(getString(R.string.scenename));
         tvScene.setText(sceneName);
 
         adapter = new RadioPlayListPagerAdapter(this);

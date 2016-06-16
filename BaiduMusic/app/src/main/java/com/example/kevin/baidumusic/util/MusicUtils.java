@@ -5,10 +5,13 @@ import android.database.Cursor;
 import android.provider.MediaStore;
 import android.util.Log;
 
+import com.example.kevin.baidumusic.R;
+
 import java.util.List;
 
 /**
  * Created by kevin on 16/6/4.
+ * 音乐工具类
  */
 public class MusicUtils {
 
@@ -31,8 +34,8 @@ public class MusicUtils {
                 long id = cursor.getLong(cursor.getColumnIndex(MediaStore.Audio.Media._ID));
                 String title = cursor.getString((cursor.getColumnIndex(MediaStore.Audio.Media.TITLE)));
                 String artist = cursor.getString(cursor.getColumnIndex(MediaStore.Audio.Media.ARTIST));
-                String unknown = "未知";
-                artist = artist.equals("<unknown>") ? unknown : artist;
+                String unknown = context.getString(R.string.unknown);
+                artist = artist.equals(context.getString(R.string.unknown_equals)) ? unknown : artist;
                 String album = cursor.getString((cursor.getColumnIndex(MediaStore.Audio.Media.ALBUM)));
                 long duration = cursor.getLong(cursor.getColumnIndex(MediaStore.Audio.Media.DURATION));
                 String url = cursor.getString(cursor.getColumnIndex(MediaStore.Audio.Media.DATA));

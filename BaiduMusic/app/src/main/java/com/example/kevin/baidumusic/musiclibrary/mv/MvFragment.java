@@ -77,7 +77,7 @@ public class MvFragment extends BaseFragment {
                 final Gson gson = new Gson();
                 final MvBean mvBean = gson.fromJson(result, MvBean.class);
                 if (mvBean.getResult() == null) {
-                    Toast.makeText(context, "网络有问题", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(context, R.string.net_error, Toast.LENGTH_SHORT).show();
                 } else {
                     mvListBeen.addAll(mvBean.getResult().getMv_list());
                     adapter.setMvListBeen(mvListBeen);
@@ -86,7 +86,7 @@ public class MvFragment extends BaseFragment {
                     ptrClassicFrameLayout.refreshComplete();
                     ptrClassicFrameLayout.loadMoreComplete(true);
                     if (page > 1) {
-                        Toast.makeText(context, "加载完毕", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(context, R.string.load_complete, Toast.LENGTH_SHORT).show();
                     }
 
                     recyclerAdapterWithHF.setOnItemClickListener(new RecyclerAdapterWithHF.OnItemClickListener() {
@@ -102,7 +102,7 @@ public class MvFragment extends BaseFragment {
                                     Gson gson1 = new Gson();
                                     MvPlayBean mvPlayBean = gson1.fromJson(result, MvPlayBean.class);
                                     String str = mvPlayBean.getResult().getVideo_info().getSourcepath();
-                                    int indexOf = str.indexOf("http://www.yinyuetai.com/video/");
+                                    int indexOf = str.indexOf(context.getString(R.string.www_yinyuetai));
                                     String substring=str.substring(31,str.length()-1);
 //                                    String substring = str.substring(indexOf+1);
 //                                    Uri uri = Uri.parse("http://www.yinyuetai.com/mv/video-url/"+substring);
@@ -110,7 +110,7 @@ public class MvFragment extends BaseFragment {
 //                                    intent.setDataAndType(uri,"video/3gp");
 //                                    startActivity(intent);
                                     Intent intent=new Intent(MyApp.context,MvPlayActivity.class);
-                                    intent.putExtra("url","http://www.yinyuetai.com/mv/video-url/"+substring);
+                                    intent.putExtra(context.getString(R.string.url),context.getString(R.string.www_yinyuetai_url)+substring);
                                     startActivity(intent);
 
                                 }

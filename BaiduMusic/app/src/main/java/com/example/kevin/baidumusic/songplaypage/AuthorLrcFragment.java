@@ -18,9 +18,10 @@ import java.io.File;
 /**
  * Created by kevin on 16/5/26.
  */
-public class AuthorLrcFragment extends BaseFragment{
+public class AuthorLrcFragment extends BaseFragment {
     private LrcView lrcViewSingle;
     private LrcView lrcViewFull;
+
     @Override
     public int setlayout() {
         return R.layout.fragment_authorlrc;
@@ -28,25 +29,28 @@ public class AuthorLrcFragment extends BaseFragment{
 
     @Override
     protected void initView(View view) {
-    lrcViewSingle= (LrcView) view.findViewById(R.id.lrcview);
+        lrcViewSingle = (LrcView) view.findViewById(R.id.lrcview);
     }
 
     @Override
     protected void initData() {
-        EventBus.getDefault().register(this);
-
+        if (EventBus.getDefault().isRegistered(false)) {
+            EventBus.getDefault().register(this);
+        }
     }
 
-    public void loadLrc(String lrc){
+    public void loadLrc(String lrc) {
         lrcViewSingle.loadLrc(lrc);
     }
-    public void onPublish(int progress){
-        if (lrcViewSingle.hasLrc()){
+
+    public void onPublish(int progress) {
+        if (lrcViewSingle.hasLrc()) {
             lrcViewSingle.updateTime(progress);
         }
     }
+
     @Subscribe(threadMode = ThreadMode.MAIN)
-    public void SeeBarControl(EventProgressBean bean){
+    public void SeeBarControl(EventProgressBean bean) {
 
         loadLrc(bean.getLrc());
         onPublish(bean.getCurrent());
@@ -59,4 +63,10 @@ public class AuthorLrcFragment extends BaseFragment{
 //        }
 //        return lrcFilePath;
 //    }
+
+    @Override
+    public void onDestroy() {
+        EventBus.getDefault().unregister(this);
+        super.onDestroy();
+    }
 }

@@ -18,7 +18,7 @@
         android:background="@android:color/white"
         android:id="@+id/linearLayout_main_playlist"
         android:layout_width="match_parent"
-        android:layout_height="50dp"
+        android:layout_height="@dimen/five_zero_dp"
         android:layout_alignParentBottom="true"
         android:layout_alignParentStart="true"
         android:orientation="horizontal"
@@ -26,7 +26,7 @@
 
         <ImageView
             android:id="@+id/iv_main_song_image"
-            android:layout_width="60dp"
+            android:layout_width="@dimen/six_zero_dp"
             android:layout_height="match_parent"
             android:src="@mipmap/yuan" />
 
@@ -43,7 +43,7 @@
             android:layout_height="match_parent"
             android:layout_weight="0.23"
             android:src="@mipmap/bt_minibar_playinglist_normal"
-            android:layout_marginEnd="22dp"
+            android:layout_marginEnd="@dimen/two_two_dp"
             android:layout_alignParentTop="true"
             android:layout_toStartOf="@+id/iv_main_play" />
 
@@ -53,7 +53,7 @@
             android:layout_height="match_parent"
             android:layout_weight="0.25"
             android:src="@mipmap/bt_minibar_play_normal"
-            android:layout_marginEnd="22dp"
+            android:layout_marginEnd="@dimen/two_two_dp"
             android:layout_alignParentTop="true"
             android:layout_toStartOf="@+id/iv_main_next" />
 
@@ -63,27 +63,31 @@
             android:layout_height="match_parent"
             android:layout_weight="0.25"
             android:src="@mipmap/bt_minibar_next_normal"
-            android:layout_marginEnd="24dp"
+            android:layout_marginEnd="@dimen/two_four_dp"
             android:layout_alignParentTop="true"
             android:layout_alignParentEnd="true" />
 
         <TextView
+            android:maxLength="15"
+            android:maxLines="1"
             android:layout_marginTop="5dp"
             android:id="@+id/tv_main_song_title"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:text="百度音乐 听到极致"
-            android:textSize="15sp"
+            android:text="@string/baidumusiclistener"
+            android:textSize="@dimen/one_five_dp"
             android:layout_alignParentTop="true"
             android:layout_toEndOf="@+id/iv_main_song_image" />
 
         <TextView
+            android:maxLength="15"
+            android:maxLines="1"
             android:id="@+id/tv_main_song_author"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:text="T-ara"
+            android:text="@string/t_ara"
             android:layout_below="@+id/tv_main_song_title"
             android:layout_toEndOf="@+id/iv_main_song_image" />
     </RelativeLayout>

@@ -127,8 +127,8 @@ public class MediaPlayService extends Service {
 
         liteOrm = LiteOrmSington.getInstance().getLiteOrm();
         List<DBSongListCacheBean> dbSongListCacheBeen = liteOrm.query(DBSongListCacheBean.class);
-        SharedPreferences getsp = getSharedPreferences("songposition", MODE_PRIVATE);
-        detailsPosition = getsp.getInt("position", 0);
+        SharedPreferences getsp = getSharedPreferences(getString(R.string.songposition), MODE_PRIVATE);
+        detailsPosition = getsp.getInt(getString(R.string.position), 0);
         if (dbSongListCacheBeen.size() != 0) {
             EventBus.getDefault().post(new EventUpDateSongUI(dbSongListCacheBeen.get(detailsPosition).getTitle(),
                     dbSongListCacheBeen.get(detailsPosition).getAuthor(), dbSongListCacheBeen.get(detailsPosition).getImageUrl(),
@@ -193,9 +193,9 @@ public class MediaPlayService extends Service {
                             songAuthor, songTitle, songImageUrl, songImageBigUrl));
                 }
 
-                SharedPreferences sp = getSharedPreferences("songposition", MODE_PRIVATE);
+                SharedPreferences sp = getSharedPreferences(getString(R.string.songposition), MODE_PRIVATE);
                 SharedPreferences.Editor editor = sp.edit();
-                editor.putInt("position", detailsPosition);
+                editor.putInt(getString(R.string.position), detailsPosition);
                 editor.commit();
             }
 
@@ -257,9 +257,9 @@ public class MediaPlayService extends Service {
 
         startPlay(localMusic);
 
-        SharedPreferences sp = getSharedPreferences("songposition", MODE_PRIVATE);
+        SharedPreferences sp = getSharedPreferences(getString(R.string.songposition), MODE_PRIVATE);
         SharedPreferences.Editor editor = sp.edit();
-        editor.putInt("position", detailsPosition);
+        editor.putInt(getString(R.string.position), detailsPosition);
         editor.commit();
     }
 
@@ -379,9 +379,9 @@ public class MediaPlayService extends Service {
                                 songAuthor, songTitle, songImageUrl, songImageBigUrl));
                     }
 
-                    SharedPreferences sp = getSharedPreferences("songposition", MODE_PRIVATE);
+                    SharedPreferences sp = getSharedPreferences(getString(R.string.songposition), MODE_PRIVATE);
                     SharedPreferences.Editor editor = sp.edit();
-                    editor.putInt("position", detailsPosition);
+                    editor.putInt(getString(R.string.position), detailsPosition);
                     editor.commit();
                 }
 
@@ -431,9 +431,9 @@ public class MediaPlayService extends Service {
                             songAuthor, songTitle, songImageUrl, songImageBigUrl));
                 }
 
-                SharedPreferences sp = getSharedPreferences("songposition", MODE_PRIVATE);
+                SharedPreferences sp = getSharedPreferences(getString(R.string.songposition), MODE_PRIVATE);
                 SharedPreferences.Editor editor = sp.edit();
-                editor.putInt("position", detailsPosition);
+                editor.putInt(getString(R.string.position), detailsPosition);
                 editor.commit();
             }
 
@@ -472,7 +472,7 @@ public class MediaPlayService extends Service {
     public void showNotification(String imgUrl, String title, String author, int id) {
         manager = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
         builder = new Notification.Builder(this);
-        builder.setSmallIcon(R.mipmap.yuan).setAutoCancel(true);
+        builder.setSmallIcon(R.mipmap.ic_aboutus_logo).setAutoCancel(true);
         remoteViews = new RemoteViews(getPackageName(), R.layout.remote_view);
 //        remoteViews.setImageViewResource(R.id.iv_remote_img,R.mipmap.yuan);
         remoteViews.setTextViewText(R.id.tv_remote_title, title);
@@ -492,7 +492,6 @@ public class MediaPlayService extends Service {
         remoteViews.setOnClickPendingIntent(R.id.remote_view_linearlayout, remote2ActPendingIntent);
         builder.setContent(remoteViews);
         manager.notify(2016, builder.build());
-        Log.d("MediaPlayService", "---------" + imgUrl);
         if (imgUrl != null && imgUrl.length() > 0) {
             Picasso.with(this).load(imgUrl).into(remoteViews,
                     R.id.iv_remote_img, 2016, builder.build());
@@ -531,7 +530,6 @@ public class MediaPlayService extends Service {
         public void onReceive(Context context, Intent intent) {
             if (detailsPosition > 0) {
                 previous(--detailsPosition);
-                Log.d("ReceivePrevious", "previous" + (detailsPosition));
             }
         }
     }
@@ -567,8 +565,7 @@ public class MediaPlayService extends Service {
 
         @Override
         public void onReceive(Context context, Intent intent) {
-            mode = intent.getIntExtra("mode", 0);
-            Log.d("ReceivePlayListMode", "mode:" + mode);
+            mode = intent.getIntExtra(getString(R.string.mode), 0);
         }
     }
 
@@ -585,12 +582,12 @@ public class MediaPlayService extends Service {
                     if (msg.what == 100) {
                         int result = (int) msg.obj;
                         if (result == 0) {
-                            Toast.makeText(MediaPlayService.this, "下载完成", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(MediaPlayService.this, R.string.download_complete, Toast.LENGTH_SHORT).show();
                         } else if (result == 1) {
-                            Toast.makeText(MediaPlayService.this, "重复下载", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(MediaPlayService.this, R.string.repeat_download, Toast.LENGTH_SHORT).show();
                         }
                     } else {
-                        Toast.makeText(MediaPlayService.this, "开始下载", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(MediaPlayService.this, R.string.download_now, Toast.LENGTH_SHORT).show();
 
                     }
                     return false;
@@ -603,10 +600,10 @@ public class MediaPlayService extends Service {
                 public void run() {
 
                     HttpDownloader httpDownloader = new HttpDownloader();
-                    int result = httpDownloader.download(songUrl, "/music/mp3/", songTitle + ".mp3");
+                    int result = httpDownloader.download(songUrl, getString(R.string.downloadutils_songurl), songTitle
+                            + getString(R.string.download_mp3));
 
                     handler.sendEmptyMessage(0);
-                    Log.d("ReceiveDownload", "开始下载");
 
                     Message msg = new Message();
                     msg.what = 100;
@@ -620,7 +617,8 @@ public class MediaPlayService extends Service {
                 @Override
                 public void run() {
                     HttpDownloader httpDownloader1 = new HttpDownloader();
-                    int reuslt1 = httpDownloader1.download(lrc, "/music/lrc/", songTitle + ".lrc");
+                    int reuslt1 = httpDownloader1.download(lrc, getString(R.string.download_lrc)
+                            , songTitle + getString(R.string.download_lrc_street));
                 }
             }).start();
         }

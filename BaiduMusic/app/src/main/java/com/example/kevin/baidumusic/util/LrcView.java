@@ -29,7 +29,6 @@ import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import javax.xml.transform.stream.StreamResult;
 
 /**
  * 歌词
@@ -143,7 +142,7 @@ public class LrcView extends View {
     public void searchLrc() {
         reset();
 
-        label = "正在搜索歌词";
+        label = getContext().getString(R.string.search_lrc);
         postInvalidate();
     }
 
@@ -151,7 +150,7 @@ public class LrcView extends View {
     public void loadNetLrc(String url) {
         reset();
         if (TextUtils.isEmpty(url)) {
-            label = "暂无歌词";
+            label = getContext().getString(R.string.no_lrc);
             postInvalidate();
             return;
         }
@@ -184,7 +183,7 @@ public class LrcView extends View {
         }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
-                label = "暂无歌词";
+                label = getContext().getString(R.string.no_lrc);
                 postInvalidate();
             }
         });
@@ -198,11 +197,11 @@ public class LrcView extends View {
      */
     public void loadLocalLrc(String path) {
         reset();
-        path = Environment.getExternalStorageDirectory() + "/music/lrc/" + path + ".lrc";
-        Log.d("LrcView", path);
+        path = Environment.getExternalStorageDirectory() + getContext().getString(R.string.music_lrc)
+                + path + getContext().getString(R.string.lrcview_lrc);
 //        Log.d("LrcView", "!new File(path).exists():" + !new File(path).exists());
         if (TextUtils.isEmpty(path) || !new File(path).exists()) {
-            label = "暂无歌词";
+            label = getContext().getString(R.string.no_lrc);
 
             postInvalidate();
             return;
@@ -238,12 +237,10 @@ public class LrcView extends View {
     public void loadLrc(String path) {
         if (path != null) {
             if (!path.equals(temp)) {
-                if (path.length() > 3 && path.substring(0, 4).equals("http")) {
-                    Log.d("LrcView", "if");
+                if (path.length() > 3 && path.substring(0, 4).equals(getContext().getString(R.string.http))) {
                     loadNetLrc(path);
                     temp = path;
                 } else {
-                    Log.d("LrcView", "else");
                     loadLocalLrc(path);
                     temp = path;
                 }

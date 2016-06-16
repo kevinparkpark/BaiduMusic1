@@ -3,9 +3,11 @@ package com.example.kevin.baidumusic.songplaypage;
 import android.view.View;
 import android.widget.ImageView;
 
+import com.android.volley.toolbox.ImageLoader;
 import com.example.kevin.baidumusic.R;
 import com.example.kevin.baidumusic.base.BaseFragment;
 import com.example.kevin.baidumusic.eventbean.EventUpDateSongUI;
+import com.example.kevin.baidumusic.netutil.VolleySingleton;
 import com.squareup.picasso.Picasso;
 
 import org.greenrobot.eventbus.EventBus;
@@ -41,7 +43,10 @@ public class AuthorImgFragment extends BaseFragment{
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void serviceToplaySong(EventUpDateSongUI songUI){
         if (songUI.getImageBigUrl()!=null) {
-            Picasso.with(context).load(songUI.getImageBigUrl()).into(ivAuthorImg);
+            ImageLoader imageLoader= VolleySingleton.getInstance().getImageLoader();
+            imageLoader.get(songUI.getImageBigUrl(),ImageLoader.getImageListener(ivAuthorImg,R.mipmap.yuan,
+                    R.mipmap.yuan));
+//            Picasso.with(context).load(songUI.getImageBigUrl()).into(ivAuthorImg);
         }
     }
 

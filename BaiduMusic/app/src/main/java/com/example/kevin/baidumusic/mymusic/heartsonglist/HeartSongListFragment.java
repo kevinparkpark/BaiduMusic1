@@ -72,7 +72,7 @@ public class HeartSongListFragment extends SecBaseFragment {
         dbHearts = liteOrm.query(DBHeart.class);
         loadImg(dbHearts);
 
-        tvCount.setText(dbHearts.size() + "首");
+        tvCount.setText(dbHearts.size() + context.getString(R.string.song));
 
         adapter.setDbHearts(dbHearts);
         listView.setAdapter(adapter);
@@ -135,7 +135,7 @@ public class HeartSongListFragment extends SecBaseFragment {
                                     dbHearts.get(position).getAuthor(), dbHearts.get(position).getImageUrl()
                                     , dbHearts.get(position).getImageBigUrl(), dbHearts.get(position).getSongId()));
                             popupWindow.dismiss();
-                            Toast.makeText(context, "已添加到我喜欢的音乐", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(context, context.getString(R.string.add_to_heart), Toast.LENGTH_SHORT).show();
                         } else {
                             ivHart.setImageResource(R.mipmap.cust_dialog_hart);
 
@@ -149,7 +149,7 @@ public class HeartSongListFragment extends SecBaseFragment {
                             List<DBHeart> dbHeartList = liteOrm.query(DBHeart.class);
                             loadImg(dbHeartList);
                             adapter.setDbHearts(dbHeartList);
-                            Toast.makeText(context, "已取消喜欢的音乐", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(context, context.getString(R.string.del_heart), Toast.LENGTH_SHORT).show();
                             popupWindow.dismiss();
                         }
                     }

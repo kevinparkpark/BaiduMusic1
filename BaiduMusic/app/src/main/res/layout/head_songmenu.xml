@@ -11,14 +11,14 @@
 
     <TextView
         android:id="@+id/tv_songmenu_list"
-        android:layout_marginLeft="5dp"
-        android:textSize="20sp"
-        android:text="全部音乐"
+        android:layout_marginLeft="@dimen/five_dp"
+        android:textSize="@dimen/two_zero_sp"
+        android:text="@string/all_music"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content" />
 
     <ImageView
-        android:layout_marginLeft="5dp"
+        android:layout_marginLeft="@dimen/five_dp"
         android:src="@mipmap/songmenu_image3"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content" />

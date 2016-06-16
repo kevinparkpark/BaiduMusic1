@@ -1,6 +1,9 @@
-package com.example.kevin.baidumusic.totalfragment;
+package com.example.kevin.baidumusic.totalfragment.popsonglist;
 
+import android.content.BroadcastReceiver;
 import android.content.Context;
+import android.content.Intent;
+import android.graphics.Color;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -18,11 +21,17 @@ import java.util.List;
 /**
  * Created by kevin on 16/6/14.
  */
-public class MainPopAdapter extends BaseAdapter{
+public class PopSonglistAdapter extends BaseAdapter{
     private List<DBSongListCacheBean> cacheBeen;
     private Context context;
+    private int click = -1;
 
-    public MainPopAdapter(Context context) {
+    public void setClick(int click) {
+        this.click = click;
+        notifyDataSetChanged();
+    }
+
+    public PopSonglistAdapter(Context context) {
         this.context = context;
     }
 
@@ -68,15 +77,27 @@ public class MainPopAdapter extends BaseAdapter{
             }
         });
 
+        if (position==click){
+            holder.ivVisi.setVisibility(View.VISIBLE);
+            holder.tvTitle.setTextColor(Color.parseColor("#1fb5fc"));
+            holder.tvAuthor.setTextColor(Color.parseColor("#1fb5fc"));
+        }else {
+            holder.ivVisi.setVisibility(View.GONE);
+            holder.tvTitle.setTextColor(Color.parseColor("#737373"));
+            holder.tvAuthor.setTextColor(Color.parseColor("#737373"));
+        }
+
         return convertView;
     }
     class MyHolder {
         TextView tvTitle,tvAuthor;
-        ImageView ivDel;
+        ImageView ivDel,ivVisi;
         public MyHolder(View itemView){
             tvAuthor= (TextView) itemView.findViewById(R.id.tv_item_songlistcache_author);
             tvTitle= (TextView) itemView.findViewById(R.id.tv_item_songlistcache_title);
             ivDel= (ImageView) itemView.findViewById(R.id.iv_item_songlistcache_del);
+            ivVisi= (ImageView) itemView.findViewById(R.id.iv_item_songlistcache_visi);
         }
     }
+
 }

@@ -39,7 +39,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
             getSupportFragmentManager().beginTransaction()
                     .replace(R.id.framelayout_login,loginFragment).commit();
             Bundle bundle=new Bundle();
-            bundle.putString("user",bmobUser.getUsername());
+            bundle.putString(getString(R.string.user),bmobUser.getUsername());
             loginFragment.setArguments(bundle);
         }else {
             //登录界面

@@ -40,16 +40,16 @@ public class RegisterActivity extends AppCompatActivity {
                     bmobUser.signUp(RegisterActivity.this, new SaveListener() {
                         @Override
                         public void onSuccess() {
-                            Toast.makeText(RegisterActivity.this, "注册成功", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(RegisterActivity.this, R.string.register_success, Toast.LENGTH_SHORT).show();
                             Intent intent=new Intent(RegisterActivity.this,LoginActivity.class);
-                            intent.putExtra("user",etUser.getText().toString());
+                            intent.putExtra(getString(R.string.user_register),etUser.getText().toString());
                             startActivity(intent);
                             finish();
                         }
 
                         @Override
                         public void onFailure(int i, String s) {
-                            Toast.makeText(RegisterActivity.this, "注册失败", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(RegisterActivity.this, R.string.register_fail, Toast.LENGTH_SHORT).show();
                         }
                     });
                 }

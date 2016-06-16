@@ -108,7 +108,7 @@ public class SongMenuFragment extends BaseFragment {
                 ptrClassicFrameLayout.loadMoreComplete(true);
 
                 if (page>1){
-                Toast.makeText(context, "加载完毕", Toast.LENGTH_SHORT).show();
+                Toast.makeText(context, R.string.songmenu_loadecomplete, Toast.LENGTH_SHORT).show();
                 }
             }
 

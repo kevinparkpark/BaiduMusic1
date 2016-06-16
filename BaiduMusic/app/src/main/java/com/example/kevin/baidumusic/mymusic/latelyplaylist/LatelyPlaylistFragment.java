@@ -1,19 +1,29 @@
 package com.example.kevin.baidumusic.mymusic.latelyplaylist;
 
 import android.content.Intent;
+import android.view.Gravity;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ImageView;
 import android.widget.ListView;
+import android.widget.PopupWindow;
+import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.kevin.baidumusic.R;
 import com.example.kevin.baidumusic.base.SecBaseFragment;
+import com.example.kevin.baidumusic.db.DBHeart;
 import com.example.kevin.baidumusic.db.DBSongListCacheBean;
 import com.example.kevin.baidumusic.db.DBSongPlayListBean;
 import com.example.kevin.baidumusic.db.LiteOrmSington;
 import com.example.kevin.baidumusic.eventbean.EventPosition;
+import com.example.kevin.baidumusic.musiclibrary.rank.RankDetailsOnClickListener;
+import com.example.kevin.baidumusic.netutil.ShowShare;
 import com.example.kevin.baidumusic.util.BroadcastValues;
 import com.litesuits.orm.LiteOrm;
+import com.litesuits.orm.db.assit.QueryBuilder;
 
 import org.greenrobot.eventbus.EventBus;
 
@@ -27,6 +37,8 @@ public class LatelyPlaylistFragment extends SecBaseFragment{
     private LatelyPlaylistAdapter adapter;
     private List<DBSongPlayListBean> dbSongPlayListBean;
     private ImageView ivBack;
+    private PopupWindow popupWindow;
+    private LiteOrm liteOrm;
 
     @Override
     public int setlayout() {
@@ -66,6 +78,79 @@ public class LatelyPlaylistFragment extends SecBaseFragment{
                 //previous方法-- 所以position+1
                 EventBus.getDefault().post(new EventPosition(position+1));
                 context.sendBroadcast(new Intent(BroadcastValues.PREVIOUS));
+            }
+        });
+        adapter.setOnClickListener(new RankDetailsOnClickListener() {
+            @Override
+            public void onRankDetailsClickListener(final int position) {
+                View contentView = LayoutInflater.from(context).inflate(R.layout.customer_dialog, null);
+                popupWindow = new PopupWindow(contentView, ViewGroup.LayoutParams.MATCH_PARENT
+                        , ViewGroup.LayoutParams.WRAP_CONTENT);
+                popupWindow.setFocusable(true);
+                popupWindow.setAnimationStyle(R.style.contextMenuAnim);
+                popupWindow.showAtLocation(contentView, Gravity.BOTTOM, 0, 0);
+
+                final ImageView ivHart = (ImageView) contentView.findViewById(R.id.iv_customer_hart);
+                ImageView ivDownload = (ImageView) contentView.findViewById(R.id.iv_customer_download);
+                TextView tvTitle = (TextView) contentView.findViewById(R.id.tv_customer_dialog_title);
+                tvTitle.setText(dbSongPlayListBean.get(position).getTitle());
+                contentView.findViewById(R.id.relativelayout_customer_dialog_other).setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        popupWindow.dismiss();
+                    }
+                });
+
+                final QueryBuilder<DBHeart> list = new QueryBuilder<DBHeart>(DBHeart.class).whereEquals
+                        (DBHeart.TITLE, dbSongPlayListBean.get(position).getTitle());
+
+                if (liteOrm.query(list).size() > 0) {
+                    ivHart.setImageResource(R.mipmap.cust_heart_press);
+                }
+
+                ivHart.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        if (liteOrm.query(list).size() == 0) {
+                            ivHart.setImageResource(R.mipmap.cust_heart_press);
+                            liteOrm.insert(new DBHeart(dbSongPlayListBean.get(position).getTitle(),
+                                    dbSongPlayListBean.get(position).getAuthor(), dbSongPlayListBean.get(position).getPicUrl()
+                                    , dbSongPlayListBean.get(position).getPicBigUrl(), dbSongPlayListBean.get(position).getSongId()));
+                            popupWindow.dismiss();
+                            Toast.makeText(context, context.getString(R.string.add_to_heart), Toast.LENGTH_SHORT).show();
+                        } else {
+                            ivHart.setImageResource(R.mipmap.cust_dialog_hart);
+
+                            QueryBuilder<DBHeart> list = new QueryBuilder<DBHeart>(DBHeart.class).whereEquals
+                                    (DBHeart.TITLE, dbSongPlayListBean.get(position).getTitle());
+
+                            List<DBHeart> dbHearts = liteOrm.query(list);
+                            if (dbHearts.size() > 0) {
+                                liteOrm.delete(dbHearts);
+                            }
+                            popupWindow.dismiss();
+                            Toast.makeText(context, context.getString(R.string.del_heart), Toast.LENGTH_SHORT).show();
+                        }
+                    }
+                });
+                //歌曲下载
+                ivDownload.setOnClickListener(new View.OnClickListener() {
+
+                    @Override
+                    public void onClick(View v) {
+                        Toast.makeText(context, R.string.download_complete, Toast.LENGTH_SHORT).show();
+                    }
+                });
+                //红心
+                ImageView ivShare = (ImageView) contentView.findViewById(R.id.iv_customer_Share);
+                ivShare.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        ShowShare showShare = new ShowShare();
+                        showShare.showShare();
+                        popupWindow.dismiss();
+                    }
+                });
             }
         });
     }

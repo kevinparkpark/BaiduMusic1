@@ -83,7 +83,7 @@ public class RankDetailsFragment extends BaseFragment implements OnRefreshListen
     @Override
     protected void initData() {
 
-        url = getArguments().getString("url");
+        url = getArguments().getString(context.getString(R.string.rankdetails_url));
         adapter = new RankDetailsAdapter(context);
         liteOrm = LiteOrmSington.getInstance().getLiteOrm();
 
@@ -154,7 +154,7 @@ public class RankDetailsFragment extends BaseFragment implements OnRefreshListen
                                     songListBeen.get(position).getAuthor(), songListBeen.get(position).getPic_small()
                                     , songListBeen.get(position).getPic_big(), songListBeen.get(position).getSong_id()));
                             popupWindow.dismiss();
-                            Toast.makeText(context, "已添加到我喜欢的音乐", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(context, context.getString(R.string.add_to_heart), Toast.LENGTH_SHORT).show();
                         } else {
                             ivHart.setImageResource(R.mipmap.cust_dialog_hart);
 
@@ -166,7 +166,7 @@ public class RankDetailsFragment extends BaseFragment implements OnRefreshListen
                                 liteOrm.delete(dbHearts);
                             }
                             popupWindow.dismiss();
-                            Toast.makeText(context, "已取消喜欢的音乐", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(context, context.getString(R.string.del_heart), Toast.LENGTH_SHORT).show();
                         }
                     }
                 });
@@ -188,7 +188,6 @@ public class RankDetailsFragment extends BaseFragment implements OnRefreshListen
                                 String songUrl=songPlayBean.getBitrate().getFile_link();
                                 String lrc=songPlayBean.getSonginfo().getLrclink();
                                 String songTitle = songPlayBean.getSonginfo().getTitle();
-                                Log.d("HeartSongListFragment","-------"+ songUrl);
                                 //下载歌曲
                                 DownloadUtils downloadUtils=new DownloadUtils(songUrl,songTitle,lrc);
                                 popupWindow.dismiss();
@@ -258,7 +257,7 @@ public class RankDetailsFragment extends BaseFragment implements OnRefreshListen
             public void onFailed(VolleyError error) {
 
             }
-        }, getArguments().getInt("count"));
+        }, getArguments().getInt(context.getString(R.string.count)));
     }
 
 }

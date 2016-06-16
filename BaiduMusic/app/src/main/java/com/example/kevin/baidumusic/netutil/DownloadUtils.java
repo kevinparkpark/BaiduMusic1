@@ -5,6 +5,7 @@ import android.os.Message;
 import android.util.Log;
 import android.widget.Toast;
 
+import com.example.kevin.baidumusic.R;
 import com.example.kevin.baidumusic.app.MyApp;
 
 /**
@@ -24,11 +25,10 @@ public class DownloadUtils {
             public void run() {
 
                 HttpDownloader httpDownloader = new HttpDownloader();
-                int result = httpDownloader.download(DownloadUtils.this.songUrl, "/music/mp3/",
-                        DownloadUtils.this.songTitle + ".mp3");
+                int result = httpDownloader.download(DownloadUtils.this.songUrl, MyApp.context.getString(R.string.downloadutils_songurl),
+                        DownloadUtils.this.songTitle + MyApp.context.getString(R.string.download_mp3));
 
                 handler.sendEmptyMessage(0);
-                Log.d("ReceiveDownload", "开始下载");
 
                 Message msg = new Message();
                 msg.what = 100;
@@ -43,8 +43,8 @@ public class DownloadUtils {
             @Override
             public void run() {
                 HttpDownloader httpDownloader1 = new HttpDownloader();
-                int reuslt1 = httpDownloader1.download(DownloadUtils.this.lrc, "/music/lrc/"
-                        , DownloadUtils.this.songTitle + ".lrc");
+                int reuslt1 = httpDownloader1.download(DownloadUtils.this.lrc, MyApp.context.getString(R.string.download_lrc)
+                        , DownloadUtils.this.songTitle + MyApp.context.getString(R.string.download_lrc_street));
             }
         }).start();
     }
@@ -56,12 +56,12 @@ public class DownloadUtils {
             if (msg.what == 100) {
                 int result = (int) msg.obj;
                 if (result == 0) {
-                    Toast.makeText(MyApp.context, "下载完成", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(MyApp.context, R.string.download_complete, Toast.LENGTH_SHORT).show();
                 } else if (result == 1) {
-                    Toast.makeText(MyApp.context, "重复下载", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(MyApp.context, R.string.repeat_download, Toast.LENGTH_SHORT).show();
                 }
             } else {
-                Toast.makeText(MyApp.context, "开始下载", Toast.LENGTH_SHORT).show();
+                Toast.makeText(MyApp.context, R.string.download_now, Toast.LENGTH_SHORT).show();
 
             }
             return false;

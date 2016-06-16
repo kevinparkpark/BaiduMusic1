@@ -75,7 +75,7 @@ public class SongMenuDetailsFragment extends BaseFragment {
     protected void initData() {
         liteOrm = LiteOrmSington.getInstance().getLiteOrm();
         adapter = new SongMenuDetailsAdapter(context);
-        String listId = getArguments().getString("listid");
+        String listId = getArguments().getString(context.getString(R.string.listid));
         NetTool netTool = new NetTool();
         netTool.getUrlId(new NetListener() {
             @Override
@@ -161,7 +161,7 @@ public class SongMenuDetailsFragment extends BaseFragment {
                                     contentBeanList.get(position).getAuthor(), bean.getPic_300()
                                     , bean.getPic_500(), contentBeanList.get(position).getSong_id()));
                             popupWindow.dismiss();
-                            Toast.makeText(context, "已添加到我喜欢的音乐", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(context, context.getString(R.string.add_to_heart), Toast.LENGTH_SHORT).show();
                         } else {
                             ivHart.setImageResource(R.mipmap.cust_dialog_hart);
 
@@ -173,7 +173,7 @@ public class SongMenuDetailsFragment extends BaseFragment {
                                 liteOrm.delete(dbHearts);
                             }
                             popupWindow.dismiss();
-                            Toast.makeText(context, "已取消喜欢的音乐", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(context, context.getString(R.string.del_heart), Toast.LENGTH_SHORT).show();
                         }
                     }
                 });
@@ -195,7 +195,6 @@ public class SongMenuDetailsFragment extends BaseFragment {
                                 String songUrl=songPlayBean.getBitrate().getFile_link();
                                 String lrc=songPlayBean.getSonginfo().getLrclink();
                                 String songTitle = songPlayBean.getSonginfo().getTitle();
-                                Log.d("HeartSongListFragment","-------"+ songUrl);
                                 //下载歌曲
                                 DownloadUtils downloadUtils=new DownloadUtils(songUrl,songTitle,lrc);
                                 popupWindow.dismiss();

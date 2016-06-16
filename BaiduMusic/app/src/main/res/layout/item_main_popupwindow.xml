@@ -3,30 +3,45 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical">
-<LinearLayout
-    android:orientation="vertical"
-    android:layout_width="wrap_content"
-    android:layout_height="wrap_content">
 
-    <TextView
-        android:id="@+id/tv_item_songlistcache_title"
+    <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="未知歌曲" />
+        android:orientation="horizontal">
 
-    <TextView
-        android:id="@+id/tv_item_songlistcache_author"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="未知歌手" />
-</LinearLayout>
+        <ImageView
+            android:id="@+id/iv_item_songlistcache_visi"
+            android:layout_margin="@dimen/nine_dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@mipmap/bt_localmusic_play_press"
+            android:visibility="gone"/>
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/tv_item_songlistcache_title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/title" />
+
+            <TextView
+                android:id="@+id/tv_item_songlistcache_author"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/author" />
+        </LinearLayout>
+    </LinearLayout>
 
     <ImageView
-        android:src="@mipmap/ic_list_dropdown_garbage_normal"
         android:id="@+id/iv_item_songlistcache_del"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignParentTop="true"
         android:layout_alignParentEnd="true"
-        android:layout_marginEnd="28dp" />
+        android:layout_alignParentTop="true"
+        android:layout_marginEnd="28dp"
+        android:src="@mipmap/ic_list_dropdown_garbage_normal" />
 </RelativeLayout>

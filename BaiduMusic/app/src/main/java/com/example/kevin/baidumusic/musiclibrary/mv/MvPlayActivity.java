@@ -20,7 +20,7 @@ public class MvPlayActivity extends AppCompatActivity{
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_mvplay);
         videoView= (VideoView) findViewById(R.id.videoview);
-        String url=getIntent().getStringExtra("url");
+        String url=getIntent().getStringExtra(getString(R.string.url));
         videoView.setMediaController(new MediaController(this));
         videoView.setVideoURI(Uri.parse(url));
         videoView.start();

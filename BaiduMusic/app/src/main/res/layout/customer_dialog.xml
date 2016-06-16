@@ -2,7 +2,7 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#66000000"
+    android:background="@color/customer_dialog"
     android:orientation="vertical">
 <RelativeLayout
     android:id="@+id/relativelayout_customer_dialog_other"
@@ -16,8 +16,8 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:gravity="center"
-        android:text="title"
-        android:textSize="20sp"
+        android:text="@string/title"
+        android:textSize="@dimen/two_zero_sp"
         android:layout_above="@+id/linearLayout5"
         android:layout_alignParentStart="true" />
 
@@ -47,7 +47,7 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:gravity="center"
-                android:text="喜欢" />
+                android:text="@string/heart" />
         </LinearLayout>
 
         <LinearLayout
@@ -67,7 +67,7 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:gravity="center"
-                android:text="下载" />
+                android:text="@string/download" />
         </LinearLayout>
 
         <LinearLayout
@@ -88,7 +88,7 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:gravity="center"
-                android:text="分享" />
+                android:text="@string/share" />
         </LinearLayout>
 
         <LinearLayout
@@ -109,7 +109,7 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:gravity="center"
-                android:text="添加到" />
+                android:text="@string/addto" />
         </LinearLayout>
 
     </LinearLayout>

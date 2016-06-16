@@ -10,6 +10,7 @@ import android.widget.TextView;
 
 import com.example.kevin.baidumusic.R;
 import com.example.kevin.baidumusic.db.DBSongPlayListBean;
+import com.example.kevin.baidumusic.musiclibrary.rank.RankDetailsOnClickListener;
 
 import java.util.List;
 
@@ -19,6 +20,11 @@ import java.util.List;
 public class LatelyPlaylistAdapter extends BaseAdapter{
     private Context context;
     private List<DBSongPlayListBean> been;
+    private RankDetailsOnClickListener onClickListener;
+
+    public void setOnClickListener(RankDetailsOnClickListener onClickListener) {
+        this.onClickListener = onClickListener;
+    }
 
     public LatelyPlaylistAdapter(Context context) {
         this.context = context;
@@ -45,7 +51,7 @@ public class LatelyPlaylistAdapter extends BaseAdapter{
     }
 
     @Override
-    public View getView(int position, View convertView, ViewGroup parent) {
+    public View getView(final int position, View convertView, ViewGroup parent) {
         MyViewHolder holder=null;
         if (convertView==null){
             convertView= LayoutInflater.from(context).inflate(R.layout.item_le_rankdetails,parent,false);
@@ -65,16 +71,24 @@ public class LatelyPlaylistAdapter extends BaseAdapter{
 //        loader.get(songListBeen.get(position).getPic_big(),ImageLoader.getImageListener(
 //                holder.imageView,R.mipmap.ic_launcher,R.mipmap.ic_launcher));
 
+        holder.ivMore.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                onClickListener.onRankDetailsClickListener(position);
+            }
+        });
+
         return convertView;
     }
     class MyViewHolder{
         TextView tv_song,tv_author,tv_count;
-        ImageView imageView;
+        ImageView imageView,ivMore;
         public MyViewHolder(View itemView){
             tv_author= (TextView) itemView.findViewById(R.id.tv_le_rankdetails_author);
             tv_count= (TextView) itemView.findViewById(R.id.tv_le_rankdetails_count);
             tv_song= (TextView) itemView.findViewById(R.id.tv_le_rankdetails_song);
             imageView= (ImageView) itemView.findViewById(R.id.iv_le_rankdetails);
+            ivMore= (ImageView) itemView.findViewById(R.id.iv_le_rankdetails_more);
         }
     }
 }

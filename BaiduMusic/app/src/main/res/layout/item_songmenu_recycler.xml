@@ -4,14 +4,14 @@
     android:layout_height="wrap_content"
     android:orientation="vertical">
 <RelativeLayout
-    android:layout_margin="10dp"
+    android:layout_margin="@dimen/tendp"
     android:id="@+id/relativelayout_songmenu"
-    android:layout_width="191dp"
+    android:layout_width="@dimen/one_nine_one_dp"
     android:layout_height="wrap_content">
     <ImageView
         android:id="@+id/iv_songmenu_image"
-        android:layout_width="180dp"
-        android:layout_height="180dp"
+        android:layout_width="@dimen/one_eight_zero_dp"
+        android:layout_height="@dimen/one_eight_zero_dp"
         android:src="@mipmap/tingmenuimage1" />
 
     <ImageView
@@ -19,30 +19,31 @@
         android:layout_height="wrap_content"
         android:layout_alignBottom="@+id/iv_songmenu_image"
         android:layout_alignParentStart="true"
-        android:layout_marginBottom="10dp"
-        android:layout_marginStart="11dp"
+        android:layout_marginBottom="@dimen/tendp"
+        android:layout_marginStart="@dimen/one_one_dp"
         android:src="@mipmap/ic_lebo_listen"
         android:id="@+id/imageView8" />
     <TextView
-        android:text="500"
+        android:text="@string/countsong"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignTop="@+id/imageView8"
         android:layout_toEndOf="@+id/imageView8"
-        android:layout_marginStart="17dp"
+        android:layout_marginStart="@dimen/one_seven_dp"
         android:id="@+id/tv_songmenu_count" />
     <ImageView
         android:id="@+id/iv_songmenu_play"
         android:src="@mipmap/ic_listmore_play_normal"
-        android:layout_width="40dp"
-        android:layout_height="40dp"
-        android:layout_above="@+id/tv_songmenu_title"
-        android:layout_alignEnd="@+id/iv_songmenu_image" />
+        android:layout_width="@dimen/four_zero_dp"
+        android:layout_height="@dimen/four_zero_dp"
+        android:layout_alignBottom="@+id/imageView8"
+        android:layout_alignEnd="@+id/iv_songmenu_image"
+        android:layout_marginEnd="@dimen/two_five_dp" />
     <TextView
         android:maxLines="1"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="2016Bullboard美国公告牌颁奖礼"
+        android:text="@string/album"
         android:layout_below="@+id/iv_songmenu_image"
         android:layout_alignParentStart="true"
         android:id="@+id/tv_songmenu_title" />
@@ -50,7 +51,7 @@
         android:id="@+id/tv_songmenu_where"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="欧美,Billboard"
+        android:text="@string/country"
         android:layout_below="@+id/tv_songmenu_title"
         android:layout_alignParentStart="true" />
 </RelativeLayout>

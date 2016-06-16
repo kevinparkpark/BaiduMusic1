@@ -16,6 +16,7 @@ import com.example.kevin.baidumusic.util.myinterface.OnRefreshListener;
 
 /**
  * Created by dllo on 16/5/27.
+ * 自定义listview
  */
 public class RefreshListView extends ListView implements AbsListView.OnScrollListener {
     private static final String TAG = "RefreshListView";

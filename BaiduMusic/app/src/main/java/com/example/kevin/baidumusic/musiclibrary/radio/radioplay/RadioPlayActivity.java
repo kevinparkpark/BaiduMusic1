@@ -50,37 +50,37 @@ public class RadioPlayActivity extends AppCompatActivity {
         //fragment复用
         RadioPlayFragment radioPlayFragment1=new RadioPlayFragment();
         Bundle bundle1=new Bundle();
-        bundle1.putString("url", URLValues.RADIOPLAY_EXERCISE);
+        bundle1.putString(getString(R.string.url), URLValues.RADIOPLAY_EXERCISE);
         radioPlayFragment1.setArguments(bundle1);
         fragments.add(radioPlayFragment1);
 
         RadioPlayFragment radioPlayFragment2=new RadioPlayFragment();
         Bundle bundle2=new Bundle();
-        bundle2.putString("url", URLValues.RADIOPLAY_MOOD);
+        bundle2.putString(getString(R.string.url), URLValues.RADIOPLAY_MOOD);
         radioPlayFragment2.setArguments(bundle2);
         fragments.add(radioPlayFragment2);
 
         RadioPlayFragment radioPlayFragment3=new RadioPlayFragment();
         Bundle bundle3=new Bundle();
-        bundle3.putString("url", URLValues.RADIOPLAY_GENRE);
+        bundle3.putString(getString(R.string.url), URLValues.RADIOPLAY_GENRE);
         radioPlayFragment3.setArguments(bundle3);
         fragments.add(radioPlayFragment3);
 
         RadioPlayFragment radioPlayFragment4=new RadioPlayFragment();
         Bundle bundle4=new Bundle();
-        bundle4.putString("url", URLValues.RADIOPLAY_LANGUAGE);
+        bundle4.putString(getString(R.string.url), URLValues.RADIOPLAY_LANGUAGE);
         radioPlayFragment4.setArguments(bundle4);
         fragments.add(radioPlayFragment4);
 
         RadioPlayFragment radioPlayFragment5=new RadioPlayFragment();
         Bundle bundle5=new Bundle();
-        bundle5.putString("url", URLValues.RADIOPLAY_YEARS);
+        bundle5.putString(getString(R.string.url), URLValues.RADIOPLAY_YEARS);
         radioPlayFragment5.setArguments(bundle5);
         fragments.add(radioPlayFragment5);
 
         RadioPlayFragment radioPlayFragment6=new RadioPlayFragment();
         Bundle bundle6=new Bundle();
-        bundle6.putString("url", URLValues.RADIOPLAY_THEME);
+        bundle6.putString(getString(R.string.url), URLValues.RADIOPLAY_THEME);
         radioPlayFragment6.setArguments(bundle6);
         fragments.add(radioPlayFragment6);
 

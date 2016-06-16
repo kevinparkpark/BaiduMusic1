@@ -52,10 +52,10 @@ public class AuthorDetailsFragment extends SecBaseFragment implements OnRefreshL
 
     @Override
     protected void initData() {
-        String title=getArguments().getString("authorname");
+        String title=getArguments().getString(context.getString(R.string.authorname));
         tvTitle.setText(title);
-        url1=getArguments().getString("authorurl1");
-        url2=getArguments().getString("authorurl2");
+        url1=getArguments().getString(context.getString(R.string.authorrul1));
+        url2=getArguments().getString(context.getString(R.string.authorrul2));
         adapter=new AuthorDeailsAdapter(context);
         artistBeanList=new ArrayList<>();
         refesh(page);

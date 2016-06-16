@@ -47,7 +47,7 @@ public class SongPlayPageActivity extends AppCompatActivity implements View.OnCl
     private ViewPager viewPager;
     private ArrayList<BaseFragment> fragments;
     private SongPlayPageAdapter adapter;
-    private ImageView ivSongPlay, ivNext, ivPrevious, ivMode,ivDownload,ivBack,iv2More,ivHeart;
+    private ImageView ivSongPlay, ivNext, ivPrevious, ivMode,ivDownload,ivBack,iv2More,ivHeart,ivTvBtn;
     private TextView tvSongPlayTitle, tvSongPlayAuthor, tvSongPlayTime, tvSongPlayMaxTime;
     private SeekBar seekBar;
     private int maxCurrent;
@@ -77,6 +77,7 @@ public class SongPlayPageActivity extends AppCompatActivity implements View.OnCl
         ivBack= (ImageView) findViewById(R.id.iv_songplaypage_back);
         iv2More= (ImageView) findViewById(R.id.iv_songplaypage_more);
         ivHeart= (ImageView) findViewById(R.id.iv_songplaypage_heart);
+        ivTvBtn= (ImageView) findViewById(R.id.iv_songplaypage_tvbtn);
 
         seekBar = (SeekBar) findViewById(R.id.seekbar_songplaypage);
 
@@ -102,11 +103,34 @@ public class SongPlayPageActivity extends AppCompatActivity implements View.OnCl
         ivBack.setOnClickListener(this);
         iv2More.setOnClickListener(this);
         ivHeart.setOnClickListener(this);
+        ivTvBtn.setOnClickListener(this);
 
         //读取播放模式
-        SharedPreferences getsp = getSharedPreferences("mode", MODE_PRIVATE);
-        mode = getsp.getInt("mode", 0);
+        SharedPreferences getsp = getSharedPreferences(getString(R.string.mode), MODE_PRIVATE);
+        mode = getsp.getInt(getString(R.string.mode), 0);
         ivMode.setImageLevel(mode);
+
+
+        viewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
+            @Override
+            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+
+            }
+
+            @Override
+            public void onPageSelected(int position) {
+                if (viewPager.getCurrentItem()==2){
+                    ivTvBtn.setImageResource(R.mipmap.bt_sceneplay_picture_press);
+                }else {
+                    ivTvBtn.setImageResource(R.mipmap.bt_sceneplay_word_press);
+                }
+            }
+
+            @Override
+            public void onPageScrollStateChanged(int state) {
+
+            }
+        });
 
     }
 
@@ -183,7 +207,7 @@ public class SongPlayPageActivity extends AppCompatActivity implements View.OnCl
     //格式化时间
     public String timeFormat(long time) {
         if (dateFormat == null) {
-            dateFormat = new SimpleDateFormat("mm:ss");
+            dateFormat = new SimpleDateFormat(getString(R.string.mm_ss));
         }
         return dateFormat.format(time);
     }
@@ -213,9 +237,9 @@ public class SongPlayPageActivity extends AppCompatActivity implements View.OnCl
                     mode = 0;
                 }
                 swithPlayMode(mode);
-                SharedPreferences sp = getSharedPreferences("mode", MODE_PRIVATE);
+                SharedPreferences sp = getSharedPreferences(getString(R.string.mode), MODE_PRIVATE);
                 SharedPreferences.Editor editor = sp.edit();
-                editor.putInt("mode", mode);
+                editor.putInt(getString(R.string.mode), mode);
                 editor.commit();
                 break;
             case R.id.iv_songplaypage_download:
@@ -233,7 +257,7 @@ public class SongPlayPageActivity extends AppCompatActivity implements View.OnCl
                 if (liteOrm.query(list).size() == 0) {
                     ivHeart.setImageResource(R.mipmap.bt_sceneplay_collect_selected);
                     liteOrm.insert(new DBHeart(title,author,img,bigImg,songId));
-                    Toast.makeText(this, "已添加到我喜欢的音乐", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(this, getString(R.string.add_to_heart), Toast.LENGTH_SHORT).show();
                 } else {
                     ivHeart.setImageResource(R.mipmap.bt_sceneplay_collect_press);
 
@@ -241,9 +265,17 @@ public class SongPlayPageActivity extends AppCompatActivity implements View.OnCl
                     if (dbHearts.size() > 0) {
                         liteOrm.delete(dbHearts);
                     }
-                    Toast.makeText(this, "已取消喜欢的音乐", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(this, getString(R.string.del_heart), Toast.LENGTH_SHORT).show();
                 }
-
+                break;
+            case R.id.iv_songplaypage_tvbtn:
+                if (viewPager.getCurrentItem()!=2){
+                viewPager.setCurrentItem(2);
+                ivTvBtn.setImageResource(R.mipmap.bt_sceneplay_picture_press);
+                }else if (viewPager.getCurrentItem()!=1){
+                    viewPager.setCurrentItem(1);
+                    ivTvBtn.setImageResource(R.mipmap.bt_sceneplay_word_press);
+                }
                 break;
         }
     }
@@ -251,17 +283,17 @@ public class SongPlayPageActivity extends AppCompatActivity implements View.OnCl
     public void swithPlayMode(int mode) {
         switch (mode) {
             case MODE_LOOP:
-                Toast.makeText(this, "循环播放", Toast.LENGTH_SHORT).show();
+                Toast.makeText(this, R.string.loop_play, Toast.LENGTH_SHORT).show();
                 break;
             case MODE_RANDOM:
-                Toast.makeText(this, "随机播放", Toast.LENGTH_SHORT).show();
+                Toast.makeText(this, R.string.random_play, Toast.LENGTH_SHORT).show();
                 break;
             case MODE_ONE:
-                Toast.makeText(this, "单曲循环", Toast.LENGTH_SHORT).show();
+                Toast.makeText(this, R.string.one_play, Toast.LENGTH_SHORT).show();
                 break;
         }
         Intent intent=new Intent(BroadcastValues.PLAY_MODE);
-        intent.putExtra("mode",mode);
+        intent.putExtra(getString(R.string.mode),mode);
         sendBroadcast(intent);
         ivMode.setImageLevel(mode);
     }

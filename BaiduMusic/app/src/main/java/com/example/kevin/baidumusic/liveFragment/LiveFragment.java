@@ -28,7 +28,7 @@ public class LiveFragment extends BaseFragment{
     //直接webView打开网站
     @Override
     protected void initData() {
-        webView.loadUrl("http://m.jd.com");
+        webView.loadUrl(context.getString(R.string.m_jd_com));
         //http://www.9xiu.com/rank
         webView.setWebViewClient(new WebViewClient(){
             @Override

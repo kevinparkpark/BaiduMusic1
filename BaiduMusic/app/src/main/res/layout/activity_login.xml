@@ -16,7 +16,7 @@
 
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="50dp"
+                android:layout_height="@dimen/five_zero_dp"
                 android:background="#1fb5fc"
                 android:orientation="horizontal">
 
@@ -24,22 +24,22 @@
                     android:id="@+id/iv_login_back"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginLeft="10dp"
-                    android:layout_marginTop="12dp"
+                    android:layout_marginLeft="@dimen/tendp"
+                    android:layout_marginTop="@dimen/ten_two_dp"
                     android:src="@mipmap/ic_back_normal" />
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="17dp"
-                    android:text="返回"
+                    android:layout_marginTop="@dimen/one_seven_dp"
+                    android:text="@string/back"
                     android:textColor="@android:color/white" />
             </LinearLayout>
 
             <FrameLayout
                 android:id="@+id/framelayout_login"
                 android:layout_width="match_parent"
-                android:layout_height="120dp">
+                android:layout_height="@dimen/one_two_zero_dp">
 
             </FrameLayout>
 

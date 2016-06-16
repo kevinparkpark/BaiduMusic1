@@ -19,13 +19,13 @@
         android:src="@mipmap/radio_page" />
 
     <TextView
-        android:layout_margin="5dp"
+        android:layout_margin="@dimen/five_dp"
         android:id="@+id/tv_le_radio_more"
         android:gravity="center"
-        android:text="更多电台分类"
+        android:text="@string/more_radio"
         android:background="@drawable/shape"
         android:layout_width="match_parent"
-        android:layout_height="40dp" />
+        android:layout_height="@dimen/four_zero_dp" />
     </LinearLayout>
     </ScrollView>
 

@@ -8,7 +8,7 @@
         android:scaleType="fitXY"
         android:id="@+id/iv_head_k_authordetails_songlist_img"
         android:layout_width="match_parent"
-        android:layout_height="200dp"
+        android:layout_height="@dimen/two_zero_zero_dp"
         android:src="@mipmap/le_rank_details" />
 
     <TextView
@@ -18,8 +18,8 @@
         android:layout_height="wrap_content"
         android:layout_above="@+id/textView10"
         android:layout_alignParentStart="true"
-        android:layout_marginStart="23dp"
-        android:text="author" />
+        android:layout_marginStart="@dimen/two_three_dp"
+        android:text="@string/author" />
 
     <TextView
         android:textColor="@android:color/white"
@@ -28,8 +28,8 @@
         android:layout_height="wrap_content"
         android:layout_alignBottom="@+id/iv_head_k_authordetails_songlist_img"
         android:layout_alignStart="@+id/tv_head_k_authordetails_songlist_author"
-        android:layout_marginBottom="24dp"
-        android:text="country" />
+        android:layout_marginBottom="@dimen/two_four_dp"
+        android:text="@string/country" />
 
     <TextView
         android:textColor="@android:color/white"
@@ -37,8 +37,8 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignTop="@+id/tv_head_k_authordetails_songlist_country"
-        android:layout_marginStart="30dp"
+        android:layout_marginStart="@dimen/three_zero_dp"
         android:layout_toEndOf="@+id/tv_head_k_authordetails_songlist_country"
-        android:text="详情" />
+        android:text="@string/details" />
 
 </RelativeLayout>

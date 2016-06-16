@@ -5,7 +5,7 @@
     <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_margin="10dip">
+        android:layout_margin="@dimen/ten_dip">
         <!--<ImageView-->
         <!--android:id="@+id/iv_icon_refresh"-->
         <!--android:layout_width="wrap_content"-->

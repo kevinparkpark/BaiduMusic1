@@ -13,15 +13,15 @@
         android:layout_height="wrap_content"
         android:id="@+id/iv_k_authordetails_iv" />
     <TextView
-        android:layout_marginLeft="10dp"
+        android:layout_marginLeft="@dimen/tendp"
         android:gravity="center"
-        android:text="未知"
+        android:text="@string/unkown"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/tv_k_authordetails_text"
         android:layout_centerVertical="true"
         android:layout_toEndOf="@+id/iv_k_authordetails_iv"
-        android:layout_marginStart="15dp" />
+        android:layout_marginStart="@dimen/one_five_dp" />
     <ImageView
         android:src="@mipmap/ic_songlist_detail_nor"
         android:layout_width="wrap_content"

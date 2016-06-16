@@ -8,5 +8,5 @@
     android:scaleType="fitXY"
     android:id="@+id/iv_le_rankdetails_head"
     android:layout_width="match_parent"
-    android:layout_height="230dp" />
+    android:layout_height="@dimen/two_three_zero_dp" />
 </LinearLayout>

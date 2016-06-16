@@ -207,55 +207,55 @@ public class KMusicFragment extends BaseFragment implements View.OnClickListener
         switch (v.getId()) {
             case R.id.k_manauthor:
                 ((kMusicToDetailsOnClickListener) getActivity()).onKMusicToDetailsClickListener(
-                        URLValues.KMUSIC_CH_MAN_AUTHOR_LIST1, URLValues.KMUSIC_CH_MAN_AUTHOR_LIST2, "华语男歌手");
+                        URLValues.KMUSIC_CH_MAN_AUTHOR_LIST1, URLValues.KMUSIC_CH_MAN_AUTHOR_LIST2, context.getString(R.string.cn_man_author));
                 break;
             case R.id.k_womenauthor:
                 ((kMusicToDetailsOnClickListener) getActivity()).onKMusicToDetailsClickListener(
-                        URLValues.KMUSIC_CH_WOMAN_AUTHOR_LIST1, URLValues.KMUSIC_CH_WOMAN_AUTHOR_LIST2, "华语女歌手");
+                        URLValues.KMUSIC_CH_WOMAN_AUTHOR_LIST1, URLValues.KMUSIC_CH_WOMAN_AUTHOR_LIST2, context.getString(R.string.cn_wo_author));
                 break;
             case R.id.k_groupauthor:
                 ((kMusicToDetailsOnClickListener) getActivity()).onKMusicToDetailsClickListener(
-                        URLValues.KMUSIC_CH_GROUP_AUTHOR_LIST1, URLValues.KMUSIC_CH_GROUP_AUTHOR_LIST2, "华语组合");
+                        URLValues.KMUSIC_CH_GROUP_AUTHOR_LIST1, URLValues.KMUSIC_CH_GROUP_AUTHOR_LIST2, context.getString(R.string.cn_group));
                 break;
             case R.id.k_euro_man_author:
                 ((kMusicToDetailsOnClickListener) getActivity()).onKMusicToDetailsClickListener(
-                        URLValues.KMUSIC_EURO_MAN_AUTHOR_LIST1, URLValues.KMUSIC_EURO_MAN_AUTHOR_LIST2, "欧美男歌手");
+                        URLValues.KMUSIC_EURO_MAN_AUTHOR_LIST1, URLValues.KMUSIC_EURO_MAN_AUTHOR_LIST2, context.getString(R.string.eu_man_author));
                 break;
             case R.id.k_euro_women_author:
                 ((kMusicToDetailsOnClickListener) getActivity()).onKMusicToDetailsClickListener(
-                        URLValues.KMUSIC_EURO_WOMAN_AUTHOR_LIST1, URLValues.KMUSIC_EURO_WOMAN_AUTHOR_LIST2, "欧美女歌手");
+                        URLValues.KMUSIC_EURO_WOMAN_AUTHOR_LIST1, URLValues.KMUSIC_EURO_WOMAN_AUTHOR_LIST2, context.getString(R.string.eu_wo_author));
                 break;
             case R.id.k_euro_group_author:
                 ((kMusicToDetailsOnClickListener) getActivity()).onKMusicToDetailsClickListener(
-                        URLValues.KMUSIC_EURO_GROUP_AUTHOR_LIST1, URLValues.KMUSIC_EURO_GROUP_AUTHOR_LIST2, "欧美组合");
+                        URLValues.KMUSIC_EURO_GROUP_AUTHOR_LIST1, URLValues.KMUSIC_EURO_GROUP_AUTHOR_LIST2, context.getString(R.string.eu_group));
                 break;
             case R.id.k_korea_man_author:
                 ((kMusicToDetailsOnClickListener) getActivity()).onKMusicToDetailsClickListener(
-                        URLValues.KMUSIC_KR_MAN_AUTHOR_LIST1, URLValues.KMUSIC_KR_MAN_AUTHOR_LIST2, "韩国男歌手");
+                        URLValues.KMUSIC_KR_MAN_AUTHOR_LIST1, URLValues.KMUSIC_KR_MAN_AUTHOR_LIST2, context.getString(R.string.kr_man_author));
                 break;
             case R.id.k_korea_woman_author:
                 ((kMusicToDetailsOnClickListener) getActivity()).onKMusicToDetailsClickListener(
-                        URLValues.KMUSIC_KR_WOMAN_AUTHOR_LIST1, URLValues.KMUSIC_KR_WOMAN_AUTHOR_LIST2, "韩国女歌手");
+                        URLValues.KMUSIC_KR_WOMAN_AUTHOR_LIST1, URLValues.KMUSIC_KR_WOMAN_AUTHOR_LIST2, context.getString(R.string.kr_wo_author));
                 break;
             case R.id.k_korea_group_author:
                 ((kMusicToDetailsOnClickListener) getActivity()).onKMusicToDetailsClickListener(
-                        URLValues.KMUSIC_KR_GROUP_AUTHOR_LIST1, URLValues.KMUSIC_KR_GROUP_AUTHOR_LIST2, "韩国组合");
+                        URLValues.KMUSIC_KR_GROUP_AUTHOR_LIST1, URLValues.KMUSIC_KR_GROUP_AUTHOR_LIST2, context.getString(R.string.kr_group));
                 break;
             case R.id.k_jp_man_author:
                 ((kMusicToDetailsOnClickListener) getActivity()).onKMusicToDetailsClickListener(
-                        URLValues.KMUSIC_JP_MAN_AUTHOR_LIST1, URLValues.KMUSIC_JP_MAN_AUTHOR_LIST2, "日本男歌手");
+                        URLValues.KMUSIC_JP_MAN_AUTHOR_LIST1, URLValues.KMUSIC_JP_MAN_AUTHOR_LIST2, context.getString(R.string.jp_man_author));
                 break;
             case R.id.k_jp_woman_author:
                 ((kMusicToDetailsOnClickListener) getActivity()).onKMusicToDetailsClickListener(
-                        URLValues.KMUSIC_JP_WOMAN_AUTHOR_LIST1, URLValues.KMUSIC_JP_WOMAN_AUTHOR_LIST2, "日本女歌手");
+                        URLValues.KMUSIC_JP_WOMAN_AUTHOR_LIST1, URLValues.KMUSIC_JP_WOMAN_AUTHOR_LIST2, context.getString(R.string.jp_wo_author));
                 break;
             case R.id.k_jp_group_author:
                 ((kMusicToDetailsOnClickListener) getActivity()).onKMusicToDetailsClickListener(
-                        URLValues.KMUSIC_JP_GROUP_AUTHOR_LIST1, URLValues.KMUSIC_JP_GROUP_AUTHOR_LIST2, "日本组合");
+                        URLValues.KMUSIC_JP_GROUP_AUTHOR_LIST1, URLValues.KMUSIC_JP_GROUP_AUTHOR_LIST2, context.getString(R.string.jp_group));
                 break;
             case R.id.k_other_author:
                 ((kMusicToDetailsOnClickListener) getActivity()).onKMusicToDetailsClickListener(
-                        URLValues.KMUSIC_OTHER_AUTHOR_LIST1, URLValues.KMUSIC_OTHER_AUTHOR_LIST2, "其他歌手");
+                        URLValues.KMUSIC_OTHER_AUTHOR_LIST1, URLValues.KMUSIC_OTHER_AUTHOR_LIST2, context.getString(R.string.other_author));
                 break;
         }
     }

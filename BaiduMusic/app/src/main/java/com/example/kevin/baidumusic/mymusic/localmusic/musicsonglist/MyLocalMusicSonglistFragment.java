@@ -75,7 +75,7 @@ public class MyLocalMusicSonglistFragment extends BaseFragment {
                 EventBus.getDefault().post(localMusics.get(position));
                 liteOrm.deleteAll(DBSongListCacheBean.class);
 
-                SharedPreferences sp = context.getSharedPreferences("songposition", context.MODE_PRIVATE);
+                SharedPreferences sp = context.getSharedPreferences(context.getString(R.string.songposition), context.MODE_PRIVATE);
                 SharedPreferences.Editor editor = sp.edit();
                 editor.putInt("position", position);
                 editor.commit();
@@ -139,7 +139,7 @@ public class MyLocalMusicSonglistFragment extends BaseFragment {
                                     localMusics.get(position).getArtist(), null
                                     , null, localMusics.get(position).getUri()));
                             popupWindow.dismiss();
-                            Toast.makeText(context, "已添加到我喜欢的音乐", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(context, context.getString(R.string.add_to_heart), Toast.LENGTH_SHORT).show();
                         } else {
                             ivHart.setImageResource(R.mipmap.cust_dialog_hart);
 
@@ -151,7 +151,7 @@ public class MyLocalMusicSonglistFragment extends BaseFragment {
                                 liteOrm.delete(dbHearts);
                             }
                             popupWindow.dismiss();
-                            Toast.makeText(context, "已取消喜欢的音乐", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(context, context.getString(R.string.del_heart), Toast.LENGTH_SHORT).show();
                         }
                     }
                 });
@@ -160,7 +160,7 @@ public class MyLocalMusicSonglistFragment extends BaseFragment {
 
                     @Override
                     public void onClick(View v) {
-                        Toast.makeText(context, "已下载", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(context, context.getString(R.string.download_complete), Toast.LENGTH_SHORT).show();
                     }
                 });
                 //红心
@@ -199,23 +199,20 @@ public class MyLocalMusicSonglistFragment extends BaseFragment {
         //设置图标
         alert1.setIcon(R.mipmap.yuan);
         //设置标题
-        alert1.setTitle("删除歌曲");
+        alert1.setTitle(context.getString(R.string.del_song));
         //设置提示内容
-        alert1.setMessage("确定删除?");
+        alert1.setMessage(context.getString(R.string.del_conofirm));
 
-        alert1.setPositiveButton("确定", new DialogInterface.OnClickListener() {
+        alert1.setPositiveButton(context.getString(R.string.confirm), new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
 
-                Log.d("MyLocalMusicSonglistFra", path);
                 File file = new File(path);
                 if (file.exists()) {
                     file.delete();
                     MusicUtils.delMusic(context,localMusics.get(position).getTitle());
-                    Log.d("MyLocalMusicSonglistFra", "文件删除");
 
                 } else {
-                    Log.d("MyLocalMusicSonglistFra", "文件不存在");
                     if (localMusics.get(position)!=null){
                         MusicUtils.delMusic(context,localMusics.get(position).getTitle());
                     }
@@ -223,15 +220,15 @@ public class MyLocalMusicSonglistFragment extends BaseFragment {
                 MusicUtils.scanMusic(context, localMusics);
                 adapter.setMusicList(localMusics);
 
-                Toast.makeText(context, "删除成功", Toast.LENGTH_SHORT).show();
+                Toast.makeText(context, R.string.del_success, Toast.LENGTH_SHORT).show();
             }
         });
 
-        alert1.setNegativeButton("取消删除", new DialogInterface.OnClickListener() {
+        alert1.setNegativeButton(context.getString(R.string.del_cancel), new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
 
-                Toast.makeText(context, "取消删除", Toast.LENGTH_SHORT).show();
+                Toast.makeText(context, context.getString(R.string.del_cancel), Toast.LENGTH_SHORT).show();
             }
         });
 

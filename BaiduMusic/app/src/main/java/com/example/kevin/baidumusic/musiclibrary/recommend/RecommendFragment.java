@@ -119,7 +119,7 @@ public class RecommendFragment extends BaseFragment implements View.OnClickListe
                 @Override
                 public void run() {
                     while (thredAlive) {
-                        for (sleepTick = 0; sleepTick < 4; sleepTick++)
+                        for (sleepTick = 0; sleepTick < 3; sleepTick++)
                             try {
                                 Thread.sleep(1000);
                             } catch (InterruptedException e) {

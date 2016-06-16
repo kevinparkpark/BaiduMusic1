@@ -2,7 +2,7 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#666666"
+    android:background="@color/songplaylistpage"
     android:orientation="vertical"
     android:weightSum="1">
 
@@ -21,26 +21,26 @@
             android:id="@+id/linearLayout3"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_margin="8dp"
+            android:layout_margin="@dimen/eight_dp"
             android:orientation="vertical">
 
         </LinearLayout>
 
         <Button
-            android:layout_width="1dp"
-            android:layout_height="20dp"
-            android:layout_alignBottom="@+id/imageView9"
-            android:layout_marginEnd="18dp"
-            android:layout_toStartOf="@+id/imageView9"
+            android:layout_width="@dimen/one_dp"
+            android:layout_height="@dimen/two_zero_dp"
+            android:layout_alignBottom="@+id/iv_songplaypage_tvbtn"
+            android:layout_marginEnd="@dimen/one_eight_dp"
+            android:layout_toStartOf="@+id/iv_songplaypage_tvbtn"
             android:background="@android:color/background_dark" />
 
         <ImageView
-            android:id="@+id/imageView9"
+            android:id="@+id/iv_songplaypage_tvbtn"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentEnd="true"
             android:layout_alignTop="@+id/songplayactivity_title"
-            android:layout_marginEnd="23dp"
+            android:layout_marginEnd="@dimen/two_three_dp"
             android:src="@mipmap/bt_sceneplay_word_press" />
 
         <TextView
@@ -48,9 +48,9 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignTop="@+id/linearLayout3"
-            android:layout_marginStart="27dp"
+            android:layout_marginStart="@dimen/two_seven_dp"
             android:layout_toEndOf="@+id/linearLayout3"
-            android:text="title"
+            android:text="@string/title"
             android:textColor="@android:color/white" />
 
         <TextView
@@ -59,14 +59,14 @@
             android:layout_height="wrap_content"
             android:layout_alignStart="@+id/songplayactivity_title"
             android:layout_below="@+id/songplayactivity_title"
-            android:text="author"
+            android:text="@string/author"
             android:textColor="@android:color/white" />
     </RelativeLayout>
 
     <android.support.v4.view.ViewPager
         android:id="@+id/songplaypage_viewpager"
         android:layout_width="match_parent"
-        android:layout_height="292dp">
+        android:layout_height="@dimen/two_nine_two_dp">
 
     </android.support.v4.view.ViewPager>
 
@@ -81,7 +81,7 @@
             android:layout_height="wrap_content"
             android:layout_alignParentStart="true"
             android:layout_centerVertical="true"
-            android:layout_marginStart="61dp"
+            android:layout_marginStart="@dimen/six_one_dp"
             android:src="@mipmap/bt_sceneplay_down_press" />
 
         <ImageView
@@ -96,7 +96,7 @@
             android:id="@+id/imageView10"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginEnd="55dp"
+            android:layout_marginEnd="@dimen/five_five_dp"
             android:src="@mipmap/bt_playpage_moreactions_normal"
             android:layout_centerVertical="true"
             android:layout_alignParentEnd="true" />
@@ -106,21 +106,29 @@
     <SeekBar
         android:id="@+id/seekbar_songplaypage"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
+        android:layout_height="wrap_content"
+        android:focusable="true"
+        android:maxHeight="@dimen/four_dip"
+        android:minHeight="@dimen/four_dip"
+        android:paddingLeft="@dimen/five_zero_dip"
+        android:paddingRight="@dimen/five_zero_dip"
+        android:progressDrawable="@drawable/progress_seekbar"
+        android:thumb="@drawable/truk"
+        />
 
     <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="114dp">
+        android:layout_height="@dimen/one_one_four_dp">
         <TextView
             android:id="@+id/tv_songplaypage_time"
             android:textColor="@android:color/white"
-            android:text="00:00"
+            android:text="@string/_00_00"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content" />
         <TextView
             android:id="@+id/tv_songplaypage_maxtime"
             android:textColor="@android:color/white"
-            android:text="00:00"
+            android:text="@string/_00_00"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentTop="true"
@@ -133,13 +141,13 @@
             android:id="@+id/iv_songplaypage_playmode"
             android:layout_centerVertical="true"
             android:layout_alignParentStart="true"
-            android:layout_marginStart="23dp" />
+            android:layout_marginStart="@dimen/two_three_dp" />
 
         <ImageView
             android:src="@mipmap/bt_widget_prev_press"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginEnd="46dp"
+            android:layout_marginEnd="@dimen/four_six_dp"
             android:id="@+id/iv_songplayactivity_previous"
             android:layout_centerVertical="true"
             android:layout_toStartOf="@+id/iv_songplayactivity_play" />
@@ -157,7 +165,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:id="@+id/iv_songplayactivity_next"
-            android:layout_marginStart="40dp"
+            android:layout_marginStart="@dimen/four_zero_dp"
             android:layout_alignTop="@+id/iv_songplayactivity_previous"
             android:layout_toEndOf="@+id/iv_songplayactivity_play" />
         <ImageView
@@ -167,6 +175,6 @@
             android:layout_height="wrap_content"
             android:layout_alignBottom="@+id/iv_songplayactivity_play"
             android:layout_alignParentEnd="true"
-            android:layout_marginEnd="20dp" />
+            android:layout_marginEnd="@dimen/two_zero_dp" />
     </RelativeLayout>
 </LinearLayout>

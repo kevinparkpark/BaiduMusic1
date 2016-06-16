@@ -3,7 +3,7 @@
     android:orientation="vertical" android:layout_width="match_parent"
     android:layout_height="match_parent">
     <RelativeLayout
-        android:layout_margin="5dp"
+        android:layout_margin="@dimen/five_dp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
@@ -17,8 +17,8 @@
             android:layout_alignBottom="@+id/tv_le_rankdetails_author" />
         <TextView
             android:id="@+id/tv_le_rankdetails_song"
-            android:textSize="16sp"
-            android:text="失落沙洲"
+            android:textSize="@dimen/one_six_sp"
+            android:text="@string/title"
             android:maxEms="10"
             android:maxLines="1"
             android:layout_width="wrap_content"
@@ -29,8 +29,8 @@
             android:maxEms="10"
             android:maxLines="1"
             android:id="@+id/tv_le_rankdetails_author"
-            android:textSize="14sp"
-            android:text="徐佳莹"
+            android:textSize="@dimen/one_four_dp"
+            android:text="@string/author"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_below="@+id/iv_le_rankdetails_more"
@@ -42,7 +42,7 @@
             android:layout_height="wrap_content"
             android:layout_centerVertical="true"
             android:layout_alignParentEnd="true"
-            android:layout_marginEnd="24dp" />
+            android:layout_marginEnd="@dimen/two_four_dp" />
         <TextView
             android:id="@+id/tv_le_rankdetails_count"
             android:textColor="@android:color/holo_red_dark"

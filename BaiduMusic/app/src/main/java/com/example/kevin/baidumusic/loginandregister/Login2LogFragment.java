@@ -46,13 +46,13 @@ public class Login2LogFragment extends BaseFragment {
                 bmobUser.login(context, new SaveListener() {
                     @Override
                     public void onSuccess() {
-                        Toast.makeText(context, "登录成功", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(context, R.string.login_success, Toast.LENGTH_SHORT).show();
                         ((Login2LogedOnClickListener)getActivity()).onLogin2LogedClickListener();
                     }
 
                     @Override
                     public void onFailure(int i, String s) {
-                        Toast.makeText(context, "登录失败", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(context, R.string.login_fail, Toast.LENGTH_SHORT).show();
                     }
                 });
             }

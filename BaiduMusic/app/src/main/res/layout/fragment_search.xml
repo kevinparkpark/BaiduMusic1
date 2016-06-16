@@ -7,7 +7,7 @@
         android:background="#1fb5fc"
         android:orientation="horizontal"
         android:layout_width="match_parent"
-        android:layout_height="50dp"
+        android:layout_height="@dimen/five_zero_dp"
         android:weightSum="1">
         <ImageView
             android:src="@mipmap/ic_back_normal"
@@ -17,15 +17,15 @@
             android:id="@+id/iv_search_back" />
         <EditText
             android:maxLines="1"
-            android:padding="5dp"
-            android:hint="歌曲,歌手,专辑,歌词,伴奏"
-            android:layout_width="250dp"
+            android:padding="@dimen/five_dp"
+            android:hint="@string/hint_search"
+            android:layout_width="@dimen/two_five_zero_dp"
             android:layout_height="wrap_content"
             android:background="@android:color/white"
             android:id="@+id/et_search"
             android:layout_alignTop="@+id/iv_search_icon"
             android:layout_toEndOf="@+id/iv_search_back"
-            android:layout_marginStart="19dp" />
+            android:layout_marginStart="@dimen/one_nine_dp" />
         <ImageView
             android:id="@+id/iv_search_icon"
             android:layout_width="wrap_content"
@@ -33,7 +33,7 @@
             android:src="@mipmap/bt_titlebar_new_search_normal"
             android:layout_centerVertical="true"
             android:layout_alignParentEnd="true"
-            android:layout_marginEnd="24dp" />
+            android:layout_marginEnd="@dimen/two_four_dp" />
     </RelativeLayout>
     <ListView
         android:id="@+id/search_listview"
