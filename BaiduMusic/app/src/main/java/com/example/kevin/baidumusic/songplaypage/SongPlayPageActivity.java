@@ -18,6 +18,7 @@ import android.widget.Toast;
 import com.example.kevin.baidumusic.R;
 import com.example.kevin.baidumusic.base.BaseFragment;
 import com.example.kevin.baidumusic.db.DBHeart;
+import com.example.kevin.baidumusic.db.DBUtilsHelper;
 import com.example.kevin.baidumusic.db.LiteOrmSington;
 import com.example.kevin.baidumusic.eventbean.EventProgressBean;
 import com.example.kevin.baidumusic.eventbean.EventSeekToBean;
@@ -47,7 +48,7 @@ public class SongPlayPageActivity extends AppCompatActivity implements View.OnCl
     private ViewPager viewPager;
     private ArrayList<BaseFragment> fragments;
     private SongPlayPageAdapter adapter;
-    private ImageView ivSongPlay, ivNext, ivPrevious, ivMode,ivDownload,ivBack,iv2More,ivHeart,ivTvBtn;
+    private ImageView ivSongPlay, ivNext, ivPrevious, ivMode, ivDownload, ivBack, iv2More, ivHeart, ivTvBtn;
     private TextView tvSongPlayTitle, tvSongPlayAuthor, tvSongPlayTime, tvSongPlayMaxTime;
     private SeekBar seekBar;
     private int maxCurrent;
@@ -58,7 +59,8 @@ public class SongPlayPageActivity extends AppCompatActivity implements View.OnCl
     private final int MODE_LOOP = 0;//列表循环
     private int mode = 0;//播放方式
     private LiteOrm liteOrm;
-    private String title,author,img,bigImg,songId;
+    private String title, author, img, bigImg, songId;
+    private DBUtilsHelper dbUtilsHelper=new DBUtilsHelper();
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -73,16 +75,16 @@ public class SongPlayPageActivity extends AppCompatActivity implements View.OnCl
         ivNext = (ImageView) findViewById(R.id.iv_songplayactivity_next);
         ivPrevious = (ImageView) findViewById(R.id.iv_songplayactivity_previous);
         ivMode = (ImageView) findViewById(R.id.iv_songplaypage_playmode);
-        ivDownload= (ImageView) findViewById(R.id.iv_songplaypage_download);
-        ivBack= (ImageView) findViewById(R.id.iv_songplaypage_back);
-        iv2More= (ImageView) findViewById(R.id.iv_songplaypage_more);
-        ivHeart= (ImageView) findViewById(R.id.iv_songplaypage_heart);
-        ivTvBtn= (ImageView) findViewById(R.id.iv_songplaypage_tvbtn);
+        ivDownload = (ImageView) findViewById(R.id.iv_songplaypage_download);
+        ivBack = (ImageView) findViewById(R.id.iv_songplaypage_back);
+        iv2More = (ImageView) findViewById(R.id.iv_songplaypage_more);
+        ivHeart = (ImageView) findViewById(R.id.iv_songplaypage_heart);
+        ivTvBtn = (ImageView) findViewById(R.id.iv_songplaypage_tvbtn);
 
         seekBar = (SeekBar) findViewById(R.id.seekbar_songplaypage);
 
         EventBus.getDefault().register(this);
-        liteOrm= LiteOrmSington.getInstance().getLiteOrm();
+        liteOrm = LiteOrmSington.getInstance().getLiteOrm();
 
         fragments = new ArrayList<>();
         AuthorImgFragment authorImgFragment = new AuthorImgFragment();
@@ -119,9 +121,9 @@ public class SongPlayPageActivity extends AppCompatActivity implements View.OnCl
 
             @Override
             public void onPageSelected(int position) {
-                if (viewPager.getCurrentItem()==2){
+                if (viewPager.getCurrentItem() == 2) {
                     ivTvBtn.setImageResource(R.mipmap.bt_sceneplay_picture_press);
-                }else {
+                } else {
                     ivTvBtn.setImageResource(R.mipmap.bt_sceneplay_word_press);
                 }
             }
@@ -136,7 +138,7 @@ public class SongPlayPageActivity extends AppCompatActivity implements View.OnCl
 
     //接收服务中seekbar相关数据
     @Subscribe(threadMode = ThreadMode.MAIN)
-    public void SeeBarControl(final EventProgressBean bean) {
+    public void seeBarControl(final EventProgressBean bean) {
 
         if (bean != null && maxCurrent != bean.getMaxCurrent()) {
             maxCurrent = bean.getMaxCurrent();
@@ -175,25 +177,26 @@ public class SongPlayPageActivity extends AppCompatActivity implements View.OnCl
 
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void serviceToPlayBtn(EventServiceToPlayBtnBean btnBean) {
-        flag=true;
+        flag = true;
         ivSongPlay.setImageResource(R.mipmap.bt_widget_pause_press);
     }
 
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void serviceToplaySong(EventUpDateSongUI songUi) {
 
-        title=songUi.getTitle();
-        author=songUi.getAuthor();
-        img=songUi.getImageUrl();
-        bigImg=songUi.getImageBigUrl();
-        songId=songUi.getSongId();
+        title = songUi.getTitle();
+        author = songUi.getAuthor();
+        img = songUi.getImageUrl();
+        bigImg = songUi.getImageBigUrl();
+        songId = songUi.getSongId();
 
         tvSongPlayAuthor.setText(songUi.getAuthor());
         tvSongPlayTitle.setText(songUi.getTitle());
-        QueryBuilder<DBHeart> list = new QueryBuilder<DBHeart>(DBHeart.class).whereEquals
-                (DBHeart.TITLE, songUi.getTitle());
+        List<DBHeart> dbHearts=dbUtilsHelper.showQuery(DBHeart.class,DBHeart.TITLE,songUi.getTitle());
+//        QueryBuilder<DBHeart> list = new QueryBuilder<DBHeart>(DBHeart.class)
+//                .whereEquals(DBHeart.TITLE, songUi.getTitle());
 
-        if (liteOrm.query(list).size() > 0) {
+        if (dbHearts.size() > 0) {
             ivHeart.setImageResource(R.mipmap.bt_sceneplay_collect_selected);
         }
     }
@@ -252,27 +255,22 @@ public class SongPlayPageActivity extends AppCompatActivity implements View.OnCl
                 startActivity(new Intent(this, SongPlayPageListActivity.class));
                 break;
             case R.id.iv_songplaypage_heart:
-                QueryBuilder<DBHeart> list = new QueryBuilder<DBHeart>(DBHeart.class).whereEquals
-                        (DBHeart.TITLE,title);
-                if (liteOrm.query(list).size() == 0) {
+
+                int size = dbUtilsHelper.showQueryDBHeart(title, author, img, bigImg, songId);
+
+                if (size == 0) {
                     ivHeart.setImageResource(R.mipmap.bt_sceneplay_collect_selected);
-                    liteOrm.insert(new DBHeart(title,author,img,bigImg,songId));
                     Toast.makeText(this, getString(R.string.add_to_heart), Toast.LENGTH_SHORT).show();
                 } else {
                     ivHeart.setImageResource(R.mipmap.bt_sceneplay_collect_press);
-
-                    List<DBHeart> dbHearts = liteOrm.query(list);
-                    if (dbHearts.size() > 0) {
-                        liteOrm.delete(dbHearts);
-                    }
                     Toast.makeText(this, getString(R.string.del_heart), Toast.LENGTH_SHORT).show();
                 }
                 break;
             case R.id.iv_songplaypage_tvbtn:
-                if (viewPager.getCurrentItem()!=2){
-                viewPager.setCurrentItem(2);
-                ivTvBtn.setImageResource(R.mipmap.bt_sceneplay_picture_press);
-                }else if (viewPager.getCurrentItem()!=1){
+                if (viewPager.getCurrentItem() != 2) {
+                    viewPager.setCurrentItem(2);
+                    ivTvBtn.setImageResource(R.mipmap.bt_sceneplay_picture_press);
+                } else if (viewPager.getCurrentItem() != 1) {
                     viewPager.setCurrentItem(1);
                     ivTvBtn.setImageResource(R.mipmap.bt_sceneplay_word_press);
                 }
@@ -292,8 +290,8 @@ public class SongPlayPageActivity extends AppCompatActivity implements View.OnCl
                 Toast.makeText(this, R.string.one_play, Toast.LENGTH_SHORT).show();
                 break;
         }
-        Intent intent=new Intent(BroadcastValues.PLAY_MODE);
-        intent.putExtra(getString(R.string.mode),mode);
+        Intent intent = new Intent(BroadcastValues.PLAY_MODE);
+        intent.putExtra(getString(R.string.mode), mode);
         sendBroadcast(intent);
         ivMode.setImageLevel(mode);
     }

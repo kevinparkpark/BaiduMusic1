@@ -4,7 +4,7 @@ import android.content.Intent;
 import android.view.View;
 import android.widget.TextView;
 
-import com.example.kevin.baidumusic.app.MyApp;
+import com.example.kevin.baidumusic.MyApp;
 import com.example.kevin.baidumusic.base.BaseFragment;
 import com.example.kevin.baidumusic.R;
 import com.example.kevin.baidumusic.musiclibrary.radio.radioplay.RadioPlayActivity;

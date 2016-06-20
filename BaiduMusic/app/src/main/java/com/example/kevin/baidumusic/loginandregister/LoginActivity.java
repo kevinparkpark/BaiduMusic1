@@ -1,21 +1,15 @@
 package com.example.kevin.baidumusic.loginandregister;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 import android.view.View;
-import android.widget.Button;
-import android.widget.EditText;
 import android.widget.ImageView;
-import android.widget.TextView;
-import android.widget.Toast;
 
 import com.example.kevin.baidumusic.R;
+import com.example.kevin.baidumusic.MyApp;
 
 import cn.bmob.v3.BmobUser;
-import cn.bmob.v3.listener.SaveListener;
 
 /**
  * Created by kevin on 16/6/8.
@@ -34,7 +28,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
 
 //        String user=getIntent().getStringExtra("user");
         //如果有登录信息直接跳转
-        if (bmobUser.getUsername()!=null){
+        if (bmobUser!=null){
             loginFragment=new LoginFragment();
             getSupportFragmentManager().beginTransaction()
                     .replace(R.id.framelayout_login,loginFragment).commit();
@@ -100,6 +94,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
 
     @Override
     public void onLogin2LogOutClickListener() {
+        BmobUser.logOut(MyApp.context);
         getSupportFragmentManager().beginTransaction().replace(R.id.framelayout_login,new Login2LogFragment()).commit();
     }
 

@@ -1,33 +1,16 @@
 package com.example.kevin.baidumusic;
 
 import android.content.Intent;
-import android.content.SharedPreferences;
-import android.graphics.Rect;
-import android.graphics.drawable.BitmapDrawable;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
-import android.util.DisplayMetrics;
-import android.util.Log;
-import android.view.Display;
-import android.view.Gravity;
 import android.view.KeyEvent;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
-import android.view.WindowManager;
-import android.widget.AdapterView;
-import android.widget.FrameLayout;
 import android.widget.ImageView;
-import android.widget.ListView;
-import android.widget.PopupWindow;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.android.volley.toolbox.ImageLoader;
-import com.example.kevin.baidumusic.db.DBSongListCacheBean;
-import com.example.kevin.baidumusic.db.LiteOrmSington;
-import com.example.kevin.baidumusic.eventbean.EventPosition;
 import com.example.kevin.baidumusic.eventbean.EventServiceToPauseBean;
 import com.example.kevin.baidumusic.eventbean.EventServiceToPlayBtnBean;
 import com.example.kevin.baidumusic.eventbean.EventUpDateSongUI;
@@ -48,17 +31,16 @@ import com.example.kevin.baidumusic.search.SearchFragment;
 import com.example.kevin.baidumusic.service.MediaPlayService;
 import com.example.kevin.baidumusic.songplaypage.SongPlayPageActivity;
 import com.example.kevin.baidumusic.totalfragment.popsonglist.PopSongListFragment;
-import com.example.kevin.baidumusic.totalfragment.popsonglist.PopSonglistAdapter;
 import com.example.kevin.baidumusic.totalfragment.TotalFragment;
 import com.example.kevin.baidumusic.util.BroadcastValues;
-import com.litesuits.orm.LiteOrm;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 
-import java.util.List;
-
+/**
+ * Created by kevin on 16/5/18.
+ */
 public class MainActivity extends AppCompatActivity implements MyFragment.MyToLocalFragmentOnClick, RankFragment.rankToOnItemListener
         , SongMenuFragment.songMenuToDetailsOnClickListener, KMusicFragment.kMusicToDetailsOnClickListener
         , AuthorDetailsFragment.authorDetailsToSonglistOnClickListener, MyFragment.LatelyPlaylistOnClick
@@ -144,8 +126,9 @@ public class MainActivity extends AppCompatActivity implements MyFragment.MyToLo
             @Override
             public void onTitleClick() {
                 // 隐藏当前fragment     进场动画
-                getSupportFragmentManager().beginTransaction().hide(totalFragment).setCustomAnimations(R.anim.fragment_in, R.anim.fragment_out)
-                        .add(R.id.framelayout_main, new SearchFragment()).addToBackStack(null).commit();
+                getSupportFragmentManager().beginTransaction().hide(totalFragment).setCustomAnimations
+                        (R.anim.fragment_in, R.anim.fragment_out).add(R.id.framelayout_main
+                        , new SearchFragment()).addToBackStack(null).commit();
 
             }
         });
@@ -170,22 +153,25 @@ public class MainActivity extends AppCompatActivity implements MyFragment.MyToLo
     //跳转到本地音乐
     @Override
     public void onMyToLocalFragmentClick() {
-        getSupportFragmentManager().beginTransaction().hide(totalFragment).setCustomAnimations(R.anim.fragment_in, R.anim.fragment_out)
-                .add(R.id.framelayout_main, new MyLocalMusicSonglistFragment()).addToBackStack(null).commit();
+        getSupportFragmentManager().beginTransaction().hide(totalFragment).setCustomAnimations(
+                R.anim.fragment_in, R.anim.fragment_out).add(R.id.framelayout_main,
+                new MyLocalMusicSonglistFragment()).addToBackStack(null).commit();
     }
 
     //跳转到最近播放
     @Override
     public void onLatelyPlaylistClick() {
-        getSupportFragmentManager().beginTransaction().hide(totalFragment).setCustomAnimations(R.anim.fragment_in, R.anim.fragment_out)
-                .add(R.id.framelayout_main, new LatelyPlaylistFragment()).addToBackStack(null).commit();
+        getSupportFragmentManager().beginTransaction().hide(totalFragment).setCustomAnimations(
+                R.anim.fragment_in, R.anim.fragment_out).add(R.id.framelayout_main,
+                new LatelyPlaylistFragment()).addToBackStack(null).commit();
     }
 
     //跳转到我喜欢的音乐
     @Override
     public void onHeartSongListClick() {
-        getSupportFragmentManager().beginTransaction().hide(totalFragment).setCustomAnimations(R.anim.fragment_in, R.anim.fragment_out)
-                .add(R.id.framelayout_main, new HeartSongListFragment()).addToBackStack(null).commit();
+        getSupportFragmentManager().beginTransaction().hide(totalFragment).setCustomAnimations(
+                R.anim.fragment_in, R.anim.fragment_out).add(R.id.framelayout_main,
+                new HeartSongListFragment()).addToBackStack(null).commit();
     }
 
     //跳转到排行榜
@@ -193,8 +179,9 @@ public class MainActivity extends AppCompatActivity implements MyFragment.MyToLo
 
     @Override
     public void onRankToItemListener(int count, String url) {
-        getSupportFragmentManager().beginTransaction().setCustomAnimations(R.anim.fragment_in, R.anim.fragment_out)
-                .add(R.id.framelayout_main, rankDetailsFragment).addToBackStack(null).commit();
+        getSupportFragmentManager().beginTransaction().setCustomAnimations(
+                R.anim.fragment_in, R.anim.fragment_out).add(R.id.framelayout_main,
+                rankDetailsFragment).addToBackStack(null).commit();
         getSupportFragmentManager().beginTransaction().hide(totalFragment).commit();
 
         Bundle bundle = new Bundle();
@@ -208,8 +195,9 @@ public class MainActivity extends AppCompatActivity implements MyFragment.MyToLo
 
     @Override
     public void onSongMenuToDetailsClickListener(String position) {
-        getSupportFragmentManager().beginTransaction().setCustomAnimations(R.anim.fragment_in, R.anim.fragment_out)
-                .add(R.id.framelayout_main, songMenuDetailsFragment).hide(totalFragment).addToBackStack(null).commit();
+        getSupportFragmentManager().beginTransaction().setCustomAnimations(R.anim.fragment_in,
+                R.anim.fragment_out).add(R.id.framelayout_main, songMenuDetailsFragment).hide(
+                totalFragment).addToBackStack(null).commit();
         Bundle bundle = new Bundle();
         bundle.putString(getString(R.string.main_listid), position);
         songMenuDetailsFragment.setArguments(bundle);
@@ -218,8 +206,9 @@ public class MainActivity extends AppCompatActivity implements MyFragment.MyToLo
     //跳转歌单详情页面
     @Override
     public void onRecommendToSongMenuDetailsClickListener(String listId) {
-        getSupportFragmentManager().beginTransaction().setCustomAnimations(R.anim.fragment_in, R.anim.fragment_out)
-                .add(R.id.framelayout_main, songMenuDetailsFragment).hide(totalFragment).addToBackStack(null).commit();
+        getSupportFragmentManager().beginTransaction().setCustomAnimations(R.anim.fragment_in,
+                R.anim.fragment_out).add(R.id.framelayout_main, songMenuDetailsFragment).hide(
+                totalFragment).addToBackStack(null).commit();
         Bundle bundle = new Bundle();
         bundle.putString(getString(R.string.main_listid), listId);
         songMenuDetailsFragment.setArguments(bundle);
@@ -237,8 +226,9 @@ public class MainActivity extends AppCompatActivity implements MyFragment.MyToLo
 
     @Override
     public void onKMusicToDetailsClickListener(String url1, String url2, String authorName) {
-        getSupportFragmentManager().beginTransaction().setCustomAnimations(R.anim.fragment_in, R.anim.fragment_out)
-                .add(R.id.framelayout_main, authorDetailsFragment).hide(totalFragment).addToBackStack(null).commit();
+        getSupportFragmentManager().beginTransaction().setCustomAnimations(R.anim.fragment_in,
+                R.anim.fragment_out).add(R.id.framelayout_main, authorDetailsFragment).hide(
+                totalFragment).addToBackStack(null).commit();
         Bundle bundle = new Bundle();
         bundle.putString(getString(R.string.main_authorurl1), url1);
         bundle.putString(getString(R.string.main_author2), url2);
@@ -255,8 +245,9 @@ public class MainActivity extends AppCompatActivity implements MyFragment.MyToLo
 
     @Override
     public void onAuthorDetailsToSonglistClickListener(String tingUid, String author, String country, String imgUrl) {
-        getSupportFragmentManager().beginTransaction().setCustomAnimations(R.anim.fragment_in, R.anim.fragment_out)
-                .add(R.id.framelayout_main, authorDetailsSonglistFragment).hide(authorDetailsFragment).addToBackStack(null).commit();
+        getSupportFragmentManager().beginTransaction().setCustomAnimations(R.anim.fragment_in,
+                R.anim.fragment_out).add(R.id.framelayout_main, authorDetailsSonglistFragment).hide(
+                authorDetailsFragment).addToBackStack(null).commit();
         Bundle bundle = new Bundle();
         bundle.putString(getString(R.string.main_tinguid), tingUid);
         bundle.putString(getString(R.string.main_author), author);
@@ -286,13 +277,13 @@ public class MainActivity extends AppCompatActivity implements MyFragment.MyToLo
     protected void onDestroy() {
         super.onDestroy();
         EventBus.getDefault().unregister(this);
+        //退出服务
         // stopService(startIntent);
     }
 
     //点击2此退出
     private long exitTime = 0;
 
-    //
     public boolean onKeyDown(int keyCode, KeyEvent event) {
         if(popSongListFragment.isVisible()){
             getSupportFragmentManager().beginTransaction().hide(popSongListFragment).commit();

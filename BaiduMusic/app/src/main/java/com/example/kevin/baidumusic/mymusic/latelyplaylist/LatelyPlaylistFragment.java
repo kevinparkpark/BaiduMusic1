@@ -1,6 +1,7 @@
 package com.example.kevin.baidumusic.mymusic.latelyplaylist;
 
 import android.content.Intent;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -17,6 +18,7 @@ import com.example.kevin.baidumusic.base.SecBaseFragment;
 import com.example.kevin.baidumusic.db.DBHeart;
 import com.example.kevin.baidumusic.db.DBSongListCacheBean;
 import com.example.kevin.baidumusic.db.DBSongPlayListBean;
+import com.example.kevin.baidumusic.db.DBUtilsHelper;
 import com.example.kevin.baidumusic.db.LiteOrmSington;
 import com.example.kevin.baidumusic.eventbean.EventPosition;
 import com.example.kevin.baidumusic.musiclibrary.rank.RankDetailsOnClickListener;
@@ -38,7 +40,7 @@ public class LatelyPlaylistFragment extends SecBaseFragment{
     private List<DBSongPlayListBean> dbSongPlayListBean;
     private ImageView ivBack;
     private PopupWindow popupWindow;
-    private LiteOrm liteOrm;
+    private DBUtilsHelper dbUtilsHelper=new DBUtilsHelper();
 
     @Override
     public int setlayout() {
@@ -53,8 +55,7 @@ public class LatelyPlaylistFragment extends SecBaseFragment{
 
     @Override
     protected void initData() {
-        final LiteOrm liteOrm=LiteOrmSington.getInstance().getLiteOrm();
-        dbSongPlayListBean=liteOrm.query(DBSongPlayListBean.class);
+        dbSongPlayListBean=dbUtilsHelper.queryAll(DBSongPlayListBean.class);
         adapter=new LatelyPlaylistAdapter(context);
         adapter.setBeen(dbSongPlayListBean);
         listView.setAdapter(adapter);
@@ -68,10 +69,10 @@ public class LatelyPlaylistFragment extends SecBaseFragment{
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 
-                liteOrm.deleteAll(DBSongListCacheBean.class);
+                dbUtilsHelper.deleteAll(DBSongListCacheBean.class);
                 for (int i = 0; i < dbSongPlayListBean.size(); i++) {
 
-                liteOrm.save(new DBSongListCacheBean(dbSongPlayListBean.get(i).getTitle(),
+                dbUtilsHelper.insertDB(new DBSongListCacheBean(dbSongPlayListBean.get(i).getTitle(),
                         dbSongPlayListBean.get(i).getAuthor(),dbSongPlayListBean.get(i).getPicUrl(),
                         dbSongPlayListBean.get(i).getPicBigUrl(),dbSongPlayListBean.get(i).getSongId()));
                 }
@@ -101,33 +102,25 @@ public class LatelyPlaylistFragment extends SecBaseFragment{
                     }
                 });
 
-                final QueryBuilder<DBHeart> list = new QueryBuilder<DBHeart>(DBHeart.class).whereEquals
-                        (DBHeart.TITLE, dbSongPlayListBean.get(position).getTitle());
-
-                if (liteOrm.query(list).size() > 0) {
+                final List<DBHeart> dbHeart=dbUtilsHelper.showQuery(DBHeart.class
+                        ,DBHeart.TITLE,dbSongPlayListBean.get(position).getTitle());
+                if (dbHeart.size()>0){
                     ivHart.setImageResource(R.mipmap.cust_heart_press);
                 }
-
                 ivHart.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        if (liteOrm.query(list).size() == 0) {
+                        if (dbHeart.size()==0){
                             ivHart.setImageResource(R.mipmap.cust_heart_press);
-                            liteOrm.insert(new DBHeart(dbSongPlayListBean.get(position).getTitle(),
+                            DBHeart dbHeartBeen=new DBHeart(dbSongPlayListBean.get(position).getTitle(),
                                     dbSongPlayListBean.get(position).getAuthor(), dbSongPlayListBean.get(position).getPicUrl()
-                                    , dbSongPlayListBean.get(position).getPicBigUrl(), dbSongPlayListBean.get(position).getSongId()));
+                                    , dbSongPlayListBean.get(position).getPicBigUrl(), dbSongPlayListBean.get(position).getSongId());
+                            dbUtilsHelper.insertDB(dbHeartBeen);
                             popupWindow.dismiss();
                             Toast.makeText(context, context.getString(R.string.add_to_heart), Toast.LENGTH_SHORT).show();
-                        } else {
+                        }else {
                             ivHart.setImageResource(R.mipmap.cust_dialog_hart);
-
-                            QueryBuilder<DBHeart> list = new QueryBuilder<DBHeart>(DBHeart.class).whereEquals
-                                    (DBHeart.TITLE, dbSongPlayListBean.get(position).getTitle());
-
-                            List<DBHeart> dbHearts = liteOrm.query(list);
-                            if (dbHearts.size() > 0) {
-                                liteOrm.delete(dbHearts);
-                            }
+                            dbUtilsHelper.delete(dbHeart);
                             popupWindow.dismiss();
                             Toast.makeText(context, context.getString(R.string.del_heart), Toast.LENGTH_SHORT).show();
                         }
@@ -138,7 +131,7 @@ public class LatelyPlaylistFragment extends SecBaseFragment{
 
                     @Override
                     public void onClick(View v) {
-                        Toast.makeText(context, R.string.download_complete, Toast.LENGTH_SHORT).show();
+                        Toast.makeText(context, R.string.download_now, Toast.LENGTH_SHORT).show();
                     }
                 });
                 //红心

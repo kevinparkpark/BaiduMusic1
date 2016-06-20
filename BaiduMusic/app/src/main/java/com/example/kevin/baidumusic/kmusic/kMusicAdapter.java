@@ -1,19 +1,13 @@
 package com.example.kevin.baidumusic.kmusic;
 
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.graphics.Canvas;
-import android.graphics.Paint;
-import android.graphics.Rect;
 import android.support.v4.view.PagerAdapter;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 
-import com.android.volley.VolleyError;
 import com.android.volley.toolbox.ImageLoader;
 import com.example.kevin.baidumusic.R;
-import com.example.kevin.baidumusic.app.MyApp;
+import com.example.kevin.baidumusic.MyApp;
 import com.example.kevin.baidumusic.netutil.VolleySingleton;
 
 import java.util.List;

@@ -1,6 +1,7 @@
 package com.example.kevin.baidumusic.db;
 
-import com.example.kevin.baidumusic.app.MyApp;
+import com.example.kevin.baidumusic.R;
+import com.example.kevin.baidumusic.MyApp;
 import com.litesuits.orm.LiteOrm;
 
 /**
@@ -16,7 +17,7 @@ public class LiteOrmSington {
     }
 
     private LiteOrmSington() {
-                liteOrm=LiteOrm.newCascadeInstance(MyApp.context,"songurl");
+                liteOrm=LiteOrm.newCascadeInstance(MyApp.context,MyApp.context.getString(R.string.liteorm_songurl));
     }
 
     public LiteOrm getLiteOrm() {

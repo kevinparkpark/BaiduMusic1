@@ -1,6 +1,7 @@
 package com.example.kevin.baidumusic.mymusic.heartsonglist;
 
 import android.graphics.drawable.BitmapDrawable;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -18,6 +19,7 @@ import com.example.kevin.baidumusic.R;
 import com.example.kevin.baidumusic.base.SecBaseFragment;
 import com.example.kevin.baidumusic.db.DBHeart;
 import com.example.kevin.baidumusic.db.DBSongListCacheBean;
+import com.example.kevin.baidumusic.db.DBUtilsHelper;
 import com.example.kevin.baidumusic.db.LiteOrmSington;
 import com.example.kevin.baidumusic.eventbean.EventGenericBean;
 import com.example.kevin.baidumusic.eventbean.EventPosition;
@@ -49,6 +51,7 @@ public class HeartSongListFragment extends SecBaseFragment {
     private LiteOrm liteOrm;
     private PopupWindow popupWindow;
     private SongPlayBean songPlayBean;
+    private DBUtilsHelper dbUtilsHelper=new DBUtilsHelper();
 
     @Override
     public int setlayout() {
@@ -68,8 +71,7 @@ public class HeartSongListFragment extends SecBaseFragment {
     protected void initData() {
         adapter = new HeartSonglistAdapter(context);
 
-        liteOrm = LiteOrmSington.getInstance().getLiteOrm();
-        dbHearts = liteOrm.query(DBHeart.class);
+        dbHearts = dbUtilsHelper.queryAll(DBHeart.class);
         loadImg(dbHearts);
 
         tvCount.setText(dbHearts.size() + context.getString(R.string.song));
@@ -82,7 +84,7 @@ public class HeartSongListFragment extends SecBaseFragment {
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 List<EventGenericBean> eventGenericBeen = new ArrayList<EventGenericBean>();
 
-                liteOrm.deleteAll(DBSongListCacheBean.class);
+                dbUtilsHelper.deleteAll(DBSongListCacheBean.class);
 
                 for (DBHeart dbHeart : dbHearts) {
                     EventGenericBean been = new EventGenericBean(dbHeart.getTitle(), dbHeart.getAuthor()
@@ -118,45 +120,33 @@ public class HeartSongListFragment extends SecBaseFragment {
                     }
                 });
 
-
-                final QueryBuilder<DBHeart> list = new QueryBuilder<DBHeart>(DBHeart.class).whereEquals
-                        (DBHeart.TITLE, dbHearts.get(position).getTitle());
-
-                if (list != null && liteOrm.query(list).size() > 0) {
+                final List<DBHeart> dbHeart=dbUtilsHelper.showQuery(DBHeart.class
+                        ,DBHeart.TITLE,dbHearts.get(position).getTitle());
+                Log.d("RankDetailsFragment", "dbHeart:" + dbHeart.size());
+                if (dbHeart.size()>0){
                     ivHart.setImageResource(R.mipmap.cust_heart_press);
                 }
-                //歌曲收藏
                 ivHart.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        if (liteOrm.query(list).size() == 0) {
+                        if (dbHeart.size()==0){
                             ivHart.setImageResource(R.mipmap.cust_heart_press);
-                            liteOrm.insert(new DBHeart(dbHearts.get(position).getTitle(),
+                            DBHeart dbHeartBeen=new DBHeart(dbHearts.get(position).getTitle(),
                                     dbHearts.get(position).getAuthor(), dbHearts.get(position).getImageUrl()
-                                    , dbHearts.get(position).getImageBigUrl(), dbHearts.get(position).getSongId()));
+                                    , dbHearts.get(position).getImageBigUrl(), dbHearts.get(position).getSongId());
+                            dbUtilsHelper.insertDB(dbHeartBeen);
                             popupWindow.dismiss();
                             Toast.makeText(context, context.getString(R.string.add_to_heart), Toast.LENGTH_SHORT).show();
-                        } else {
+                        }else {
                             ivHart.setImageResource(R.mipmap.cust_dialog_hart);
-
-                            QueryBuilder<DBHeart> list = new QueryBuilder<DBHeart>(DBHeart.class).whereEquals
-                                    (DBHeart.TITLE, dbHearts.get(position).getTitle());
-
-                            List<DBHeart> hearts = liteOrm.query(list);
-                            if (hearts.size() > 0) {
-                                liteOrm.delete(hearts);
-                            }
-                            List<DBHeart> dbHeartList = liteOrm.query(DBHeart.class);
-                            loadImg(dbHeartList);
-                            adapter.setDbHearts(dbHeartList);
-                            Toast.makeText(context, context.getString(R.string.del_heart), Toast.LENGTH_SHORT).show();
+                            dbUtilsHelper.delete(dbHeart);
                             popupWindow.dismiss();
+                            Toast.makeText(context, context.getString(R.string.del_heart), Toast.LENGTH_SHORT).show();
                         }
                     }
                 });
                 //歌曲下载
                 ivDownload.setOnClickListener(new View.OnClickListener() {
-                    List<DBHeart> dbHeartList = liteOrm.query(DBHeart.class);
 
                     @Override
                     public void onClick(View v) {

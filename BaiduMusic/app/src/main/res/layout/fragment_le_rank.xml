@@ -1,11 +1,34 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical" android:layout_width="match_parent"
-    android:layout_height="match_parent">
-<ListView
-    android:id="@+id/rank_listview"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content">
+    android:layout_height="match_parent"
+    android:orientation="vertical">
 
-</ListView>
-</LinearLayout>
+
+    <ListView
+        android:id="@+id/rank_listview"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentStart="true">
+
+    </ListView>
+    <ImageView
+        android:id="@+id/iv_le_rank_load_error"
+        android:visibility="gone"
+        android:src="@mipmap/load_error1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="57dp" />
+    <ProgressBar
+        android:visibility="gone"
+        android:id="@+id/progressbar_le_rank"
+        style="@style/Base.TextAppearance.AppCompat.Large.Inverse"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerVertical="true"
+        android:layout_centerHorizontal="true" />
+
+</RelativeLayout>

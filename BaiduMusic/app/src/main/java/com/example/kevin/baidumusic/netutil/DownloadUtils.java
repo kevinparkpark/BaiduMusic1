@@ -2,11 +2,10 @@ package com.example.kevin.baidumusic.netutil;
 
 import android.os.Handler;
 import android.os.Message;
-import android.util.Log;
 import android.widget.Toast;
 
 import com.example.kevin.baidumusic.R;
-import com.example.kevin.baidumusic.app.MyApp;
+import com.example.kevin.baidumusic.MyApp;
 
 /**
  * Created by kevin on 16/6/12.

@@ -1,16 +1,14 @@
 package com.example.kevin.baidumusic.musiclibrary.recommend;
 
 import android.support.v4.view.PagerAdapter;
-import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 
 import com.android.volley.toolbox.ImageLoader;
 import com.example.kevin.baidumusic.R;
-import com.example.kevin.baidumusic.app.MyApp;
+import com.example.kevin.baidumusic.MyApp;
 import com.example.kevin.baidumusic.netutil.VolleySingleton;
-import com.squareup.picasso.Picasso;
 
 import java.util.List;
 

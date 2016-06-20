@@ -9,6 +9,7 @@ import com.litesuits.orm.db.enums.AssignType;
  */
 public class DBHeart {
     public static final String TITLE= "title";
+
     @PrimaryKey(AssignType.AUTO_INCREMENT)
     int id;
     @Column(TITLE)

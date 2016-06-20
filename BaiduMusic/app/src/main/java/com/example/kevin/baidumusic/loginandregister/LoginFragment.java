@@ -27,13 +27,14 @@ public class LoginFragment extends BaseFragment{
     @Override
     protected void initData() {
 //        String user=getArguments().getString("user");
-        BmobUser bmobUser=BmobUser.getCurrentUser(context);
+        final BmobUser bmobUser=BmobUser.getCurrentUser(context);
 
         tvUsername.setText(context.getString(R.string.welcome_login)+bmobUser.getUsername());
         tvLogOut.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 ((Login2LogOutOnClcikListener)getActivity()).onLogin2LogOutClickListener();
+
             }
         });
     }

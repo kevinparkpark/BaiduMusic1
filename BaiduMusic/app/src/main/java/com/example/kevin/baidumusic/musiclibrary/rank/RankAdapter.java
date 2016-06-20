@@ -58,11 +58,11 @@ public class RankAdapter extends BaseAdapter {
         }
 
         holder.tvRank.setText(contentBeans.get(position).getName());
-        holder.tvNo1.setText(contentBeans.get(position).getContent().get(0).getTitle()
+        holder.tvNo1.setText("1."+contentBeans.get(position).getContent().get(0).getTitle()
                 + "-" + contentBeans.get(position).getContent().get(0).getAuthor());
-        holder.tvNo2.setText(contentBeans.get(position).getContent().get(1).getTitle()
+        holder.tvNo2.setText("2."+contentBeans.get(position).getContent().get(1).getTitle()
                 + "-" + contentBeans.get(position).getContent().get(1).getAuthor());
-        holder.tvNo3.setText(contentBeans.get(position).getContent().get(2).getTitle()
+        holder.tvNo3.setText("3."+contentBeans.get(position).getContent().get(2).getTitle()
                 + "-" + contentBeans.get(position).getContent().get(2).getAuthor());
 
         ImageLoader loader = VolleySingleton.getInstance().getImageLoader();

@@ -15,7 +15,7 @@ import com.example.kevin.baidumusic.R;
 import com.example.kevin.baidumusic.util.myinterface.OnRefreshListener;
 
 /**
- * Created by dllo on 16/5/27.
+ * Created by kevin on 16/5/27.
  * 自定义listview
  */
 public class RefreshListView extends ListView implements AbsListView.OnScrollListener {

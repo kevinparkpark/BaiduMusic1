@@ -1,6 +1,7 @@
 package com.example.kevin.baidumusic.songplaypage;
 
 import android.provider.SyncStateContract;
+import android.util.Log;
 import android.view.View;
 
 import com.example.kevin.baidumusic.R;
@@ -20,7 +21,6 @@ import java.io.File;
  */
 public class AuthorLrcFragment extends BaseFragment {
     private LrcView lrcViewSingle;
-    private LrcView lrcViewFull;
 
     @Override
     public int setlayout() {
@@ -34,7 +34,7 @@ public class AuthorLrcFragment extends BaseFragment {
 
     @Override
     protected void initData() {
-        if (EventBus.getDefault().isRegistered(false)) {
+        if (!EventBus.getDefault().isRegistered(this)) {
             EventBus.getDefault().register(this);
         }
     }
@@ -50,8 +50,7 @@ public class AuthorLrcFragment extends BaseFragment {
     }
 
     @Subscribe(threadMode = ThreadMode.MAIN)
-    public void SeeBarControl(EventProgressBean bean) {
-
+    public void seeBarControl(EventProgressBean bean) {
         loadLrc(bean.getLrc());
         onPublish(bean.getCurrent());
     }

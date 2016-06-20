@@ -1,7 +1,7 @@
 package com.example.kevin.baidumusic.netutil;
 
 import com.example.kevin.baidumusic.R;
-import com.example.kevin.baidumusic.app.MyApp;
+import com.example.kevin.baidumusic.MyApp;
 
 import cn.sharesdk.framework.ShareSDK;
 import cn.sharesdk.onekeyshare.OnekeyShare;

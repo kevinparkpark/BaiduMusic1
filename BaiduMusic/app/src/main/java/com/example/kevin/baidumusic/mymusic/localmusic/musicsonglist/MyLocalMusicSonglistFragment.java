@@ -21,6 +21,7 @@ import com.example.kevin.baidumusic.R;
 import com.example.kevin.baidumusic.base.BaseFragment;
 import com.example.kevin.baidumusic.db.DBHeart;
 import com.example.kevin.baidumusic.db.DBSongListCacheBean;
+import com.example.kevin.baidumusic.db.DBUtilsHelper;
 import com.example.kevin.baidumusic.db.LiteOrmSington;
 import com.example.kevin.baidumusic.eventbean.EventPosition;
 import com.example.kevin.baidumusic.musiclibrary.rank.RankDetailsOnClickListener;
@@ -44,8 +45,8 @@ public class MyLocalMusicSonglistFragment extends BaseFragment {
     private ListView listView;
     private List<LocalMusic> localMusics;
     private PopupWindow popupWindow;
-    private LiteOrm liteOrm;
     private RelativeLayout relativeLayout;
+    private DBUtilsHelper dbUtilsHelper=new DBUtilsHelper();
 
     @Override
     public int setlayout() {
@@ -61,7 +62,6 @@ public class MyLocalMusicSonglistFragment extends BaseFragment {
     @Override
     protected void initData() {
         localMusics = new ArrayList<>();
-        liteOrm = LiteOrmSington.getInstance().getLiteOrm();
         adapter = new MyLocalMusicSongListAdapter(context);
         MusicUtils.scanMusic(context, localMusics);
         adapter.setMusicList(localMusics);
@@ -73,7 +73,7 @@ public class MyLocalMusicSonglistFragment extends BaseFragment {
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 EventBus.getDefault().post(new EventPosition(position));
                 EventBus.getDefault().post(localMusics.get(position));
-                liteOrm.deleteAll(DBSongListCacheBean.class);
+                dbUtilsHelper.deleteAll(DBSongListCacheBean.class);
 
                 SharedPreferences sp = context.getSharedPreferences(context.getString(R.string.songposition), context.MODE_PRIVATE);
                 SharedPreferences.Editor editor = sp.edit();
@@ -84,7 +84,7 @@ public class MyLocalMusicSonglistFragment extends BaseFragment {
                     @Override
                     public void run() {
                         for (int i = 0; i < localMusics.size(); i++) {
-                            liteOrm.insert(new DBSongListCacheBean(localMusics.get(i).getTitle(), localMusics.get(i).getArtist(),
+                            dbUtilsHelper.insertDB(new DBSongListCacheBean(localMusics.get(i).getTitle(), localMusics.get(i).getArtist(),
                                     null, null, localMusics.get(i).getFileName()));
                         }
                     }
@@ -123,33 +123,26 @@ public class MyLocalMusicSonglistFragment extends BaseFragment {
                     }
                 });
 
-                final QueryBuilder<DBHeart> list = new QueryBuilder<DBHeart>(DBHeart.class).whereEquals
-                        (DBHeart.TITLE, localMusics.get(position).getTitle());
-
-                if (liteOrm.query(list).size() > 0) {
+                final List<DBHeart> dbHeart=dbUtilsHelper.showQuery(DBHeart.class
+                        ,DBHeart.TITLE,localMusics.get(position).getTitle());
+                Log.d("RankDetailsFragment", "dbHeart:" + dbHeart.size());
+                if (dbHeart.size()>0){
                     ivHart.setImageResource(R.mipmap.cust_heart_press);
                 }
-
                 ivHart.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        if (liteOrm.query(list).size() == 0) {
+                        if (dbHeart.size()==0){
                             ivHart.setImageResource(R.mipmap.cust_heart_press);
-                            liteOrm.insert(new DBHeart(localMusics.get(position).getTitle(),
-                                    localMusics.get(position).getArtist(), null
-                                    , null, localMusics.get(position).getUri()));
+                            DBHeart dbHeartBeen=new DBHeart(localMusics.get(position).getTitle(),
+                                    localMusics.get(position).getAlbum(), null
+                                    , null, localMusics.get(position).getUri());
+                            dbUtilsHelper.insertDB(dbHeartBeen);
                             popupWindow.dismiss();
                             Toast.makeText(context, context.getString(R.string.add_to_heart), Toast.LENGTH_SHORT).show();
-                        } else {
+                        }else {
                             ivHart.setImageResource(R.mipmap.cust_dialog_hart);
-
-                            QueryBuilder<DBHeart> list = new QueryBuilder<DBHeart>(DBHeart.class).whereEquals
-                                    (DBHeart.TITLE, localMusics.get(position).getTitle());
-
-                            List<DBHeart> dbHearts = liteOrm.query(list);
-                            if (dbHearts.size() > 0) {
-                                liteOrm.delete(dbHearts);
-                            }
+                            dbUtilsHelper.delete(dbHeart);
                             popupWindow.dismiss();
                             Toast.makeText(context, context.getString(R.string.del_heart), Toast.LENGTH_SHORT).show();
                         }

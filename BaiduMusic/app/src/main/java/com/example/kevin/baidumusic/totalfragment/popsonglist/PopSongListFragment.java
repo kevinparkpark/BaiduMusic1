@@ -13,6 +13,7 @@ import com.example.kevin.baidumusic.MainActivity;
 import com.example.kevin.baidumusic.R;
 import com.example.kevin.baidumusic.base.BaseFragment;
 import com.example.kevin.baidumusic.db.DBSongListCacheBean;
+import com.example.kevin.baidumusic.db.DBUtilsHelper;
 import com.example.kevin.baidumusic.db.LiteOrmSington;
 import com.example.kevin.baidumusic.eventbean.EventPosition;
 import com.example.kevin.baidumusic.util.BroadcastValues;
@@ -37,6 +38,7 @@ public class PopSongListFragment extends BaseFragment {
     private final int MODE_ONE = 2;//单曲循环
     private final int MODE_LOOP = 0;//列表循环
     private int mode = 0;//播放方式
+    private DBUtilsHelper dbUtilsHelper=new DBUtilsHelper();
 
     @Override
     public int setlayout() {
@@ -61,8 +63,7 @@ public class PopSongListFragment extends BaseFragment {
         mode = getsp.getInt(getString(R.string.mode), 0);
         ivMode.setImageLevel(mode);
 
-        liteOrm = LiteOrmSington.getInstance().getLiteOrm();
-        cacheBeen = liteOrm.query(DBSongListCacheBean.class);
+        cacheBeen=dbUtilsHelper.queryAll(DBSongListCacheBean.class);
         adapter = new PopSonglistAdapter(context);
         adapter.setCacheBeen(cacheBeen);
         listView.setAdapter(adapter);
@@ -89,8 +90,8 @@ public class PopSongListFragment extends BaseFragment {
         tvClear.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                liteOrm.deleteAll(DBSongListCacheBean.class);
-                cacheBeen = liteOrm.query(DBSongListCacheBean.class);
+                dbUtilsHelper.deleteAll(DBSongListCacheBean.class);
+                cacheBeen = dbUtilsHelper.queryAll(DBSongListCacheBean.class);
                 adapter.setCacheBeen(cacheBeen);
             }
         });

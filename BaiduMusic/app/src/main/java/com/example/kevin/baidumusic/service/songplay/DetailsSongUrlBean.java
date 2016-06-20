@@ -1,4 +1,4 @@
-package com.example.kevin.baidumusic.service;
+package com.example.kevin.baidumusic.service.songplay;
 
 /**
  * Created by kevin on 16/5/26.

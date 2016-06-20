@@ -3,7 +3,7 @@ package com.example.kevin.baidumusic.netutil;
 import com.android.volley.RequestQueue;
 import com.android.volley.toolbox.ImageLoader;
 import com.android.volley.toolbox.Volley;
-import com.example.kevin.baidumusic.app.MyApp;
+import com.example.kevin.baidumusic.MyApp;
 
 /**
  * Created by kevin on 16/5/23.

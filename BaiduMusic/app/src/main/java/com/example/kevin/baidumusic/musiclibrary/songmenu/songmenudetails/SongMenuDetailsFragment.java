@@ -19,6 +19,7 @@ import com.example.kevin.baidumusic.R;
 import com.example.kevin.baidumusic.base.BaseFragment;
 import com.example.kevin.baidumusic.db.DBHeart;
 import com.example.kevin.baidumusic.db.DBSongListCacheBean;
+import com.example.kevin.baidumusic.db.DBUtilsHelper;
 import com.example.kevin.baidumusic.db.LiteOrmSington;
 import com.example.kevin.baidumusic.eventbean.EventGenericBean;
 import com.example.kevin.baidumusic.eventbean.EventPosition;
@@ -51,6 +52,7 @@ public class SongMenuDetailsFragment extends BaseFragment {
     private SongMenuDetailsBean bean;
     private PopupWindow popupWindow;
     private LiteOrm liteOrm;
+    private DBUtilsHelper dbUtilsHelper=new DBUtilsHelper();
 
     @Override
     public int setlayout() {
@@ -73,7 +75,6 @@ public class SongMenuDetailsFragment extends BaseFragment {
 
     @Override
     protected void initData() {
-        liteOrm = LiteOrmSington.getInstance().getLiteOrm();
         adapter = new SongMenuDetailsAdapter(context);
         String listId = getArguments().getString(context.getString(R.string.listid));
         NetTool netTool = new NetTool();
@@ -107,8 +108,7 @@ public class SongMenuDetailsFragment extends BaseFragment {
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 
                 List<EventGenericBean> eventGenericBeen = new ArrayList<EventGenericBean>();
-
-                liteOrm.deleteAll(DBSongListCacheBean.class);
+                dbUtilsHelper.deleteAll(DBSongListCacheBean.class);
                 for (SongMenuDetailsBean.ContentBean contentBean : bean.getContent()) {
 
                     EventGenericBean bean1 = new EventGenericBean(contentBean.getTitle(), contentBean.getAuthor(),
@@ -145,33 +145,27 @@ public class SongMenuDetailsFragment extends BaseFragment {
                         popupWindow.dismiss();
                     }
                 });
-                final QueryBuilder<DBHeart> list = new QueryBuilder<DBHeart>(DBHeart.class).whereEquals
-                        (DBHeart.TITLE, contentBeanList.get(position).getTitle());
 
-                if (list != null && liteOrm.query(list).size() > 0) {
+                final List<DBHeart> dbHeart=dbUtilsHelper.showQuery(DBHeart.class
+                        ,DBHeart.TITLE,contentBeanList.get(position).getTitle());
+                Log.d("RankDetailsFragment", "dbHeart:" + dbHeart.size());
+                if (dbHeart.size()>0){
                     ivHart.setImageResource(R.mipmap.cust_heart_press);
                 }
-                //红心收藏
                 ivHart.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        if (liteOrm.query(list).size() == 0) {
+                        if (dbHeart.size()==0){
                             ivHart.setImageResource(R.mipmap.cust_heart_press);
-                            liteOrm.insert(new DBHeart(contentBeanList.get(position).getTitle(),
-                                    contentBeanList.get(position).getAuthor(), bean.getPic_300()
-                                    , bean.getPic_500(), contentBeanList.get(position).getSong_id()));
+                            DBHeart dbHeartBeen=new DBHeart(contentBeanList.get(position).getTitle(),
+                                    contentBeanList.get(position).getAuthor(),bean.getPic_300()
+                                    , bean.getPic_500(), contentBeanList.get(position).getSong_id());
+                            dbUtilsHelper.insertDB(dbHeartBeen);
                             popupWindow.dismiss();
                             Toast.makeText(context, context.getString(R.string.add_to_heart), Toast.LENGTH_SHORT).show();
-                        } else {
+                        }else {
                             ivHart.setImageResource(R.mipmap.cust_dialog_hart);
-
-                            QueryBuilder<DBHeart> list = new QueryBuilder<DBHeart>(DBHeart.class).whereEquals
-                                    (DBHeart.TITLE, contentBeanList.get(position).getTitle());
-
-                            List<DBHeart> dbHearts = liteOrm.query(list);
-                            if (dbHearts.size() > 0) {
-                                liteOrm.delete(dbHearts);
-                            }
+                            dbUtilsHelper.delete(dbHeart);
                             popupWindow.dismiss();
                             Toast.makeText(context, context.getString(R.string.del_heart), Toast.LENGTH_SHORT).show();
                         }

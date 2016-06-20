@@ -18,6 +18,7 @@ import com.example.kevin.baidumusic.R;
 import com.example.kevin.baidumusic.base.BaseFragment;
 import com.example.kevin.baidumusic.db.DBHeart;
 import com.example.kevin.baidumusic.db.DBSongListCacheBean;
+import com.example.kevin.baidumusic.db.DBUtilsHelper;
 import com.example.kevin.baidumusic.db.LiteOrmSington;
 import com.example.kevin.baidumusic.eventbean.EventGenericBean;
 import com.example.kevin.baidumusic.eventbean.EventPosition;
@@ -53,6 +54,7 @@ public class RankDetailsFragment extends BaseFragment implements OnRefreshListen
     private String url;
     private PopupWindow popupWindow;
     private LiteOrm liteOrm;
+    private DBUtilsHelper dbUtilsHelper=new DBUtilsHelper();
 
     @Override
     public int setlayout() {
@@ -127,7 +129,7 @@ public class RankDetailsFragment extends BaseFragment implements OnRefreshListen
                 popupWindow.setAnimationStyle(R.style.contextMenuAnim);
                 popupWindow.showAtLocation(contentView, Gravity.BOTTOM, 0, 0);
 
-                final ImageView ivHart = (ImageView) contentView.findViewById(R.id.iv_customer_hart);
+                final ImageView ivHeart = (ImageView) contentView.findViewById(R.id.iv_customer_hart);
                 ImageView ivDownload= (ImageView) contentView.findViewById(R.id.iv_customer_download);
                 TextView tvTitle= (TextView) contentView.findViewById(R.id.tv_customer_dialog_title);
                 tvTitle.setText(songListBeen.get(position).getTitle());
@@ -138,33 +140,26 @@ public class RankDetailsFragment extends BaseFragment implements OnRefreshListen
                     }
                 });
 
-                final QueryBuilder<DBHeart> list = new QueryBuilder<DBHeart>(DBHeart.class).whereEquals
-                        (DBHeart.TITLE, songListBeen.get(position).getTitle());
-
-                if (liteOrm.query(list).size() > 0) {
-                    ivHart.setImageResource(R.mipmap.cust_heart_press);
+                final List<DBHeart> dbHeart=dbUtilsHelper.showQuery(DBHeart.class
+                        ,DBHeart.TITLE,songListBeen.get(position).getTitle());
+                Log.d("RankDetailsFragment", "dbHeart:" + dbHeart.size());
+                if (dbHeart.size()>0){
+                    ivHeart.setImageResource(R.mipmap.cust_heart_press);
                 }
-                //红心点击事件
-                ivHart.setOnClickListener(new View.OnClickListener() {
+                ivHeart.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        if (liteOrm.query(list).size() == 0) {
-                            ivHart.setImageResource(R.mipmap.cust_heart_press);
-                            liteOrm.insert(new DBHeart(songListBeen.get(position).getTitle(),
+                        if (dbHeart.size()==0){
+                            ivHeart.setImageResource(R.mipmap.cust_heart_press);
+                            DBHeart dbHeartBeen=new DBHeart(songListBeen.get(position).getTitle(),
                                     songListBeen.get(position).getAuthor(), songListBeen.get(position).getPic_small()
-                                    , songListBeen.get(position).getPic_big(), songListBeen.get(position).getSong_id()));
+                                    , songListBeen.get(position).getPic_big(), songListBeen.get(position).getSong_id());
+                            dbUtilsHelper.insertDB(dbHeartBeen);
                             popupWindow.dismiss();
                             Toast.makeText(context, context.getString(R.string.add_to_heart), Toast.LENGTH_SHORT).show();
-                        } else {
-                            ivHart.setImageResource(R.mipmap.cust_dialog_hart);
-
-                            QueryBuilder<DBHeart> list = new QueryBuilder<DBHeart>(DBHeart.class).whereEquals
-                                    (DBHeart.TITLE, songListBeen.get(position).getTitle());
-
-                            List<DBHeart> dbHearts = liteOrm.query(list);
-                            if (dbHearts.size() > 0) {
-                                liteOrm.delete(dbHearts);
-                            }
+                        }else {
+                            ivHeart.setImageResource(R.mipmap.cust_dialog_hart);
+                            dbUtilsHelper.delete(dbHeart);
                             popupWindow.dismiss();
                             Toast.makeText(context, context.getString(R.string.del_heart), Toast.LENGTH_SHORT).show();
                         }
@@ -172,7 +167,6 @@ public class RankDetailsFragment extends BaseFragment implements OnRefreshListen
                 });
                 //歌曲下载
                 ivDownload.setOnClickListener(new View.OnClickListener() {
-                    List<DBHeart> dbHeartList=liteOrm.query(DBHeart.class);
                     @Override
                     public void onClick(View v) {
                         NetTool netTool=new NetTool();

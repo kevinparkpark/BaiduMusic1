@@ -1,14 +1,10 @@
 package com.example.kevin.baidumusic.musiclibrary.mv;
 
 import android.content.Intent;
-import android.net.Uri;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.View;
-import android.widget.MediaController;
 import android.widget.Toast;
-import android.widget.VideoView;
 
 import com.android.volley.VolleyError;
 import com.chanven.lib.cptr.PtrClassicFrameLayout;
@@ -16,7 +12,7 @@ import com.chanven.lib.cptr.PtrDefaultHandler;
 import com.chanven.lib.cptr.PtrFrameLayout;
 import com.chanven.lib.cptr.loadmore.OnLoadMoreListener;
 import com.chanven.lib.cptr.recyclerview.RecyclerAdapterWithHF;
-import com.example.kevin.baidumusic.app.MyApp;
+import com.example.kevin.baidumusic.MyApp;
 import com.example.kevin.baidumusic.base.BaseFragment;
 import com.example.kevin.baidumusic.R;
 import com.example.kevin.baidumusic.netutil.NetListener;

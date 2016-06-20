@@ -8,13 +8,12 @@ import android.graphics.Paint;
 import android.os.Environment;
 import android.text.TextUtils;
 import android.util.AttributeSet;
-import android.util.Log;
 import android.view.View;
 
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.example.kevin.baidumusic.R;
-import com.example.kevin.baidumusic.app.MyApp;
+import com.example.kevin.baidumusic.MyApp;
 import com.example.kevin.baidumusic.netutil.StreamRequest;
 import com.example.kevin.baidumusic.netutil.VolleySingleton;
 
@@ -31,8 +30,8 @@ import java.util.regex.Pattern;
 
 
 /**
- * 歌词
  * Created by kevin on 16/5/23.
+ * 歌词
  */
 public class LrcView extends View {
     private List<Long> mLrcTimes;
@@ -150,7 +149,7 @@ public class LrcView extends View {
     public void loadNetLrc(String url) {
         reset();
         if (TextUtils.isEmpty(url)) {
-            label = getContext().getString(R.string.no_lrc);
+            label = "暂无歌词";
             postInvalidate();
             return;
         }
@@ -237,7 +236,7 @@ public class LrcView extends View {
     public void loadLrc(String path) {
         if (path != null) {
             if (!path.equals(temp)) {
-                if (path.length() > 3 && path.substring(0, 4).equals(getContext().getString(R.string.http))) {
+                if (path.length() > 3 && path.substring(0, 4).equals("http")) {
                     loadNetLrc(path);
                     temp = path;
                 } else {

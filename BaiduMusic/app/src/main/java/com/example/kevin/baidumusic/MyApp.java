@@ -1,4 +1,4 @@
-package com.example.kevin.baidumusic.app;
+package com.example.kevin.baidumusic;
 
 import android.app.Application;
 import android.content.Context;

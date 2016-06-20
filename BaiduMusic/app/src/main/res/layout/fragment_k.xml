@@ -39,7 +39,7 @@
                     android:id="@+id/k_more"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="@dimen/nine_dp"
+                    android:layout_marginTop="@dimen/six_dp"
                     android:text="@string/more" />
 
                 <ImageView
